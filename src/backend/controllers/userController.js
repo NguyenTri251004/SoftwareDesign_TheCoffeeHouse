@@ -1,9 +1,9 @@
-const User = require("../models/User");
+const { findById } = require("../models/User");
 
 const userController = {
     getProfile: async (req, res) => {
         try {
-            const user = await User.findById(req.user.id).select("-password");
+            const user = await findById(req.user.id).select("-password");
             if (!user) return res.status(404).json({ msg: "Không tìm thấy người dùng" });
 
             res.json(user);

@@ -1,15 +1,26 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginPage from "./pages/login/LoginPage.js";
+import Login from "./pages/auth/login/LoginPage.js";
+import SignUp from "./pages/auth/signup/SignUpPage.js";
+import VerifyEmail from "./pages/auth/signup/Verify.js";
+import ForgotPassword from "./pages/auth/forgotPw/ForgotPassword.js";
+import PasswordReset from "./pages/auth/forgotPw/PasswordReset.js";
+import SetNewPassword from "./pages/auth/forgotPw/SetNewPassword.js";
 import HomePage from "./pages/homepage/HomePage.js";
+import Footer from "./components/footer/Footer.js";
 import './App.css';
-
 function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/login" element={<LoginPage />} />
                 <Route path="/" element={<HomePage />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/verify-email" element={<VerifyEmail />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/password-reset" element={<PasswordReset />} />
+                <Route path="/set-new-password" element={<SetNewPassword />} />
             </Routes>
+            <Footer />
         </Router>
     );
 }
