@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { setUser, clearUser } from "../../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 import userAPI from "../../services/userService";
+import Header from "components/header/Header";
 
 const HomePage = () => {
     const [user, setLocalUser] = useState(null); 
@@ -33,6 +34,7 @@ const HomePage = () => {
 
     return (
         <div>
+            <Header />
             <h2>Profile</h2>
             {user ? (
                 <div>

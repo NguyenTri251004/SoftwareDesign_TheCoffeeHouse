@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineExclamationCircle, AiOutlineCheckCircle } from "react-icons/ai";
+import Footer from "components/Footer/Footer.js";
 import "./SetNewPassword.css";
 
 const SetNewPassword = () => {
@@ -27,7 +28,8 @@ const SetNewPassword = () => {
   };
 
   return (
-    <div className="set-password-container">
+    <>
+      <div className="set-password-container">
       <div className="set-password-box">
         {successMessage && (
           <div className="success-message">
@@ -81,6 +83,9 @@ const SetNewPassword = () => {
             <h1>THE COFFEE HOUSE</h1>
         </div>
     </div>
+    <Footer />
+    </>
+    
   );
 };
 

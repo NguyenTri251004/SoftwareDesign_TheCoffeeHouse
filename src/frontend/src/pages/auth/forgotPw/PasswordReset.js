@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import Footer from "components/Footer/Footer.js";
 import "./PasswordReset.css";
 
 const PasswordReset = () => {
@@ -28,7 +29,8 @@ const PasswordReset = () => {
   };
 
   return (
-    <div className="password-reset-container">
+    <>
+      <div className="password-reset-container">
       <div className="password-reset-box">
         <h2>Password Reset</h2>
         <p>We have sent a code to your email</p>
@@ -57,6 +59,9 @@ const PasswordReset = () => {
             <h1>THE COFFEE HOUSE</h1>
         </div>
     </div>
+    <Footer />
+    </>
+    
   );
 };
 

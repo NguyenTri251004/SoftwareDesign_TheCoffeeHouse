@@ -1,12 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./pages/auth/login/LoginPage.js";
-import SignUp from "./pages/auth/signup/SignUpPage.js";
-import VerifyEmail from "./pages/auth/signup/Verify.js";
-import ForgotPassword from "./pages/auth/forgotPw/ForgotPassword.js";
-import PasswordReset from "./pages/auth/forgotPw/PasswordReset.js";
-import SetNewPassword from "./pages/auth/forgotPw/SetNewPassword.js";
-import HomePage from "./pages/homepage/HomePage.js";
-import Footer from "./components/footer/Footer.js";
+import Login from "pages/auth/login/LoginPage.js";
+import SignUp from "pages/auth/signup/SignUpPage.js";
+import VerifyEmail from "pages/auth/signup/Verify.js";
+import ForgotPassword from "pages/auth/forgotPw/ForgotPassword.js";
+import PasswordReset from "pages/auth/forgotPw/PasswordReset.js";
+import SetNewPassword from "pages/auth/forgotPw/SetNewPassword.js";
+import HomePage from "pages/homepage/HomePage.js";
+
 import './App.css';
 function App() {
     return (
@@ -20,7 +20,7 @@ function App() {
                 <Route path="/password-reset" element={<PasswordReset />} />
                 <Route path="/set-new-password" element={<SetNewPassword />} />
             </Routes>
-            <Footer />
+            
         </Router>
     );
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
+import Footer from "components/Footer/Footer.js";
 
 const VerifyEmail = () => {
     const [searchParams] = useSearchParams();
@@ -21,11 +22,15 @@ const VerifyEmail = () => {
     }, [token]);
 
     return (
-        <div>
-            <h2>Email Verification</h2>
-            <p>{message}</p>
-            <a href="/login">Go to Login</a>
-        </div>
+        <>
+            <div>
+                <h2>Email Verification</h2>
+                <p>{message}</p>
+                <a href="/login">Go to Login</a>
+            </div>
+            <Footer />
+        </>
+        
     );
 };
 

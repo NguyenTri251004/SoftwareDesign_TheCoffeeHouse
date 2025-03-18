@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaGoogle, FaFacebookF, FaApple } from "react-icons/fa";
 import { MdEmail, MdLock, MdPerson } from "react-icons/md";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
+import Footer from "components/Footer/Footer.js";
 import "./SignUpPage.css";
 import axios from "axios";
 
@@ -54,7 +55,8 @@ const Signup = () => {
   };
 
   return (
-    <div className="signup-container">
+    <>
+      <div className="signup-container">
       <div className="signup-box">
         {error && (
           <div className="error-message">
@@ -126,6 +128,9 @@ const Signup = () => {
         <h1>THE COFFEE HOUSE</h1>
       </div>
     </div>
+    <Footer />
+    </>
+    
   );
 };
 

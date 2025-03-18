@@ -3,6 +3,8 @@ import axios from "axios";
 import { FaGoogle, FaFacebookF, FaApple } from "react-icons/fa";
 import { MdEmail, MdLock } from "react-icons/md";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
+import Footer from "components/Footer/Footer.js";
+
 import "./LoginPage.css";
 
 const Login = () => {
@@ -40,7 +42,8 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
+    <>
+      <div className="login-container">
       <div className="login-box">
         {error && (
           <div className="error-message">
@@ -99,7 +102,11 @@ const Login = () => {
       <div className="image-section">
         <h1>THE COFFEE HOUSE</h1>
       </div>
+      
     </div>
+    <Footer />
+    </>
+    
   );
 };
 

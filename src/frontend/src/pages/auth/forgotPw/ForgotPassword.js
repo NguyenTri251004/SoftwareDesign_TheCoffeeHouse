@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { MdEmail } from "react-icons/md";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
+import Footer from "components/Footer/Footer.js";
 import "./ForgotPassword.css";
 
 const ForgotPassword = () => {
@@ -25,7 +26,8 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="forgot-password-container">
+    <>
+      <div className="forgot-password-container">
       <div className="forgot-password-box">
         {error && (
           <div className="error-message">
@@ -60,6 +62,9 @@ const ForgotPassword = () => {
             <h1>THE COFFEE HOUSE</h1>
         </div>
     </div>
+    <Footer />
+    </>
+    
   );
 };
 
