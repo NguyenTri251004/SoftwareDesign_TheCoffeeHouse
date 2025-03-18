@@ -1,12 +1,12 @@
 
-import authRoute from "./routes/authRoute.js"; // Đảm bảo đường dẫn đúng!
+import authRoute from "./routes/auth.route.js"; // Đảm bảo đường dẫn đúng!
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 
-// const userRoute = require("./routes/userRoute");
+// const userRoute = require("./routes/user.route");
 dotenv.config();
 
 const app = express();

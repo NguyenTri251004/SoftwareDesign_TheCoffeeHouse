@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { register, login } from "../controllers/authController.js"; // Make sure the file extension is .js
+import { register, login } from "../controllers/auth.controller.js"; // Make sure the file extension is .js
 
 const router = Router();
 

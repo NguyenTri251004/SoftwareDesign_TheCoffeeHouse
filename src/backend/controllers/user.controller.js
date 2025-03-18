@@ -1,4 +1,4 @@
-const { findById } = require("../models/User");
+const { findById } = require("../models/user.model");
 
 const userController = {
     getProfile: async (req, res) => {
