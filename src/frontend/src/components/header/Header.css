@@ -1,67 +1,67 @@
 .header {
-    background-color: #e7eff6;
-    padding-top: 1.3rem;
-    padding-bottom: 1.3rem;
+  background-color: #e7eff6;
+  padding-top: 1.2rem;
+  padding-bottom: 1.2rem;
 }
-  
+
 .header-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 1200px;
-    margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
 }
-  
+
 .logo img {
-    height: 20px;
+  height: 20px;
 }
-  
+
 .nav ul {
-    list-style: none;
-    display: flex;
-    gap: 50px;
+  list-style: none;
+  display: flex;
+  gap: 50px;
 }
-  
+
 .nav ul li {
-    display: inline-block;
+  display: inline-block;
 }
-  
+
 .nav ul li a {
-    text-decoration: none;
-    color: #000;
-    font-weight: bold;
-    font-size: 18px;
-    transition: color 0.3s;
+  text-decoration: none;
+  color: #000;
+  font-weight: bold;
+  font-size: 18px;
+  transition: color 0.3s;
 }
-  
+
 .nav ul li a:hover {
-    color: #ff6600;
+  color: #ff6600;
 }
-  
+
 .header-icons {
-    display: flex;
-    align-items: center !important;
-    gap: 15px;
+  display: flex;
+  align-items: center !important;
+  gap: 15px;
 }
-  
+
 .icon-btn {
-    margin: 0;
-    width: 44px; 
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    border-radius: 50%;
-    transition: background 0.3s;
+  margin: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background 0.3s;
 }
-  
+
 .icon-btn:hover {
-    background: #e6e6e6;
+  background: #e6e6e6;
 }
-  
+
 #user-icon {
   font-size: 20px;
   background-color: #a8c6e0;

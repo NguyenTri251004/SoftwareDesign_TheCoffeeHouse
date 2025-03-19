@@ -1,15 +1,44 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser, clearUser } from "../../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 import userAPI from "../../services/userService";
 import Header from "components/header/Header";
+import "./HomePage.css"; // Import a CSS file for styling
+import bannerImage1 from "assets/banner/banner-1.jpg";
+import bannerImage2 from "assets/banner/banner-2.jpg";
+import bannerImage3 from "assets/banner/banner-3.jpg";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 
 const HomePage = () => {
+  const bannerImages = [bannerImage1, bannerImage2, bannerImage3];
+
   const [user, setLocalUser] = useState(null);
+  const [currentSlide, setCurrentSlide] = useState(0); // Track the current slide index
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // --- Function to handle next slide ---
+  const nextSlide = () => {
+    setCurrentSlide((prevSlide) => (prevSlide + 1) % bannerImages.length);
+  };
+
+  // --- Function to handle previous slide ---
+  const prevSlide = () => {
+    setCurrentSlide((prevSlide) =>
+      prevSlide === 0 ? bannerImages.length - 1 : prevSlide - 1
+    );
+  };
+  // --- Function to handle dot click ---
+  const goToSlide = (index) => {
+    setCurrentSlide(index);
+  };
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -35,7 +64,48 @@ const HomePage = () => {
   return (
     <div>
       <Header />
-      <h2>Profile</h2>
+
+      {/* --- Banner Slider --- */}
+      <div className="banner-slider">
+        <div className="slider-container">
+          {/* Left Arrow */}
+          <button className="slider-arrow prev" onClick={prevSlide}>
+            <FontAwesomeIcon icon={faChevronLeft} />
+          </button>
+
+          {/* Image Slides */}
+          {bannerImages.map((image, index) => (
+            <div
+              key={index}
+              className={`slide ${index === currentSlide ? "active" : ""}`}
+              style={{
+                backgroundImage: `url(${image})`,
+                transform: `translateX(${(index - currentSlide) * 100}%)`,
+              }}
+            >
+              {/*  You can put content *inside* the slide here, like text or buttons */}
+            </div>
+          ))}
+
+          {/* Right Arrow */}
+          <button className="slider-arrow next" onClick={nextSlide}>
+            <FontAwesomeIcon icon={faChevronRight} />
+          </button>
+        </div>
+        {/* --- Slider Dots --- */}
+        <div className="slider-dots">
+          {bannerImages.map((_, index) => (
+            <span
+              key={index}
+              className={`dot ${index === currentSlide ? "active" : ""}`}
+              onClick={() => goToSlide(index)}
+            ></span>
+          ))}
+        </div>
+      </div>
+      {/* --- End Banner Slider --- */}
+
+      {/* <h2>Profile</h2>
       {user ? (
         <div>
           <p>
@@ -46,7 +116,7 @@ const HomePage = () => {
         </div>
       ) : (
         <p>No user logged in</p>
-      )}
+      )} */}
     </div>
   );
 };
