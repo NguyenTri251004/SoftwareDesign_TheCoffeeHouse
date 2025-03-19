@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
-import Footer from "components/Footer/Footer.js";
+import Footer from "components/footer/Footer.js";
 
 const VerifyEmail = () => {
     const [searchParams] = useSearchParams();

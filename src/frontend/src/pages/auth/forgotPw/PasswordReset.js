@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import Footer from "components/Footer/Footer.js";
+import Footer from "components/footer/Footer.js";
 import "./PasswordReset.css";
 
 const PasswordReset = () => {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { MdEmail } from "react-icons/md";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
-import Footer from "components/Footer/Footer.js";
+import Footer from "components/footer/Footer.js";
 import "./ForgotPassword.css";
 
 const ForgotPassword = () => {

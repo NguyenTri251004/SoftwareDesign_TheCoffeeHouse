@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineExclamationCircle, AiOutlineCheckCircle } from "react-icons/ai";
-import Footer from "components/Footer/Footer.js";
+import Footer from "components/footer/Footer.js";
 import "./SetNewPassword.css";
 
 const SetNewPassword = () => {

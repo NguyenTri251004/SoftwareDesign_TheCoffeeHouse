@@ -2,6 +2,11 @@ import React from "react";
 import "./Header.css";
 import logo from "assets/logo.svg";
 
+// Import Font Awesome
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-regular-svg-icons'; 
+import { faShoppingBag } from '@fortawesome/free-solid-svg-icons';
+
 const Header = () => {
   return (
     <header className="header">
@@ -22,11 +27,11 @@ const Header = () => {
         </nav>
 
         <div className="header-icons">
-          <button className="icon-btn">
-            <i className="fa-regular fa-user"></i>
+          <button className="icon-btn" id="user-icon">
+            <FontAwesomeIcon icon={faUser} />
           </button>
-          <button className="icon-btn">
-            <i className="fa-regular fa-shopping-bag"></i>
+          <button className="icon-btn" id="bag-icon">
+            <FontAwesomeIcon icon={faShoppingBag} />
           </button>
         </div>
       </div>

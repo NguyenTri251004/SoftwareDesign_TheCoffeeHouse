@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaGoogle, FaFacebookF, FaApple } from "react-icons/fa";
 import { MdEmail, MdLock, MdPerson } from "react-icons/md";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
-import Footer from "components/Footer/Footer.js";
+import Footer from "components/footer/Footer.js";
 import "./SignUpPage.css";
 import axios from "axios";
 
