@@ -1,5 +1,3 @@
-/* HomePage.module.css */
-
 .bannerSlider {
   width: 100%;
   position: relative;
@@ -7,8 +5,7 @@
 }
 
 .sliderContainer {
-  /* display: flex; */
-  transition: transform 0.5s ease-in-out; /* Smooth transition */
+  transition: transform 0.5s ease-in-out;
   width: 100%;
 }
 
@@ -23,7 +20,7 @@
   transition: opacity 0.5s ease-in-out;
 }
 
-.slideActive {
+.slide.active {
   display: block;
 }
 
@@ -37,12 +34,12 @@
   border: none;
   padding: 0.5rem;
   cursor: pointer;
-  z-index: 10; /* Ensure arrows are above the slides */
-  opacity: 0.7; /* Slightly transparent */
+  z-index: 10;
+  opacity: 0.7;
   transition: opacity 0.3s ease;
 }
 
-.sliderArrowPrev {
+.sliderArrow.prev {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -53,7 +50,7 @@
   border-radius: 50%;
 }
 
-.sliderArrowNext {
+.sliderArrow.next {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -86,6 +83,6 @@
   transition: background-color 0.3s ease;
 }
 
-.dotActive {
+.dot.active {
   background-color: orange;
 }
