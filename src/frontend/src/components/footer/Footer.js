@@ -1,22 +1,22 @@
 import React from "react";
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaFacebookF, FaTwitter, FaLinkedin, FaYoutube } from "react-icons/fa";
-import "./Footer.css";
+import styles from "./Footer.module.css"; 
 
 const Footer = () => {
   return (
-    <footer className="footer">
-      <div className="footer-container">
+    <footer className={styles.footer}>
+      <div className={styles.footerContainer}>
         {/* Left Section - Contact Info */}
-        <div className="footer-section">
+        <div className={styles.footerSection}>
           <ul>
-            <li><FaMapMarkerAlt className="icon" /> 67 Đinh Bộ Lĩnh, P.26, Bình Thạnh, TP.HCM</li>
-            <li><FaPhoneAlt className="icon" /> (+84) 363 567 239</li>
-            <li><FaEnvelope className="icon" /> nhacaphe@gmail.com</li>
+            <li><FaMapMarkerAlt className={styles.icon} /> 67 Đinh Bộ Lĩnh, P.26, Bình Thạnh, TP.HCM</li>
+            <li><FaPhoneAlt className={styles.icon} /> (+84) 363 567 239</li>
+            <li><FaEnvelope className={styles.icon} /> nhacaphe@gmail.com</li>
           </ul>
         </div>
 
         {/* Center Section - Links */}
-        <div className="footer-section">
+        <div className={styles.footerSection}>
           <ul>
             <li><a href="#">Về chúng tôi</a></li>
             <li><a href="#">Trà</a></li>
@@ -26,10 +26,10 @@ const Footer = () => {
         </div>
 
         {/* Right Section - Social & Button */}
-        <div className="footer-section">
+        <div className={styles.footerSection}>
           <h3>THE COFFEE HOUSE</h3>
-          <button className="menu-button">Menu →</button>
-          <div className="social-icons">
+          <button className={styles.menuButton}>Menu →</button>
+          <div className={styles.socialIcons}>
             <a href="#"><FaFacebookF /></a>
             <a href="#"><FaTwitter /></a>
             <a href="#"><FaLinkedin /></a>
@@ -39,7 +39,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom Footer */}
-      <div className="footer-bottom">
+      <div className={styles.footerBottom}>
         © 2025 Nhà Cà Phê, Inc. • <a href="#">Privacy</a> • <a href="#">Terms</a>
       </div>
     </footer>

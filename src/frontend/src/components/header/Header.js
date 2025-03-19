@@ -1,5 +1,5 @@
 import React from "react";
-import "./Header.css";
+import styles from "./Header.module.css";
 import logo from "assets/logo.svg";
 
 // Import Font Awesome
@@ -9,28 +9,28 @@ import { faShoppingBag } from '@fortawesome/free-solid-svg-icons';
 
 const Header = () => {
   return (
-    <header className="header">
-      <div className="header-container">
-        <div className="logo">
+    <header className={styles.header}>
+      <div className={styles.headerContainer}>
+        <div className={styles.logo}>
           <img src={logo} alt="The Coffee House" />
         </div>
 
-        <nav className="nav">
+        <nav className={styles.nav}>
           <ul>
             <li><a href="#">Cà phê</a></li>
             <li><a href="#">Trà</a></li>
-            <li className="dropdown">
+            <li className={styles.dropdown}>
               <a href="#">Menu ▾</a>
             </li>
-            <li><a href="#">Cửa hàng</a></li>
+            <li><a href="/shop/list">Cửa hàng</a></li>
           </ul>
         </nav>
 
-        <div className="header-icons">
-          <button className="icon-btn" id="user-icon">
+        <div className={styles.headerIcons}>
+          <button className={styles.iconBtn} id="user-icon">
             <FontAwesomeIcon icon={faUser} />
           </button>
-          <button className="icon-btn" id="bag-icon">
+          <button className={styles.iconBtn} id="bag-icon">
             <FontAwesomeIcon icon={faShoppingBag} />
           </button>
         </div>

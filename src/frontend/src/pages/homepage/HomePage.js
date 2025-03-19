@@ -4,7 +4,7 @@ import { setUser, clearUser } from "../../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 import userAPI from "../../services/userService";
 import Header from "components/header/Header";
-import "./HomePage.css"; // Import a CSS file for styling
+import styles from "./HomePage.module.css"; // Import a CSS file for styling
 import bannerImage1 from "assets/banner/banner-1.jpg";
 import bannerImage2 from "assets/banner/banner-2.jpg";
 import bannerImage3 from "assets/banner/banner-3.jpg";
@@ -66,10 +66,10 @@ const HomePage = () => {
       <Header />
 
       {/* --- Banner Slider --- */}
-      <div className="banner-slider">
-        <div className="slider-container">
+      <div className={styles.bannerSlider}>
+        <div className={styles.sliderContainer}>
           {/* Left Arrow */}
-          <button className="slider-arrow prev" onClick={prevSlide}>
+          <button className={styles.sliderArrowPrev} onClick={prevSlide}>
             <FontAwesomeIcon icon={faChevronLeft} />
           </button>
 
@@ -77,7 +77,7 @@ const HomePage = () => {
           {bannerImages.map((image, index) => (
             <div
               key={index}
-              className={`slide ${index === currentSlide ? "active" : ""}`}
+              className={`${styles.slide} ${index === currentSlide ? styles.slideActive : ""}`}
               style={{
                 backgroundImage: `url(${image})`,
                 transform: `translateX(${(index - currentSlide) * 100}%)`,
@@ -88,16 +88,16 @@ const HomePage = () => {
           ))}
 
           {/* Right Arrow */}
-          <button className="slider-arrow next" onClick={nextSlide}>
+          <button className={styles.sliderArrowNext} onClick={nextSlide}>
             <FontAwesomeIcon icon={faChevronRight} />
           </button>
         </div>
         {/* --- Slider Dots --- */}
-        <div className="slider-dots">
+        <div className={styles.sliderDots}>
           {bannerImages.map((_, index) => (
             <span
               key={index}
-              className={`dot ${index === currentSlide ? "active" : ""}`}
+              className={`${styles.dot} ${index === currentSlide ? styles.dotActive : ""}`}
               onClick={() => goToSlide(index)}
             ></span>
           ))}

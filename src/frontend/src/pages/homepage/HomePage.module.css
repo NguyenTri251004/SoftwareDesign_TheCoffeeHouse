@@ -1,12 +1,12 @@
-/* HomePage.css */
+/* HomePage.module.css */
 
-.banner-slider {
+.bannerSlider {
   width: 100%;
   position: relative;
   overflow: hidden;
 }
 
-.slider-container {
+.sliderContainer {
   /* display: flex; */
   transition: transform 0.5s ease-in-out; /* Smooth transition */
   width: 100%;
@@ -22,11 +22,12 @@
   display: none;
   transition: opacity 0.5s ease-in-out;
 }
-.slide.active {
+
+.slideActive {
   display: block;
 }
 
-.slider-arrow {
+.sliderArrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -40,7 +41,8 @@
   opacity: 0.7; /* Slightly transparent */
   transition: opacity 0.3s ease;
 }
-.slider-arrow.prev {
+
+.sliderArrowPrev {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51,7 +53,7 @@
   border-radius: 50%;
 }
 
-.slider-arrow.next {
+.sliderArrowNext {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -61,13 +63,14 @@
   font-size: 24px;
   border-radius: 50%;
 }
-.slider-arrow:hover {
+
+.sliderArrow:hover {
   opacity: 1;
   background-color: orange;
   transition: 0.3s;
 }
 
-.slider-dots {
+.sliderDots {
   text-align: center;
   margin-top: 10px;
 }
@@ -83,6 +86,6 @@
   transition: background-color 0.3s ease;
 }
 
-.dot.active {
+.dotActive {
   background-color: orange;
 }

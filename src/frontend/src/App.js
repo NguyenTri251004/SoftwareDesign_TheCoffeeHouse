@@ -6,6 +6,8 @@ import ForgotPassword from "pages/auth/forgotPw/ForgotPassword.js";
 import PasswordReset from "pages/auth/forgotPw/PasswordReset.js";
 import SetNewPassword from "pages/auth/forgotPw/SetNewPassword.js";
 import HomePage from "pages/homepage/HomePage.js";
+import ShopListPage from "pages/shop/ShopListPage";
+import ShopDetailPage from "pages/shop/DetailShop";
 
 import './App.css';
 function App() {
@@ -19,6 +21,10 @@ function App() {
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/password-reset" element={<PasswordReset />} />
                 <Route path="/set-new-password" element={<SetNewPassword />} />
+
+                <Route path="/shop/list" element={<ShopListPage />} />
+                <Route path="/shop/detail/:_id" element={<ShopDetailPage />} />
+                
             </Routes>
             
         </Router>

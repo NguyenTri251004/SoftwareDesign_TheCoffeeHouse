@@ -4,7 +4,7 @@
   padding-bottom: 1.2rem;
 }
 
-.header-container {
+.headerContainer {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -38,13 +38,13 @@
   color: #ff6600;
 }
 
-.header-icons {
+.headerIcons {
   display: flex;
   align-items: center !important;
   gap: 15px;
 }
 
-.icon-btn {
+.iconBtn {
   margin: 0;
   width: 44px;
   height: 44px;
@@ -58,16 +58,16 @@
   transition: background 0.3s;
 }
 
-.icon-btn:hover {
+.iconBtn:hover {
   background: #e6e6e6;
 }
 
-#user-icon {
+#userIcon {
   font-size: 20px;
   background-color: #a8c6e0;
 }
 
-#bag-icon {
+#bagIcon {
   font-size: 20px;
   background-color: white;
   border: 2px solid #a8c6e0;
