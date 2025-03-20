@@ -1,3 +1,11 @@
+.homeContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
 .bannerSlider {
   width: 100%;
   position: relative;
@@ -85,4 +93,23 @@
 
 .dot.active {
   background-color: orange;
+}
+
+.adsContainer {
+  display: flex;
+  width: 700px;
+  height: 490px;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem 0 3.5rem 0;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Thêm hiệu ứng bóng */
+}
+
+.adsPoster {
+  width: 700px;
+  height: 490px;
+  border-radius: 12px;
+  background: url("assets/images/ads-1.jpg") no-repeat center center;
+  background-size: contain;
 }

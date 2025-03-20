@@ -5,9 +5,10 @@ import { useNavigate } from "react-router-dom";
 import userAPI from "../../services/userService";
 import Header from "components/header/Header";
 import styles from "./HomePage.module.css"; // Import module.css
-import bannerImage1 from "assets/banner/banner-1.jpg";
-import bannerImage2 from "assets/banner/banner-2.jpg";
-import bannerImage3 from "assets/banner/banner-3.jpg";
+import bannerImage1 from "assets/images/banner-1.jpg";
+import bannerImage2 from "assets/images/banner-2.jpg";
+import bannerImage3 from "assets/images/banner-3.jpg";
+import FlashSale from "./FlashSale";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -60,20 +61,25 @@ const HomePage = () => {
   };
 
   return (
-    <div>
+    <div className={styles.homeContainer}>
       <Header />
 
       {/* --- Banner Slider --- */}
       <div className={styles.bannerSlider}>
         <div className={styles.sliderContainer}>
-          <button className={`${styles.sliderArrow} ${styles.prev}`} onClick={prevSlide}>
+          <button
+            className={`${styles.sliderArrow} ${styles.prev}`}
+            onClick={prevSlide}
+          >
             <FontAwesomeIcon icon={faChevronLeft} />
           </button>
 
           {bannerImages.map((image, index) => (
             <div
               key={index}
-              className={`${styles.slide} ${index === currentSlide ? styles.active : ""}`}
+              className={`${styles.slide} ${
+                index === currentSlide ? styles.active : ""
+              }`}
               style={{
                 backgroundImage: `url(${image})`,
                 transform: `translateX(${(index - currentSlide) * 100}%)`,
@@ -81,7 +87,10 @@ const HomePage = () => {
             ></div>
           ))}
 
-          <button className={`${styles.sliderArrow} ${styles.next}`} onClick={nextSlide}>
+          <button
+            className={`${styles.sliderArrow} ${styles.next}`}
+            onClick={nextSlide}
+          >
             <FontAwesomeIcon icon={faChevronRight} />
           </button>
         </div>
@@ -90,12 +99,18 @@ const HomePage = () => {
           {bannerImages.map((_, index) => (
             <span
               key={index}
-              className={`${styles.dot} ${index === currentSlide ? styles.active : ""}`}
+              className={`${styles.dot} ${
+                index === currentSlide ? styles.active : ""
+              }`}
               onClick={() => goToSlide(index)}
             ></span>
           ))}
         </div>
       </div>
+      <div className={styles.adsContainer}>
+        <div className={styles.adsPoster}></div>
+      </div>
+      <FlashSale />
     </div>
   );
 };
