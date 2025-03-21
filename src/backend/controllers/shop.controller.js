@@ -1,6 +1,26 @@
 import ShopModel from "../models/shop.model.js";
 
 const ShopController = {
+    getAllShops: async (start, end) => {
+        try {
+            const shops = await ShopModel.find()
+                .skip(parseInt(start))
+                .limit(parseInt(end) - parseInt(start));
+            
+            if (!Array.isArray(shops)) {
+                console.error("ShopModel.find did not return an array:", shops);
+                return [];
+            }
+            
+            return shops.map(shop => ({
+                ...shop.toObject(),
+                id: shop._id.toString(),
+            }));
+        } catch (error) {
+            console.error("Error in getAllShops:", error);
+            return [];
+        }
+    },
     getCities: async (req, res) => {
         try {
             const cities = await ShopModel.aggregate([

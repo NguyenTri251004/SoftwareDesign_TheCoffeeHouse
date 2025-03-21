@@ -29,6 +29,7 @@ app.use(cors({
         }
     },
     credentials: true,
+    exposedHeaders: ["X-Total-Count"],
 }));
 
 mongoose.connect(process.env.MONGO_URI)
