@@ -28,6 +28,40 @@ router.get("/", async (req, res) => {
         });
     }
 });
+router.get("/:id", async (req, res) => {
+    try {
+        const shop = await ShopController.getOneShop(req.params.id);
+        res.json(shop);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+});
+router.post("/", async (req, res) => {
+    try {
+        const shop = await ShopController.createShop(req.body);
+        res.status(201).json(shop);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+router.put("/:id", async (req, res) => {
+    try {
+        const shop = await ShopController.updateShop(req.params.id, req.body);
+        res.json(shop);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+router.delete("/:id", async (req, res) => {
+    try {
+        const result = await ShopController.deleteShop(req.params.id);
+        res.json(result);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
 router.get("/cities", ShopController.getCities);
 router.get("/districts", ShopController.getDistrictsByCity);
 router.get("/shops", ShopController.getShopByAddress);

@@ -1,12 +1,16 @@
 import { Admin, Resource } from 'react-admin';
-import { ShopList } from './components/ShopList/ShopList';
-import  dataProvider  from './dataProvider';
-
+import dataProvider from './dataProvider';
+import { ShopList, ShopCreate, ShopEdit } from './components/ShopList/ShopList';
 
 const App = () => (
-  <Admin dataProvider={dataProvider}>
-    <Resource name="shop" list={ShopList} />
-  </Admin>
+    <Admin dataProvider={dataProvider}>
+        <Resource 
+            name="shop" 
+            list={ShopList} 
+            create={ShopCreate} 
+            edit={ShopEdit}
+        />
+    </Admin>
 );
 
 export default App;

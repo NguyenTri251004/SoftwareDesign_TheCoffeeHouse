@@ -8,7 +8,7 @@ const ShopController = {
                 .limit(parseInt(end) - parseInt(start));
             
             if (!Array.isArray(shops)) {
-                console.error("ShopModel.find did not return an array:", shops);
+                console.error("ShopModel.find không trả về mảng!:", shops);
                 return [];
             }
             
@@ -17,8 +17,66 @@ const ShopController = {
                 id: shop._id.toString(),
             }));
         } catch (error) {
-            console.error("Error in getAllShops:", error);
+            console.error("Lỗi ở getAllShops:", error);
             return [];
+        }
+    },
+    getOneShop: async (id) => {
+        try {
+            const shop = await ShopModel.findById(id);
+            if (!shop) {
+                throw new Error("Shop không tìm thấy");
+            }
+            return {
+                ...shop.toObject(),
+                id: shop._id.toString(),
+            };
+        } catch (error) {
+            console.error("Lỗi ở getOneShop:", error);
+            throw error;
+        }
+    },
+    createShop: async (data) => {
+        try {
+            const shop = new ShopModel(data);
+            await shop.save();
+            return {
+                ...shop.toObject(),
+                id: shop._id.toString()
+            };
+        } catch (error) {
+            console.error("Lỗi ở createShop:", error);
+            throw error;
+        }
+    },
+
+    updateShop: async (id, data) => {
+        try {
+            const shop = await ShopModel.findByIdAndUpdate(id, data, { 
+                new: true,
+                runValidators: true 
+            });
+            if (!shop) throw new Error("Shop không tìm thấy");
+            return {
+                ...shop.toObject(),
+                id: shop._id.toString()
+            };
+        } catch (error) {
+            console.error("Lỗi ở updateShop:", error);
+            throw error;
+        }
+    },
+
+    deleteShop: async (id) => {
+        try {
+            const shop = await ShopModel.findByIdAndDelete(id);
+            if (!shop) throw new Error("Shop không tìm thấy");
+            return {
+                id: shop._id.toString()
+            };
+        } catch (error) {
+            console.error("Lỗi ở deleteShop:", error);
+            throw error;
         }
     },
     getCities: async (req, res) => {
