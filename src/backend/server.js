@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 // import shopSeedRoute from "./routes/seedRoutes.js";  // để load dữ liệu shop lên mongo thoi
 import authRoute from "./routes/auth.route.js"; 
 import shopRoute from "./routes/shop.route.js";
+import userRoute from "./routes/user.route.js";
 
 
 // const userRoute = require("./routes/user.route");
@@ -37,7 +38,7 @@ mongoose.connect(process.env.MONGO_URI)
     .catch(err => console.error("MongoDB connection error:", err));
 
 app.use("/api/auth", authRoute);
-// app.use("/api/user", userRoute);
+app.use("/api/user", userRoute);
 // app.use("/api/seed", shopSeedRoute);  // để load dữ liệu shop lên mongo thoi
 app.use("/api/shop", shopRoute);
 

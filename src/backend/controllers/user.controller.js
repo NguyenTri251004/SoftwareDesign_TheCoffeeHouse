@@ -1,4 +1,4 @@
-const { findById } = require("../models/user.model");
+import findById from "../models/user.model.js"
 
 const userController = {
     getProfile: async (req, res) => {
@@ -13,4 +13,4 @@ const userController = {
     }
 }
 
-module.exports = userController;
+export default userController;
