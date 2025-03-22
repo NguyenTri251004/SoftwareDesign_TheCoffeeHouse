@@ -1,4 +1,5 @@
 import { Admin, Resource } from 'react-admin';
+
 // import dataProvider from './dataProvider';
 import fakeDataProvider from 'ra-data-fakerest';
 import { AdminList } from './components/Admin/AdminList';
@@ -65,5 +66,6 @@ const App = () => (
       />
     </Admin>
 );
+
 
 export default App;
