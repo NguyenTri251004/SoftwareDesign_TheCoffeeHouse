@@ -35,24 +35,6 @@ const Signup = () => {
 
     setLoading(true);
     try {
-<<<<<<< Updated upstream
-      const response = await axios.post("http://localhost:5001/api/auth/register", {
-        email,
-        password,
-        role: "customer",
-      });
-
-      setSuccess("Please check your email to verify your account.");
-=======
-      setSuccess("Account created successfully! Redirecting to login...");
->>>>>>> Stashed changes
-      setTimeout(() => {
-        window.location.href = "/login"; // Redirect to login page
-      }, 2000);
-    } catch (err) {
-      setError(err.response?.data?.message || "Registration failed.");
-    } finally {
-      setLoading(false);
     }
   };
 

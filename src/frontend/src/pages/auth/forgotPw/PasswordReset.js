@@ -1,9 +1,4 @@
 import React, { useState, useRef } from "react";
-<<<<<<< Updated upstream
-import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
-import "./PasswordReset.css";
-=======
 import Footer from "components/footer/Footer.js";
 import styles from "./PasswordReset.module.css";
 >>>>>>> Stashed changes

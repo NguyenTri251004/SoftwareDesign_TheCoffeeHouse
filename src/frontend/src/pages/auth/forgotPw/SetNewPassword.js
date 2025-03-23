@@ -1,15 +1,4 @@
 import React, { useState } from "react";
-<<<<<<< Updated upstream
-import {
-  AiOutlineEye,
-  AiOutlineEyeInvisible,
-  AiOutlineExclamationCircle,
-  AiOutlineCheckCircle,
-} from "react-icons/ai";
-import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
-import "./SetNewPassword.css";
-=======
 import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineExclamationCircle, AiOutlineCheckCircle } from "react-icons/ai";
 import Footer from "components/footer/Footer.js";
 import styles from "./SetNewPassword.module.css";
