@@ -1,7 +1,9 @@
 import React, { useState, useRef } from "react";
-import Footer from "components/footer/Footer.js";
 import styles from "./PasswordReset.module.css";
->>>>>>> Stashed changes
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+
+
 
 const PasswordReset = () => {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
@@ -57,20 +59,11 @@ const PasswordReset = () => {
 
   return (
     <>
-<<<<<<< Updated upstream
-      <div className="password-reset-container">
-        <div className="password-reset-box">
-          <h2>Password Reset</h2>
-          <p>We have sent a code to your email</p>
-
-          <div className="code-inputs">
-=======
       <div className={styles.passwordResetContainer}>
         <div className={styles.passwordResetBox}>
           <h2>Password Reset</h2>
           <p>We have sent a code to your email</p>
           <div className={styles.codeInputs}>
->>>>>>> Stashed changes
             {code.map((digit, index) => (
               <input
                 key={index}
@@ -83,15 +76,7 @@ const PasswordReset = () => {
               />
             ))}
           </div>
-<<<<<<< Updated upstream
-
-          {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
-
           <button onClick={handleContinue}>Continue</button>
-
-=======
-          <button>Continue</button>
->>>>>>> Stashed changes
           <p>
             Didn’t receive the code? <a href="#">Click here</a>
           </p>
@@ -99,19 +84,10 @@ const PasswordReset = () => {
             Back to <a href="/login">Log in</a>
           </p>
         </div>
-<<<<<<< Updated upstream
-
-        <div className="image-section">
-          <h1>THE COFFEE HOUSE</h1>
-        </div>
-      </div>
-=======
         <div className={styles.imageSection}>
           <h1>THE COFFEE HOUSE</h1>
         </div>
       </div>
-      <Footer />
->>>>>>> Stashed changes
     </>
   );
 };

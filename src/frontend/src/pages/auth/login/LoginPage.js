@@ -102,16 +102,6 @@ const Login = () => {
           <h1>THE COFFEE HOUSE</h1>
         </div>
       </div>
-<<<<<<< Updated upstream
-
-      <div className="image-section">
-        <h1>THE COFFEE HOUSE</h1>
-      </div>
-      
-    </div>
-=======
-      <Footer />
->>>>>>> Stashed changes
     </>
   );
 };

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineExclamationCircle, AiOutlineCheckCircle } from "react-icons/ai";
-import Footer from "components/footer/Footer.js";
 import styles from "./SetNewPassword.module.css";
->>>>>>> Stashed changes
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+
 
 const SetNewPassword = () => {
   const [password, setPassword] = useState("");
@@ -52,18 +53,6 @@ const SetNewPassword = () => {
 
   return (
     <>
-<<<<<<< Updated upstream
-      <div className="set-password-container">
-        <div className="set-password-box">
-          {successMessage && (
-            <div className="success-message">
-              <AiOutlineCheckCircle className="success-icon" /> {successMessage}
-            </div>
-          )}
-          {error && (
-            <div className="error-message">
-              <AiOutlineExclamationCircle className="error-icon" /> {error}
-=======
       <div className={styles.setPasswordContainer}>
         <div className={styles.setPasswordBox}>
           {successMessage && (
@@ -74,21 +63,13 @@ const SetNewPassword = () => {
           {error && (
             <div className={styles.errorMessage}>
               <AiOutlineExclamationCircle className={styles.errorIcon} /> {error}
->>>>>>> Stashed changes
             </div>
           )}
 
           <h2>Set new password</h2>
-<<<<<<< Updated upstream
-          <p>Password must have at least 8 characters</p>
-          <form onSubmit={handleResetPassword}>
-            <label>Password</label>
-            <div className="input-field">
-=======
           <form onSubmit={handleResetPassword}>
             <label>Password</label>
             <div className={styles.inputField}>
->>>>>>> Stashed changes
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter at least 8+ characters"
@@ -101,11 +82,7 @@ const SetNewPassword = () => {
             </div>
 
             <label>Confirm Password</label>
-<<<<<<< Updated upstream
-            <div className="input-field">
-=======
             <div className={styles.inputField}>
->>>>>>> Stashed changes
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="Enter at least 8+ characters"
@@ -123,22 +100,12 @@ const SetNewPassword = () => {
           <p>
             Back to <a href="/login">Log in</a>
           </p>
-<<<<<<< Updated upstream
-        </div>
-
-        <div className="image-section">
-          <h1>THE COFFEE HOUSE</h1>
-        </div>
-      </div>
-=======
         </div>
 
         <div className={styles.imageSection}>
           <h1>THE COFFEE HOUSE</h1>
         </div>
       </div>
-      <Footer />
->>>>>>> Stashed changes
     </>
   );
 };

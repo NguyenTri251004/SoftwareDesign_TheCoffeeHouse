@@ -157,3 +157,20 @@
     margin-right: 10px;
     font-size: 20px;
   }
+
+  .successMessage {
+    background: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .successIcon {
+    margin-right: 10px;
+    font-size: 20px;
+  }
