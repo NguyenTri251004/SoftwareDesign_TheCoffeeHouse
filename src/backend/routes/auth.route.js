@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { register, login } from "../controllers/auth.controller.js"; // Make sure the file extension is .js
+import { register, login, verifyEmail, forgotPassword, verifyResetCode, resetPassword } from "../controllers/auth.controller.js"; // Make sure the file extension is .js
 
 const router = Router();
 
@@ -8,6 +8,14 @@ router.post("/register", register);
 
 // Đăng nhập
 router.post("/login", login);
+
+// Xác thực email
+router.get("/verify-email", verifyEmail);
+
+router.post("/forgot-password", forgotPassword);
+router.post("/verify-reset-code", verifyResetCode);
+
+router.post("/reset-password", resetPassword);
 
 // Lấy thông tin user (yêu cầu authentication)
 // router.get("/profile", authMiddleware, getUserProfile);

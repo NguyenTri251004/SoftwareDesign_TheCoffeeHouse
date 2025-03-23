@@ -1,20 +1,16 @@
-* {
+.body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
   
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-  }
-  
-  .signup-container {
+
+  .signupContainer {
     display: flex;
     height: 100vh;
   }
   
-  .signup-box {
+  .signupBox {
     width: 40%;
     padding: 40px;
     background: white;
@@ -23,7 +19,7 @@
     justify-content: center;
   }
   
-  .image-section {
+  .imageSection {
     width: 60%;
     background: url('../../../assets/auth.png') no-repeat center;
     background-size: cover;
@@ -32,7 +28,7 @@
     text-align: center;
   }
 
-  .image-section h1 {
+  .imageSection h1 {
     font-size: 36px;
     margin-top: 30px;
   }
@@ -48,7 +44,7 @@
     margin-top: 10px;
   }
   
-  .input-field {
+  .inputField {
     display: flex;
     align-items: center;
     border: 1px solid #ccc;
@@ -57,7 +53,7 @@
     margin-top: 5px;
   }
   
-  .input-field input {
+  .inputField input {
     border: none;
     outline: none;
     flex: 1;
@@ -76,10 +72,11 @@
     margin-top: 10px;
   }
   
-  button {
+  button[type="submit"] {
     width: 100%;
     padding: 10px;
-    margin-top: 20px !important;
+    margin-top: 20px;
+    margin-bottom: 10px;
     background: olive;
     color: white;
     border: none;
@@ -88,8 +85,12 @@
     font-size: 16px;
     font-weight: bold;
   }
+
+  .imageSection h1 {
+    font-weight: 700;
+  }
   
-  button:hover {
+  button[type="submit"]:hover {
     background: darkolivegreen;
   }
   
@@ -98,7 +99,7 @@
     margin-top: 10px;
   }
   
-  a {
+  p a {
     color: olive;
     text-decoration: none;
     font-weight: bold;
@@ -106,19 +107,19 @@
   
   .separator {
     text-align: center;
-    margin: 10px !important;
+    margin: 20px 0;
   }
   
-  .social-signup {
+  .socialSignup {
     display: flex;
     justify-content: center;
     gap: 10px;
   }
   
-  .social-signup button {
+  .socialSignup button {
     width: 40px;
     height: 40px;
-    border-radius: 50% !important;
+    border-radius: 50%;
     border: none;
     color: white;
     font-size: 18px;
@@ -140,7 +141,7 @@
     background: black;
   }
   
-  .error-message {
+  .errorMessage {
     background: #f8d7da;
     color: #721c24;
     padding: 10px;
@@ -152,7 +153,24 @@
     justify-content: center;
   }
   
-  .error-icon {
+  .errorIcon {
+    margin-right: 10px;
+    font-size: 20px;
+  }
+
+  .successMessage {
+    background: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .successIcon {
     margin-right: 10px;
     font-size: 20px;
   }

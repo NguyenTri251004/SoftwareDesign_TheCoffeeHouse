@@ -7,7 +7,6 @@ import mongoose from "mongoose";
 import authRoute from "./routes/auth.route.js"; 
 import shopRoute from "./routes/shop.route.js";
 
-
 // const userRoute = require("./routes/user.route");
 dotenv.config();
 
@@ -15,8 +14,6 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-
-console.log("📌 EMAIL_PASS:", process.env.EMAIL_PASS);
 
 const allowedOrigins = process.env.CLIENT_URL ? process.env.CLIENT_URL.split(",") : [];
 
