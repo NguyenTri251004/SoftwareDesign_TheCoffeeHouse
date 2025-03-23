@@ -3,7 +3,6 @@ import axios from "axios";
 import { FaGoogle, FaFacebookF, FaApple } from "react-icons/fa";
 import { MdEmail, MdLock } from "react-icons/md";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
-import Footer from "components/footer/Footer.js";
 
 import "./LoginPage.css";
 
@@ -104,7 +103,6 @@ const Login = () => {
       </div>
       
     </div>
-    <Footer />
     </>
     
   );

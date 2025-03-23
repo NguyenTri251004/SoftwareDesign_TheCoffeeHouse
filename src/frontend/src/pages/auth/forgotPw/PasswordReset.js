@@ -1,10 +1,17 @@
 import React, { useState, useRef } from "react";
-import Footer from "components/footer/Footer.js";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./PasswordReset.css";
 
 const PasswordReset = () => {
-  const [code, setCode] = useState(["", "", "", "", ""]);
+  const [code, setCode] = useState(["", "", "", "", "", ""]);
+  const [error, setError] = useState("");
   const inputRefs = useRef([]);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const token = location.state?.token;
+  const email = location.state?.email;
 
   const handleChange = (index, value) => {
     if (/^[0-9]$/.test(value)) {
@@ -28,40 +35,64 @@ const PasswordReset = () => {
     }
   };
 
+  const handleContinue = async () => {
+    const enteredCode = code.join("");
+    if (enteredCode.length < 6) {
+      setError("Please enter the full 6-digit code.");
+      return;
+    }
+
+    try {
+      const response = await axios.post("http://localhost:5001/api/auth/verify-reset-code", {
+        code: enteredCode,
+        token,
+      });
+
+      // Nếu mã đúng → chuyển sang trang đặt mật khẩu mới
+      navigate("/set-new-password", { state: { token, email } });
+    } catch (err) {
+      setError(err.response?.data?.message || "Verification failed.");
+    }
+  };
+
   return (
     <>
       <div className="password-reset-container">
-      <div className="password-reset-box">
-        <h2>Password Reset</h2>
-        <p>We have sent a code to your email</p>
-        <div className="code-inputs">
-          {code.map((digit, index) => (
-            <input
-              key={index}
-              type="text"
-              maxLength="1"
-              value={digit}
-              onChange={(e) => handleChange(index, e.target.value)}
-              onKeyDown={(e) => handleKeyDown(index, e)}
-              ref={(el) => (inputRefs.current[index] = el)}
-            />
-          ))}
+        <div className="password-reset-box">
+          <h2>Password Reset</h2>
+          <p>We have sent a code to your email</p>
+
+          <div className="code-inputs">
+            {code.map((digit, index) => (
+              <input
+                key={index}
+                type="text"
+                maxLength="1"
+                value={digit}
+                onChange={(e) => handleChange(index, e.target.value)}
+                onKeyDown={(e) => handleKeyDown(index, e)}
+                ref={(el) => (inputRefs.current[index] = el)}
+              />
+            ))}
+          </div>
+
+          {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
+
+          <button onClick={handleContinue}>Continue</button>
+
+          <p>
+            Didn’t receive the code? <a href="#">Click here</a>
+          </p>
+          <p>
+            Back to <a href="/login">Log in</a>
+          </p>
         </div>
-        <button>Continue</button>
-        <p>
-          Didn’t receive the code? <a href="#">Click here</a>
-        </p>
-        <p>
-          Back to <a href="/login">Log in</a>
-        </p>
+
+        <div className="image-section">
+          <h1>THE COFFEE HOUSE</h1>
+        </div>
       </div>
-      <div className="image-section">
-            <h1>THE COFFEE HOUSE</h1>
-        </div>
-    </div>
-    <Footer />
     </>
-    
   );
 };
 

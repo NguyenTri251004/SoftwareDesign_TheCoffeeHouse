@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { FaGoogle, FaFacebookF, FaApple } from "react-icons/fa";
 import { MdEmail, MdLock, MdPerson } from "react-icons/md";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
-import Footer from "components/footer/Footer.js";
 import "./SignUpPage.css";
 import axios from "axios";
 
@@ -10,7 +9,6 @@ const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
@@ -20,18 +18,13 @@ const Signup = () => {
     setError("");
     setSuccess("");
 
-    if (!name || !email || !password || !confirmPassword) {
+    if (!name || !email || !password ) {
       setError("Please fill in all fields.");
       return;
     }
 
     if (password.length < 8) {
       setError("Password must be at least 8 characters long.");
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
       return;
     }
 
@@ -43,7 +36,7 @@ const Signup = () => {
         role: "customer",
       });
 
-      setSuccess("Account created successfully! Redirecting to login...");
+      setSuccess("Please check your email to verify your account.");
       setTimeout(() => {
         window.location.href = "/login"; // Redirect to login page
       }, 2000);
@@ -63,6 +56,9 @@ const Signup = () => {
             <AiOutlineExclamationCircle className="error-icon" /> {error}
           </div>
         )}
+
+        {success && <div className="success-message">{success}</div>}
+
         <h2>Sign Up</h2>
         <form onSubmit={handleSignup}>
           <label>Full Name</label>
@@ -98,17 +94,6 @@ const Signup = () => {
             />
           </div>
 
-          <label>Confirm Password</label>
-          <div className="input-field">
-            <MdLock className="icon" />
-            <input
-              type="password"
-              placeholder="Confirm your password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-          </div>
-
           <button type="submit">Sign Up</button>
         </form>
 
@@ -128,7 +113,6 @@ const Signup = () => {
         <h1>THE COFFEE HOUSE</h1>
       </div>
     </div>
-    <Footer />
     </>
     
   );
