@@ -8,31 +8,31 @@ import SetNewPassword from "pages/auth/forgotPw/SetNewPassword.js";
 import HomePage from "pages/homepage/HomePage.js";
 import ShopListPage from "pages/shop/ShopListPage";
 import ShopDetailPage from "pages/shop/DetailShop";
+import Menu from "pages/menu/Menu";
 
 import OrderStatus from "pages/order/orderStatus";
 
-import './App.css';
+import "./App.css";
 function App() {
-    return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<SignUp />} />
-                <Route path="/verify-email" element={<VerifyEmail />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/password-reset" element={<PasswordReset />} />
-                <Route path="/set-new-password" element={<SetNewPassword />} />
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/password-reset" element={<PasswordReset />} />
+        <Route path="/set-new-password" element={<SetNewPassword />} />
 
-                <Route path="/shop/list" element={<ShopListPage />} />
-                <Route path="/shop/detail/:_id" element={<ShopDetailPage />} />
+        <Route path="/shop/list" element={<ShopListPage />} />
+        <Route path="/shop/detail/:_id" element={<ShopDetailPage />} />
 
-                <Route path="/order-status" element={<OrderStatus />} />
-                
-            </Routes>
-            
-        </Router>
-    );
+        <Route path="/order-status" element={<OrderStatus />} />
+        <Route path="/menu" element={<Menu />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;

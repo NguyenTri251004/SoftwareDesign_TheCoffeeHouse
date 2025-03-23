@@ -42,7 +42,7 @@ const Header = () => {
               onMouseEnter={handleMouseEnter} // Thêm sự kiện onMouseEnter
               // onMouseLeave={handleMouseLeave} // Xóa sự kiện này ở đây
             >
-              <a href="#" className={isMenuOpen ? styles.menuActive : ""}>
+              <a href="/menu" className={isMenuOpen ? styles.menuActive : ""}>
                 Menu ▾
               </a>
             </li>

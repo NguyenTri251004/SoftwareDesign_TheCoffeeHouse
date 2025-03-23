@@ -1,0 +1,51 @@
+.menuContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.menuSidebar {
+  width: 300px;
+  height: 100vh;
+  padding-top: 30px;
+  padding-left: 80px;
+  border-right: 3px solid #ddd;
+}
+
+.menuSidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.menuSidebar li {
+  margin-bottom: 8px;
+}
+
+.menuSidebar a {
+  text-decoration: none;
+  color: #939393;
+  font-size: 16px;
+  display: block;
+}
+
+.menuSidebar > ul > li > a {
+  margin-bottom: 10px;
+}
+.menuSidebar li ul li a {
+  font-size: 14px;
+  padding-left: 15px;
+}
+
+.menuSidebar a:hover {
+  color: #ff6600;
+  transition: 0.3s;
+}
+
+.menuSidebar a.active {
+  font-weight: bold;
+  color: #ff6600;
+}
+
+.menuContent {
+  flex: 1;
+  padding: 20px;
+}
