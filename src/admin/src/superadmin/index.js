@@ -9,6 +9,7 @@ import { ToppingList, ToppingCreate, ToppingEdit } from './toppingsManager.js';
 import { MyLayout } from '../auth/layout'; 
 import { ProfilePage } from '../auth/profile';
 import authProvider from '../auth/authProvider';
+import LoginPage from '../auth/LoginPage';
 
 const data = {
     drinks: [
@@ -147,7 +148,7 @@ const dataProvider = fakeDataProvider(data);
 
 const SuperAdminApp = () => {
     return (
-        <Admin dataProvider={dataProvider} authProvider={authProvider}  layout={MyLayout} >
+        <Admin dataProvider={dataProvider} authProvider={authProvider}  layout={MyLayout} loginPage={LoginPage} >
             <Resource name="admin" list={AdminList} create={AdminCreate} edit={AdminEdit} />
             <Resource name="shop" list={ShopList} create={ShopCreate} edit={ShopEdit} />              
             <Resource name="drinks" list={DrinkList} create={DrinkCreate} edit={DrinkEdit} />

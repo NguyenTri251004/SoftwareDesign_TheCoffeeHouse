@@ -32,7 +32,7 @@ const Login = () => {
       localStorage.setItem("role", response.data.role);
 
       // Redirect to dashboard or homepage
-      window.location.href = "/dashboard"; // Change to your route
+      window.location.href = "/"; // Change to your route
     } catch (err) {
       setError(err.response?.data?.message || "Login failed.");
     } finally {

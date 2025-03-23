@@ -3,12 +3,11 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-// import shopSeedRoute from "./routes/seedRoutes.js";  // để load dữ liệu shop lên mongo thoi
 import authRoute from "./routes/auth.route.js"; 
 import shopRoute from "./routes/shop.route.js";
 import userRoute from "./routes/user.route.js";
 
-// const userRoute = require("./routes/user.route");
+
 dotenv.config();
 
 const app = express();
@@ -36,7 +35,6 @@ mongoose.connect(process.env.MONGO_URI)
 
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
-// app.use("/api/seed", shopSeedRoute);  // để load dữ liệu shop lên mongo thoi
 app.use("/api/shop", shopRoute);
 
 const PORT = process.env.PORT || 5001;

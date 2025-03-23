@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser, clearUser } from "../../redux/userSlice";
 import { useNavigate } from "react-router-dom";
-import userAPI from "../../services/userService";
+import userAPI from "services/userService";
 import Header from "components/header/Header";
 import Footer from "components/footer/Footer";
 import styles from "./HomePage.module.css"; // Import module.css
