@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { FaGoogle, FaFacebookF, FaApple } from "react-icons/fa";
 import { MdEmail, MdLock, MdPerson } from "react-icons/md";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
+<<<<<<< Updated upstream
 import "./SignUpPage.css";
+=======
+import Footer from "components/footer/Footer.js";
+import styles from "./SignUpPage.module.css";
+>>>>>>> Stashed changes
 import axios from "axios";
 
 const Signup = () => {
@@ -30,6 +35,7 @@ const Signup = () => {
 
     setLoading(true);
     try {
+<<<<<<< Updated upstream
       const response = await axios.post("http://localhost:5001/api/auth/register", {
         email,
         password,
@@ -37,6 +43,9 @@ const Signup = () => {
       });
 
       setSuccess("Please check your email to verify your account.");
+=======
+      setSuccess("Account created successfully! Redirecting to login...");
+>>>>>>> Stashed changes
       setTimeout(() => {
         window.location.href = "/login"; // Redirect to login page
       }, 2000);
@@ -49,12 +58,74 @@ const Signup = () => {
 
   return (
     <>
-      <div className="signup-container">
-      <div className="signup-box">
-        {error && (
-          <div className="error-message">
-            <AiOutlineExclamationCircle className="error-icon" /> {error}
+      <div className={styles.signupContainer}>
+        <div className={styles.signupBox}>
+          {error && (
+            <div className={styles.errorMessage}>
+              <AiOutlineExclamationCircle className={styles.errorIcon} /> {error}
+            </div>
+          )}
+          <h2>Sign Up</h2>
+          <form onSubmit={handleSignup}>
+            <label>Full Name</label>
+            <div className={styles.inputField}>
+              <MdPerson className={styles.icon} />
+              <input
+                type="text"
+                placeholder="Enter your full name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+
+            <label>Email</label>
+            <div className={styles.inputField}>
+              <MdEmail className={styles.icon} />
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+
+            <label>Password</label>
+            <div className={styles.inputField}>
+              <MdLock className={styles.icon} />
+              <input
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+
+            <label>Confirm Password</label>
+            <div className={styles.inputField}>
+              <MdLock className={styles.icon} />
+              <input
+                type="password"
+                placeholder="Confirm your password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </div>
+
+            <button type="submit">Sign Up</button>
+          </form>
+
+          <p>
+            Already have an account? <a href="/login">Log in</a>
+          </p>
+
+          <div className={styles.separator}>OR</div>
+
+          <div className={styles.socialSignup}>
+            <button className={styles.google}><FaGoogle /></button>
+            <button className={styles.facebook}><FaFacebookF /></button>
+            <button className={styles.apple}><FaApple /></button>
           </div>
+<<<<<<< Updated upstream
         )}
 
         {success && <div className="success-message">{success}</div>}
@@ -113,8 +184,15 @@ const Signup = () => {
         <h1>THE COFFEE HOUSE</h1>
       </div>
     </div>
+=======
+        </div>
+        <div className={styles.imageSection}>
+          <h1>THE COFFEE HOUSE</h1>
+        </div>
+      </div>
+      <Footer />
+>>>>>>> Stashed changes
     </>
-    
   );
 };
 

@@ -4,7 +4,7 @@ import { FaGoogle, FaFacebookF, FaApple } from "react-icons/fa";
 import { MdEmail, MdLock } from "react-icons/md";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
-import "./LoginPage.css";
+import styles from "./LoginPage.module.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -42,69 +42,77 @@ const Login = () => {
 
   return (
     <>
-      <div className="login-container">
-      <div className="login-box">
-        {error && (
-          <div className="error-message">
-            <AiOutlineExclamationCircle className="error-icon" /> {error}
+      <div className={styles.loginContainer}>
+        <div className={styles.loginBox}>
+          {error && (
+            <div className={styles.errorMessage}>
+              <AiOutlineExclamationCircle className={styles.errorIcon} /> {error}
+            </div>
+          )}
+          <h2>Log in</h2>
+          <form onSubmit={handleLogin}>
+            <label>Email</label>
+            <div className={styles.inputField}>
+              <MdEmail className={styles.icon} />
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+
+            <label>Password</label>
+            <div className={styles.inputField}>
+              <MdLock className={styles.icon} />
+              <input
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+
+            <div className={styles.options}>
+              <label>
+                <input type="checkbox" /> Remember me
+              </label>
+              <a href="/forgot-password">Forgot password?</a>
+            </div>
+
+            <button type="submit" disabled={loading}>
+              {loading ? "Logging in..." : "Log in"}
+            </button>
+          </form>
+
+          <p>
+            Don't have an account? <a href="/signup">Sign up</a>
+          </p>
+
+          <div className={styles.separator}>OR</div>
+
+          <div className={styles.socialLogin}>
+            <button className={styles.google}><FaGoogle /></button>
+            <button className={styles.facebook}><FaFacebookF /></button>
+            <button className={styles.apple}><FaApple /></button>
           </div>
-        )}
-        <h2>Log in</h2>
-        <form onSubmit={handleLogin}>
-          <label>Email</label>
-          <div className="input-field">
-            <MdEmail className="icon" />
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
+        </div>
 
-          <label>Password</label>
-          <div className="input-field">
-            <MdLock className="icon" />
-            <input
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-
-          <div className="options">
-            <label>
-              <input type="checkbox" /> Remember me
-            </label>
-            <a href="/forgot-password">Forgot password?</a>
-          </div>
-
-          <button type="submit" disabled={loading}>
-            {loading ? "Logging in..." : "Log in"}
-          </button>
-        </form>
-
-        <p>
-          Don't have an account? <a href="/signup">Sign up</a>
-        </p>
-
-        <div className="separator">OR</div>
-
-        <div className="social-login">
-          <button className="google"><FaGoogle /></button>
-          <button className="facebook"><FaFacebookF /></button>
-          <button className="apple"><FaApple /></button>
+        <div className={styles.imageSection}>
+          <h1>THE COFFEE HOUSE</h1>
         </div>
       </div>
+<<<<<<< Updated upstream
 
       <div className="image-section">
         <h1>THE COFFEE HOUSE</h1>
       </div>
       
     </div>
+=======
+      <Footer />
+>>>>>>> Stashed changes
     </>
-    
   );
 };
 

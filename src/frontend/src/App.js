@@ -9,6 +9,8 @@ import HomePage from "pages/homepage/HomePage.js";
 import ShopListPage from "pages/shop/ShopListPage";
 import ShopDetailPage from "pages/shop/DetailShop";
 
+import OrderStatus from "pages/order/orderStatus";
+
 import './App.css';
 function App() {
     return (
@@ -24,6 +26,8 @@ function App() {
 
                 <Route path="/shop/list" element={<ShopListPage />} />
                 <Route path="/shop/detail/:_id" element={<ShopDetailPage />} />
+
+                <Route path="/order-status" element={<OrderStatus />} />
                 
             </Routes>
             
