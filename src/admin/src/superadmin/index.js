@@ -126,17 +126,20 @@ const data = {
   admin: [
     {
       id: "1",
-      shopId: "1"
-    },
-    {
-      id: "2",
+      username: "nguyenvana",
+      email: "vana@gmail.com",
+      avatar: "https://i.pravatar.cc/150?u=admin1",
       shopId: "67da424781cca2b131c915e0"
     },
     {
-      id: "3",
+      id: "2",
+      username: "lethingoc",
+      email: "ngocle@gmail.com",
+      avatar: "https://i.pravatar.cc/150?u=admin3",
       shopId: "shop2"
     }
   ]
+  
 };
 
 

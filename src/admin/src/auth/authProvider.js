@@ -1,6 +1,6 @@
 const authProvider = {
     login: ({ username, password }) => {
-        localStorage.setItem('role', 'admin');
+        localStorage.setItem('role', 'superadmin');
         localStorage.setItem('username', username);
         return Promise.resolve();
     },
