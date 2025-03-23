@@ -9,11 +9,25 @@ import HomePage from "pages/homepage/HomePage.js";
 import ShopListPage from "pages/shop/ShopListPage";
 import ShopDetailPage from "pages/shop/DetailShop";
 import Menu from "pages/menu/Menu";
-
 import OrderStatus from "pages/order/orderStatus";
 
 import "./App.css";
+
+import { menuItems } from "pages/menu/menuData";
+
 function App() {
+  const menuRoutes = menuItems.flatMap((item) => {
+    const routes = [];
+    routes.push(<Route key={item.path} path={item.path} element={<Menu />} />); // Thêm route cho parent path
+    if (item.subMenu) {
+      item.subMenu.forEach((subItem) => {
+        routes.push(
+          <Route key={subItem.path} path={subItem.path} element={<Menu />} />
+        );
+      });
+    }
+    return routes;
+  });
   return (
     <Router>
       <Routes>
@@ -29,7 +43,9 @@ function App() {
         <Route path="/shop/detail/:_id" element={<ShopDetailPage />} />
 
         <Route path="/order-status" element={<OrderStatus />} />
-        <Route path="/menu" element={<Menu />} />
+
+        {/* Thêm các Route động vào đây */}
+        {menuRoutes}
       </Routes>
     </Router>
   );
