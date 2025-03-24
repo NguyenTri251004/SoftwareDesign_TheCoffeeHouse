@@ -235,7 +235,7 @@ const Menu = () => {
           ) : null}
         </div>
       </div>
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 };

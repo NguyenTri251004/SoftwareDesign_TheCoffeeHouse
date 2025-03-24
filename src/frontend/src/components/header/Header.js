@@ -1,26 +1,47 @@
-// Header.js
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styles from "./Header.module.css";
 import logo from "assets/logo.svg";
 import DropdownMenu from "./DropdownMenu";
+import AccountDropdown from "./AccountDropdown";
 
-// Import Font Awesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faShoppingBag } from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
+  const accountDropdownRef = useRef(null);
 
-  // Không cần hàm toggleMenu nữa
-
-  const handleMouseEnter = () => {
-    setIsMenuOpen(true);
+  const toggleAccountMenu = () => {
+    setIsAccountMenuOpen((prev) => !prev);
   };
 
-  const handleMouseLeave = () => {
-    setIsMenuOpen(false);
-  };
+  useEffect(() => {
+    const handleMouseLeave = (event) => {
+      if (
+        accountDropdownRef.current &&
+        !accountDropdownRef.current.contains(event.relatedTarget) &&
+        !document.getElementById("user-icon").contains(event.relatedTarget)
+      ) {
+        setIsAccountMenuOpen(false);
+      }
+    };
+
+    if (isAccountMenuOpen) {
+      accountDropdownRef.current?.addEventListener(
+        "mouseleave",
+        handleMouseLeave
+      );
+    }
+
+    return () => {
+      accountDropdownRef.current?.removeEventListener(
+        "mouseleave",
+        handleMouseLeave
+      );
+    };
+  }, [isAccountMenuOpen]);
 
   return (
     <header className={styles.header}>
@@ -39,8 +60,7 @@ const Header = () => {
             </li>
             <li
               className={styles.dropdown}
-              onMouseEnter={handleMouseEnter} // Thêm sự kiện onMouseEnter
-              // onMouseLeave={handleMouseLeave} // Xóa sự kiện này ở đây
+              onMouseEnter={() => setIsMenuOpen(true)}
             >
               <a href="/menu" className={isMenuOpen ? styles.menuActive : ""}>
                 Menu ▾
@@ -53,16 +73,24 @@ const Header = () => {
         </nav>
 
         <div className={styles.headerIcons}>
-          <button className={styles.userBtn} id="user-icon">
+          <button
+            className={styles.userBtn}
+            id="user-icon"
+            onClick={toggleAccountMenu}
+          >
             <FontAwesomeIcon icon={faUser} />
           </button>
-          <button className={styles.bagBtn} id="bag-icon">
+          <button className={styles.bagBtn}>
             <FontAwesomeIcon icon={faShoppingBag} />
           </button>
         </div>
       </div>
-      {/* Chuyển onMouseLeave sang DropdownMenu */}
-      {isMenuOpen && <DropdownMenu onMouseLeave={handleMouseLeave} />}
+      {isMenuOpen && <DropdownMenu onMouseLeave={() => setIsMenuOpen(false)} />}
+      {isAccountMenuOpen && (
+        <div ref={accountDropdownRef}>
+          <AccountDropdown />
+        </div>
+      )}
     </header>
   );
 };

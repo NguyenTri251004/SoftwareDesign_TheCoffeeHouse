@@ -185,4 +185,18 @@ export const menuItems = [
     ],
     products: [],
   },
+  // {
+  //   label: "Thưởng thức tại nhà",
+  //   link: "#",
+  //   path: "/menu/thuong-thuc-tai-nha",
+  //   subMenu: [
+  //     {
+  //       label: "Cà phê tại nhà",
+  //       link: "#",
+  //       path: "/menu/thuong-thuc-tai-nha/ca-phe-tai-nha",
+  //       products: [],
+  //     },
+  //   ],
+  //   products: [],
+  // },
 ];

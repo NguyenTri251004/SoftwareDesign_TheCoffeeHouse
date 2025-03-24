@@ -4,6 +4,12 @@ import ShopModel from "../models/shop.model.js";
 
 const router = express.Router();
 
+router.get("/cities", ShopController.getCities);
+router.get("/districts", ShopController.getDistrictsByCity);
+router.get("/shops", ShopController.getShopByAddress);
+router.get("/detail", ShopController.getShopById);
+router.get("/nearbyshops", ShopController.getNearByShops);
+
 router.get("/", async (req, res) => {
     try {
         const start = req.query.start || 0;
@@ -28,14 +34,7 @@ router.get("/", async (req, res) => {
         });
     }
 });
-router.get("/:id", async (req, res) => {
-    try {
-        const shop = await ShopController.getOneShop(req.params.id);
-        res.json(shop);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
-});
+
 router.post("/", async (req, res) => {
     try {
         const shop = await ShopController.createShop(req.body);
@@ -62,10 +61,14 @@ router.delete("/:id", async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 });
-router.get("/cities", ShopController.getCities);
-router.get("/districts", ShopController.getDistrictsByCity);
-router.get("/shops", ShopController.getShopByAddress);
-router.get("/detail", ShopController.getShopById);
-router.get("/nearbyshops", ShopController.getNearByShops);
+
+router.get("/:id", async (req, res) => {
+    try {
+        const shop = await ShopController.getOneShop(req.params.id);
+        res.json(shop);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+});
 
 export default router;
