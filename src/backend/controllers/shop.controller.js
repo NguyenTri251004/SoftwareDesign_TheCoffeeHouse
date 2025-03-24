@@ -79,6 +79,7 @@ const ShopController = {
             throw error;
         }
     },
+    
     getCities: async (req, res) => {
         try {
             const cities = await ShopModel.aggregate([
