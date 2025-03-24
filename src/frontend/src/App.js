@@ -47,7 +47,6 @@ function App() {
         <Route path="/drink/detail/:id" element={<DrinkDetailPage />} />
         <Route path="/order-status" element={<OrderStatus />} />
 
-        {/* Thêm các Route động vào đây */}
         {menuRoutes}
       </Routes>
     </Router>
