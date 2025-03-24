@@ -1,0 +1,62 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+  }
+  
+  .verifyContainer {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .verifyBox {
+    width: 40%;
+    padding: 40px;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .imageSection {
+    width: 60%;
+    background: url('../../../assets/auth.png') no-repeat center;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .imageSection h1 {
+    font-size: 36px;
+    margin-top: 30px;
+    font-weight: 700;
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+    align-self: center;
+  }
+  
+  label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+  }
+  p {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .verifyBox a {
+    color: olive;
+    text-decoration: none;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+  }

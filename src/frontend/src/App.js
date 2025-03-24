@@ -8,9 +8,9 @@ import SetNewPassword from "pages/auth/forgotPw/SetNewPassword.js";
 import HomePage from "pages/homepage/HomePage.js";
 import ShopListPage from "pages/shop/ShopListPage";
 import ShopDetailPage from "pages/shop/DetailShop";
+
 import Menu from "pages/menu/Menu";
-import OrderStatus from "pages/order/orderStatus";
-import ModalAddress1  from "components/modal/ModalAddress1";
+
 import "./App.css";
 
 import { menuItems } from "pages/menu/menuData";
