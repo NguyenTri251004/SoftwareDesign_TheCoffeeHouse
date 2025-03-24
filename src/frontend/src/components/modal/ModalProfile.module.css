@@ -1,0 +1,103 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .modal {
+    background: white;
+    padding: 20px;
+    width: 400px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    text-align: center;
+    padding-top: 40px;
+  }
+  
+  .closeButton {
+    position: absolute;
+    top: -20px;
+    right: 0px;
+    background: none;
+    border: none;
+    font-size: 25px;
+    cursor: pointer;
+    color: black;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+  }
+  
+  .title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 30px;
+  }
+  
+  .avatarWrapper {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto;
+  }
+  
+  .avatar {
+    width: 80%;
+    height: 80%;
+    object-fit: cover;
+  }
+  
+  .memberType {
+    color: orange;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 8px 0;
+  }
+  
+  .formGroup {
+    text-align: left;
+    margin-bottom: 12px;
+  }
+  
+  .formGroup label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  
+  .formGroup input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    background: white;
+  }
+  
+  .saveButton {
+    background: #f7931e;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: auto;
+    margin-top: 10px;
+  }
+
+  .saveButton:hover {
+    background: #f7931e;
+    color: white;
+  }
+  

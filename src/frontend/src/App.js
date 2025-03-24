@@ -17,6 +17,7 @@ import { menuItems } from "pages/menu/menuData";
 import ModalAddress2 from "components/modal/ModalAddress2";
 import ModalTrackOrder1 from "components/modal/ModalTrackOrder1";
 import ModalTrackOrder2 from "components/modal/ModalTrackOrder2";
+import ModalProfile from "components/modal/ModalProfile";
 
 function App() {
   // const menuRoutes = menuItems.flatMap((item) => {
@@ -53,7 +54,7 @@ function App() {
   //   </Router>
   // );
   return (
-    < ModalTrackOrder1 />
+    < ModalProfile />
   )
 }
 
