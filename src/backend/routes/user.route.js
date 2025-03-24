@@ -1,8 +1,10 @@
-// const express = require("express");
-// const router = express.Router();
-// const verifyToken = require("../middlewares/auth.middleware");
-// const userController = require("../controllers/userController");
+import express from "express";
+const router = express.Router();
+import userController from "../controllers/user.controller.js";
+import verifyToken from "../middlewares/auth.middleware.js";
 
-// router.get("/profile", verifyToken, userController.getProfile);
 
-// module.exports = router;
+//router.get("/profile", verifyToken, userController.getProfile);
+router.get("/profile", userController.getProfile);
+
+export default router;

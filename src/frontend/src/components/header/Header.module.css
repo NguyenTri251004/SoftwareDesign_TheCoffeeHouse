@@ -37,6 +37,7 @@
   transition: color 0.3s;
 }
 
+.nav ul li a.menuActive,
 .nav ul li a:hover {
   color: #ff6600;
 }
@@ -49,7 +50,7 @@
 
 .userBtn,
 .bagBtn {
-  margin: 0;
+  margin: 0 !important;
   width: 44px;
   height: 44px;
   display: flex;

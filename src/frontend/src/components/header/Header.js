@@ -1,6 +1,8 @@
-import React from "react";
+// Header.js
+import React, { useState } from "react";
 import styles from "./Header.module.css";
 import logo from "assets/logo.svg";
+import DropdownMenu from "./DropdownMenu";
 
 // Import Font Awesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,6 +10,18 @@ import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faShoppingBag } from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Không cần hàm toggleMenu nữa
+
+  const handleMouseEnter = () => {
+    setIsMenuOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
     <header className={styles.header}>
       <div className={styles.headerContainer}>
@@ -23,8 +37,14 @@ const Header = () => {
             <li>
               <a href="#">Trà</a>
             </li>
-            <li className={styles.dropdown}>
-              <a href="#">Menu ▾</a>
+            <li
+              className={styles.dropdown}
+              onMouseEnter={handleMouseEnter} // Thêm sự kiện onMouseEnter
+              // onMouseLeave={handleMouseLeave} // Xóa sự kiện này ở đây
+            >
+              <a href="/menu" className={isMenuOpen ? styles.menuActive : ""}>
+                Menu ▾
+              </a>
             </li>
             <li>
               <a href="/shop/list">Cửa hàng</a>
@@ -41,6 +61,8 @@ const Header = () => {
           </button>
         </div>
       </div>
+      {/* Chuyển onMouseLeave sang DropdownMenu */}
+      {isMenuOpen && <DropdownMenu onMouseLeave={handleMouseLeave} />}
     </header>
   );
 };

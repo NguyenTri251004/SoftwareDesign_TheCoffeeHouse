@@ -10,29 +10,46 @@ import ShopListPage from "pages/shop/ShopListPage";
 import ShopDetailPage from "pages/shop/DetailShop";
 
 import OrderStatus from "pages/order/OrderStatus";
+import Menu from "pages/menu/Menu";
 
-import './App.css';
+import "./App.css";
+
+import { menuItems } from "pages/menu/menuData";
+
 function App() {
-    return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<SignUp />} />
-                <Route path="/verify-email" element={<VerifyEmail />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/password-reset" element={<PasswordReset />} />
-                <Route path="/set-new-password" element={<SetNewPassword />} />
+  const menuRoutes = menuItems.flatMap((item) => {
+    const routes = [];
+    routes.push(<Route key={item.path} path={item.path} element={<Menu />} />); // Thêm route cho parent path
+    if (item.subMenu) {
+      item.subMenu.forEach((subItem) => {
+        routes.push(
+          <Route key={subItem.path} path={subItem.path} element={<Menu />} />
+        );
+      });
+    }
+    return routes;
+  });
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/password-reset" element={<PasswordReset />} />
+        <Route path="/set-new-password" element={<SetNewPassword />} />
 
-                <Route path="/shop/list" element={<ShopListPage />} />
-                <Route path="/shop/detail/:_id" element={<ShopDetailPage />} />
+        <Route path="/shop/list" element={<ShopListPage />} />
+        <Route path="/shop/detail/:_id" element={<ShopDetailPage />} />
 
-                <Route path="/order-status" element={<OrderStatus />} />
-                
-            </Routes>
-            
-        </Router>
-    );
+        <Route path="/order-status" element={<OrderStatus />} />
+
+        {/* Thêm các Route động vào đây */}
+        {menuRoutes}
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
