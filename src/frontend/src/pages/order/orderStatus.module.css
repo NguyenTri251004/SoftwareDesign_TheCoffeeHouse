@@ -1,178 +1,194 @@
+/* orderStatus.module.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+
 .container {
-    display: flex;
-    padding: 32px;
-    gap: 40px;
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #f9f9f9;
-  }
-  
-  /* === Sidebar bên trái (Chi tiết đơn hàng) === */
-  .sidebar {
-    background-color: #fff;
-    border-radius: 16px;
-    padding: 24px;
-    width: 320px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  }
-  
-  .sidebar h2 {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 16px;
-    border-bottom: 3px solid #f7941e;
-    display: inline-block;
-    padding-bottom: 4px;
-  }
-  
-  .itemList {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  
-  .item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  .item img {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    object-fit: cover;
-    margin-right: 12px;
-  }
-  
-  .item div {
-    flex: 1;
-  }
-  
-  .itemName {
-    font-weight: 500;
-  }
-  
-  .itemSize {
-    font-size: 13px;
-    color: #666;
-  }
-  
-  .summary {
-    margin-top: 24px;
-    border-top: 1px solid #eee;
-    padding-top: 16px;
-    font-size: 14px;
-  }
-  
-  .row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-  }
-  
-  .strike {
-    color: #aaa;
-    text-decoration: line-through;
-  }
-  
-  .discount {
-    color: #f7941e;
-    margin: 8px 0;
-  }
-  
-  .total {
-    font-weight: bold;
-    font-size: 16px;
-    margin-top: 8px;
-  }
-  
-  /* === Phần theo dõi đơn hàng bên phải === */
-  .statusArea {
-    flex: 1;
-  }
-  
-  .statusArea h3 {
-    font-size: 16px;
-    font-weight: normal;
-    margin-bottom: 8px;
-  }
-  
-  .statusArea h3 strong {
-    font-weight: bold;
-  }
-  
-  .statusArea h2 {
-    font-size: 20px;
-    margin: 12px 0 24px;
-    font-weight: bold;
-  }
-  
-  .timeline {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    position: relative;
-    padding-left: 32px;
-  }
-  
-  .step {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    position: relative;
-  }
-  
-  .step::before {
-    content: '';
-    position: absolute;
-    top: 12px;
-    left: -16px;
-    width: 2px;
-    height: 100%;
-    background-color: #eee;
-    z-index: 0;
-  }
-  
-  .step:last-child::before {
-    display: none;
-  }
-  
-  .icon {
-    width: 24px;
-    height: 24px;
-    color: #f7941e;
-    z-index: 1;
-  }
-  
-  .details {
-    flex: 1;
-  }
-  
-  .time {
-    font-size: 12px;
-    color: #999;
-  }
-  
-  .title {
-    font-weight: bold;
-    font-size: 15px;
-    margin-top: 2px;
-  }
-  
-  .desc {
-    font-size: 14px;
-    color: #555;
-    margin-top: 2px;
-  }
-  
-  /* Nút huỷ đơn */
-  .disabledButton {
-    margin-top: 32px;
-    background-color: #eee;
-    color: #aaa;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: not-allowed;
-  }
+  display: flex;
+  padding: 2rem;
+  gap: 2rem;
+  background-color: #f4f6f8;
+  min-height: 90vh;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.sidebar {
+  flex: 1;
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  height: fit-content;
+}
+
+.sidebar h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.itemList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 50px 1fr auto; /* ảnh | thông tin | giá */
+  align-items: center;
+  gap: 3rem;
+}
+
+.item img {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.size {
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.summary {
+  margin-top: 1.5rem;
+  border-top: 1px solid #ddd;
+  padding-top: 1rem;
+  font-size: 16px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin: 6px 0;
+}
+
+.strike {
+  text-decoration: line-through;
+  color: #aaa;
+  font-size: 14px;
+}
+
+.discount {
+  color: #ff7e00;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.statusArea {
+  flex: 2;
+  padding: 1.5rem 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  height: fit-content;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.statusArea h3 {
+  font-size: 16px;
+  margin-bottom: 1rem;
+
+}
+
+.statusArea h2 {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-left: 20px;
+  border-left: 2px  #f0c36d;
+  padding-left: 1.5rem;
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  position: relative;
+}
+
+.icon {
+  background: #fceecf;
+  color: #f0a500;
+  padding: 0.6rem 0.76rem;
+  border-radius: 50%;
+  font-size: 16px;
+  position: absolute;
+  left: -45px;
+  width: 40px;
+}
+
+.drinkDetails {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-content: right;
+}
+
+.details {
+  margin-left: 1rem;
+}
+
+.time {
+  font-size: 14px;
+  color: #999;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: 4px;
+}
+
+.desc {
+  font-size: 15px;
+  color: #555;
+  margin-top: 4px;
+}
+
+.buttons {
+  padding: 0px 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.disabledButton {
+  padding: 10px 20px;
+  background: #f6dcb5;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  /* cursor: not-allowed; */
+  opacity: 0.7;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.primaryButton {
+  padding: 10px 20px;
+  background: #E98800FF;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+}
+

@@ -9,7 +9,7 @@ import HomePage from "pages/homepage/HomePage.js";
 import ShopListPage from "pages/shop/ShopListPage";
 import ShopDetailPage from "pages/shop/DetailShop";
 
-import OrderStatus from "pages/order/orderStatus";
+import OrderStatus from "pages/order/OrderStatus";
 
 import './App.css';
 function App() {
