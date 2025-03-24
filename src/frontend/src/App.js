@@ -18,6 +18,7 @@ import ModalAddress2 from "components/modal/ModalAddress2";
 import ModalTrackOrder1 from "components/modal/ModalTrackOrder1";
 import ModalTrackOrder2 from "components/modal/ModalTrackOrder2";
 import ModalProfile from "components/modal/ModalProfile";
+import Checkout from "pages/checkout/Checkout";
 
 function App() {
   // const menuRoutes = menuItems.flatMap((item) => {
@@ -54,7 +55,7 @@ function App() {
   //   </Router>
   // );
   return (
-    < ModalProfile />
+    <Checkout/>
   )
 }
 
