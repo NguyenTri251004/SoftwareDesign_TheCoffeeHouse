@@ -8,6 +8,7 @@ import SetNewPassword from "pages/auth/forgotPw/SetNewPassword.js";
 import HomePage from "pages/homepage/HomePage.js";
 import ShopListPage from "pages/shop/ShopListPage";
 import ShopDetailPage from "pages/shop/DetailShop";
+import Redeem from "pages/redeem/RedeemPage";
 
 import OrderStatus from "pages/order/orderStatus";
 import Menu from "pages/menu/Menu";
@@ -46,7 +47,7 @@ function App() {
 
         <Route path="/drink/detail/:id" element={<DrinkDetailPage />} />
         <Route path="/order-status" element={<OrderStatus />} />
-
+        <Route path="/redeem" element={<Redeem />} />
         {menuRoutes}
       </Routes>
     </Router>

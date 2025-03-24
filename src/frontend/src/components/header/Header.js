@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styles from "./Header.module.css";
 import logo from "assets/logo.svg";
 import DropdownMenu from "./DropdownMenu";
@@ -11,19 +11,37 @@ import { faShoppingBag } from "@fortawesome/free-solid-svg-icons";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
-
-  const handleMouseEnter = () => {
-    setIsMenuOpen(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsMenuOpen(false);
-  };
+  const accountDropdownRef = useRef(null);
 
   const toggleAccountMenu = () => {
-    setIsAccountMenuOpen(!isAccountMenuOpen); // Đảo ngược trạng thái
+    setIsAccountMenuOpen((prev) => !prev);
   };
-  // Không cần closeAccountMenu riêng.
+
+  useEffect(() => {
+    const handleMouseLeave = (event) => {
+      if (
+        accountDropdownRef.current &&
+        !accountDropdownRef.current.contains(event.relatedTarget) &&
+        !document.getElementById("user-icon").contains(event.relatedTarget)
+      ) {
+        setIsAccountMenuOpen(false);
+      }
+    };
+
+    if (isAccountMenuOpen) {
+      accountDropdownRef.current?.addEventListener(
+        "mouseleave",
+        handleMouseLeave
+      );
+    }
+
+    return () => {
+      accountDropdownRef.current?.removeEventListener(
+        "mouseleave",
+        handleMouseLeave
+      );
+    };
+  }, [isAccountMenuOpen]);
 
   return (
     <header className={styles.header}>
@@ -40,7 +58,10 @@ const Header = () => {
             <li>
               <a href="#">Trà</a>
             </li>
-            <li className={styles.dropdown} onMouseEnter={handleMouseEnter}>
+            <li
+              className={styles.dropdown}
+              onMouseEnter={() => setIsMenuOpen(true)}
+            >
               <a href="/menu" className={isMenuOpen ? styles.menuActive : ""}>
                 Menu ▾
               </a>
@@ -55,17 +76,21 @@ const Header = () => {
           <button
             className={styles.userBtn}
             id="user-icon"
-            onClick={toggleAccountMenu} // Gọi hàm toggleAccountMenu
+            onClick={toggleAccountMenu}
           >
             <FontAwesomeIcon icon={faUser} />
           </button>
-          <button className={styles.bagBtn} id="bag-icon">
+          <button className={styles.bagBtn}>
             <FontAwesomeIcon icon={faShoppingBag} />
           </button>
         </div>
       </div>
-      {isMenuOpen && <DropdownMenu onMouseLeave={handleMouseLeave} />}
-      {isAccountMenuOpen && <AccountDropdown />}
+      {isMenuOpen && <DropdownMenu onMouseLeave={() => setIsMenuOpen(false)} />}
+      {isAccountMenuOpen && (
+        <div ref={accountDropdownRef}>
+          <AccountDropdown />
+        </div>
+      )}
     </header>
   );
 };

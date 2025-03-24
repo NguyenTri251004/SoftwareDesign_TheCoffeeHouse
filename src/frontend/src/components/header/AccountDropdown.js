@@ -14,7 +14,7 @@ const AccountDropdown = ({ onClose }) => {
         <img src={memberIcon} alt="Member" className={styles.icon} />
         Thành viên
       </a>
-      <a href="#" className={styles.dropdownItem}>
+      <a href="/redeem" className={styles.dropdownItem}>
         <img src={beanIcon} alt="Đổi BEAN" className={styles.icon} />
         Đổi BEAN
       </a>
