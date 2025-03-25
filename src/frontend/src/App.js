@@ -17,6 +17,12 @@ import DrinkDetailPage from "pages/menu/DetailDrink";
 import "./App.css";
 
 import { menuItems } from "pages/menu/menuData";
+import Checkout from "pages/checkout/Checkout";
+import ModalAddress1 from "components/modal/ModalAddress1";
+import ModalAddress2 from "components/modal/ModalAddress2";
+import ModalProfile from "components/modal/ModalProfile";
+import ModalTrackOrder1 from "components/modal/ModalTrackOrder1";
+import ModalTrackOrder2 from "components/modal/ModalTrackOrder2";
 
 function App() {
   const menuRoutes = menuItems.flatMap((item) => {
@@ -41,7 +47,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/password-reset" element={<PasswordReset />} />
         <Route path="/set-new-password" element={<SetNewPassword />} />
-
+        <Route path="/checkout" element={<Checkout />} />
         <Route path="/shop/list" element={<ShopListPage />} />
         <Route path="/shop/detail/:_id" element={<ShopDetailPage />} />
 

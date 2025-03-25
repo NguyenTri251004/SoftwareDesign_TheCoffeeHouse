@@ -1,197 +1,354 @@
-/* Checkout.module.css */
+p {
+  margin: 0;
+  text-align: left;
+}
 .checkoutContainer {
-    font-family: Arial, sans-serif;
-    background-color: #f8f8f8;
-    padding: 20px;
-  }
-  
-  .checkoutContent {
-    max-width: 900px;
-    margin: auto;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .title {
-    font-size: 30px;
-    font-weight: bold;
-    display: flex;
-    text-align: center;
-    justify-content: center;    
-    margin-bottom: 50px;
-    gap: 10px;
+  padding: 20px;
+  width: 100%;
+}
 
+.checkoutContent {
+  max-width: 900px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 100px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  margin-bottom: 50px;
+  gap: 10px;
+}
+
+.orderContainer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.shippingSection,
+.orderSummary {
+  width: 48%;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  margin-top: 20px;
+  border-bottom: 2px solid #f7931e;
+  padding-bottom: 5px;
+}
+
+.sectionHeader h3 {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.editButton {
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 5px 15px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.addressBox {
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.addressContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.deliveryIcon {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.addressText {
+  flex: 1;
+}
+
+.addressText p {
+  margin: 2px 0;
+  text-align: left;
+}
+
+.arrowIcon {
+  font-size: 20px;
+  margin-left: 10px;
+}
+
+.inputField {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.paymentMethods {
+  margin-bottom: 15px;
+}
+
+.paymentOption {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.paymentOption input {
+  margin-right: 30px;
+}
+
+.paymentIcon {
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+}
+
+.terms {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: #666;
+}
+
+.terms input {
+  appearance: none;
+  margin-right: 5px;
+  width: 14px;
+  height: 14px;
+  border: 2px solid orange; 
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+}
+.terms input:checked::after {
+  content: "✔";
+  color: orange;
+  font-size: 12px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+}
+
+
+.orderSummary {
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.orderSummaryDetail {
+  padding: 15px;
+  flex: 1;
+}
+.headerRow {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  margin-bottom: 16px; 
+}
+.addMoreButton {
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.orderItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+  font-size: 14px;
+}
+.orderItemContent {
+  display: flex;
+  align-items: center;
+  gap: 15px; 
+}
+
+.editIcon {
+  color: #f28c38;
+  font-size: 20px;
+}
+.orderItemContentDetail {
+  p {
+    text-align: left;
   }
-  
-  .orderContainer {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-  }
-  
-  .shippingSection,
-  .orderSummary {
-    width: 48%;
-  }
-  
-  .sectionHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .editButton {
-    background: none;
-    border: none;
-    color: #f7931e;
-    cursor: pointer;
+}
+.orderItem p {
+  margin: 2px 0;
+}
+
+.price {
+  font-weight: bold;
+}
+
+.divider {
+  border: 0;
+  border-top: 2px solid #d4d6dc;
+  margin: 10px 0;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.summaryRow h3 {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.summaryRow p:nth-child(2) {
+  font-weight: bold;
+}
+
+.confirmButton {
+  width: 100%;
+  background: #f7931e;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.confirmButton:hover {
+  background: #e6821b;
+}
+
+.strikeThrough {
+  color: #888888; 
+  text-decoration: line-through; 
+}
+.summaryDiscountRow {
+  display: flex;
+  flex-direction: column; 
+  width: 100%;
+  p {
+    text-align: left;
     font-size: 14px;
-    width: auto;
   }
-  
-  .addressBox {
-    background: #fff3cd;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 15px;
-    font-size: 14px;
+}
+.discountRow {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center; 
+  width: 100%; 
+  margin: 0;
+  p {
+    margin: 0;
   }
-  
-  .addressBox p {
-    margin: 5px 0;
-  }
-  
-  .inputField {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-  }
-  
-  .paymentMethods {
-    margin-bottom: 15px;
-  }
-  
-  .paymentOption {
-    display: flex;
-    align-items: center;
-    margin: 10px 0;
-    font-size: 14px;
-  }
-  
-  .paymentOption input {
-    margin-right: 10px;
-  }
-  
-  .paymentIcon {
-    margin-right: 10px;
-  }
-  
-  .paymentIcon img {
-    width: 20px;
-    height: 20px;
-  }
-  
-  .terms {
-    display: flex;
-    align-items: center;
-    font-size: 12px;
-    color: #666;
-  }
-  
-  .terms input {
-    margin-right: 5px;
-  }
-  
-  .termsLink {
-    color: #f7931e;
-    text-decoration: none;
-  }
-  
-  .orderSummary {
-    background: #fff;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    position: relative;
-  }
-  
-  .addMoreButton {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: none;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 5px 10px;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  
-  .orderItem {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 10px 0;
-    font-size: 14px;
-  }
-  
-  .price {
-    font-weight: bold;
-  }
-  
-  .divider {
-    border: 0;
-    border-top: 1px solid #ccc;
-    margin: 10px 0;
-  }
-  
-  .summaryRow {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 5px 0;
-    font-size: 14px;
-  }
-  
-  .summaryRow h3 {
-    font-size: 18px;
-    font-weight: bold;
-  }
-  
-  .confirmButton {
-    width: 100%;
-    background: #f7931e;
-    color: white;
-    border: none;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-  
-  .confirmButton:hover {
-    background: #e6821b;
-  }
-  
-  .cancelButton {
-    width: 100%;
-    background: none;
-    border: none;
-    color: #f7931e;
-    padding: 10px;
-    font-size: 14px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-  }
+}
+.discountLabel {
+  font-size: 12px !important; 
+  color: #f28c38;
+  margin: 0; 
+}
+.discountContainer {
+  display: flex;
+  flex-direction: column; 
+  width: 100%;
+  gap: 10px;
+}
+.totalSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ff9603; 
+  border-radius: 0 0 10px 10px; 
+  width: 100%; 
+  padding: 12px 12px;
+}
+
+.totalDetails {
+  display: flex;
+  flex-direction: column; 
+}
+
+.sectionTotal {
+  font-size: 12px; 
+  font-weight: bold; 
+  color: #fff; 
+  margin: 0; 
+  position: relative;
+  padding-bottom: 4px; 
+}
+
+.sectionTotal::after {
+  content: none; 
+}
+.sectionPrice {
+  font-weight: bold; 
+  color: #fff;
+  font-size: 12px; 
+}
+.confirmButton {
+  background-color: #fff; 
+  color: #f28c38; 
+  border: none; 
+  border-radius: 20px; 
+  width: auto; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px; 
+  cursor: pointer; 
+  margin: 0;
+}
+
+.confirmButton:hover {
+  background-color: #f0f0f0; 
+}
+
+.cancelButton {
+  position: absolute;
+  bottom: -70px;
+  right: 0;
+  background: none;
+  border: none;
+  color: #f7931e;
+  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
