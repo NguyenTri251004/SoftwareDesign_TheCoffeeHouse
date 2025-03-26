@@ -14,6 +14,8 @@ import OrderStatus from "pages/order/orderStatus";
 import Menu from "pages/menu/Menu";
 import DrinkDetailPage from "pages/menu/DetailDrink";
 
+import {VoucherProvider} from "pages/voucher/VoucherContext";
+
 import "./App.css";
 
 import { menuItems } from "pages/menu/menuData";
@@ -23,6 +25,7 @@ import ModalAddress2 from "components/modal/ModalAddress2";
 import ModalProfile from "components/modal/ModalProfile";
 import ModalTrackOrder1 from "components/modal/ModalTrackOrder1";
 import ModalTrackOrder2 from "components/modal/ModalTrackOrder2";
+import VoucherPage from "pages/voucher/VoucherPage";
 
 function App() {
   const menuRoutes = menuItems.flatMap((item) => {
@@ -38,25 +41,28 @@ function App() {
     return routes;
   });
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/verify-email" element={<VerifyEmail />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/password-reset" element={<PasswordReset />} />
-        <Route path="/set-new-password" element={<SetNewPassword />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/shop/list" element={<ShopListPage />} />
-        <Route path="/shop/detail/:_id" element={<ShopDetailPage />} />
+    <VoucherProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/password-reset" element={<PasswordReset />} />
+          <Route path="/set-new-password" element={<SetNewPassword />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/shop/list" element={<ShopListPage />} />
+          <Route path="/shop/detail/:_id" element={<ShopDetailPage />} />
 
-        <Route path="/drink/detail/:id" element={<DrinkDetailPage />} />
-        <Route path="/order-status" element={<OrderStatus />} />
-        <Route path="/redeem" element={<Redeem />} />
-        {menuRoutes}
-      </Routes>
-    </Router>
+          <Route path="/drink/detail/:id" element={<DrinkDetailPage />} />
+          <Route path="/order-status" element={<OrderStatus />} />
+          <Route path="/redeem" element={<Redeem />} />
+          {menuRoutes}
+        </Routes>
+      </Router>
+      <VoucherPage/>
+    </VoucherProvider>
   );
 }
 

@@ -3,6 +3,7 @@ import styles from "./Header.module.css";
 import logo from "assets/logo.svg";
 import DropdownMenu from "./DropdownMenu";
 import AccountDropdown from "./AccountDropdown";
+import { useVoucher } from "pages/voucher/VoucherContext";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
@@ -43,6 +44,8 @@ const Header = () => {
     };
   }, [isAccountMenuOpen]);
 
+  const { openPopup } = useVoucher();
+
   return (
     <header className={styles.header}>
       <div className={styles.headerContainer}>
@@ -68,6 +71,9 @@ const Header = () => {
             </li>
             <li>
               <a href="/shop/list">Cửa hàng</a>
+            </li>
+            <li>
+              <a href="#" onClick={openPopup}>Voucher</a>
             </li>
           </ul>
         </nav>
