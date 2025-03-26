@@ -14,7 +14,7 @@ import OrderStatus from "pages/order/orderStatus";
 import Menu from "pages/menu/Menu";
 import DrinkDetailPage from "pages/menu/DetailDrink";
 
-import {VoucherProvider} from "pages/voucher/VoucherContext";
+import {PopupProvider} from "context/PopupContext";
 
 import "./App.css";
 
@@ -42,7 +42,7 @@ function App() {
     return routes;
   });
   return (
-    <VoucherProvider>
+    <PopupProvider>
       <Router>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -64,7 +64,7 @@ function App() {
         </Routes>
       </Router>
       <VoucherPage/>
-    </VoucherProvider>
+    </PopupProvider>
   );
 }
 

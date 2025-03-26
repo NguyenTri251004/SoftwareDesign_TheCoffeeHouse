@@ -1,21 +1,21 @@
 import React, { createContext, useState, useContext } from "react";
 
 // Tạo Context
-const VoucherContext = createContext();
+const PopupContext = createContext();
 
 // Tạo Provider để bọc ứng dụng
-export const VoucherProvider = ({ children }) => {
+export const PopupProvider = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const openPopup = () => setIsOpen(true);
   const closePopup = () => setIsOpen(false);
 
   return (
-    <VoucherContext.Provider value={{ isOpen, openPopup, closePopup }}>
+    <PopupContext.Provider value={{ isOpen, openPopup, closePopup }}>
       {children}
-    </VoucherContext.Provider>
+    </PopupContext.Provider>
   );
 };
 
 // Hook để dùng context trong các component
-export const useVoucher = () => useContext(VoucherContext);
+export const usePopup = () => useContext(PopupContext);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
-import { useVoucher } from "./VoucherContext";
+import { usePopup } from "context/PopupContext";
 import VoucherAPI from "services/voucherService";
 import VoucherDetail from "./VoucherDetail"; // Import component
 import styles from "./VoucherPage.module.css";
@@ -9,7 +9,7 @@ import styles from "./VoucherPage.module.css";
 Modal.setAppElement("#root");
 
 const VoucherPage = () => {
-  const { isOpen, openPopup, closePopup } = useVoucher(); 
+  const { isOpen, openPopup, closePopup } = usePopup(); 
   const [vouchers, setVouchers] = useState([]);
   const [loading, setLoading] = useState(false);
 
