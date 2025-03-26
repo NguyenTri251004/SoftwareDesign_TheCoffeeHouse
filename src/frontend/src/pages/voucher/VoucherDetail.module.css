@@ -1,0 +1,158 @@
+/* Overlay mờ cho popup */
+.voucherDetailOverlay {
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container chính của popup */
+.voucherDetailContainer {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    text-align: center;
+    position: relative;
+    outline: none;
+}
+
+/* Header chứa tiêu đề "Chi tiết khuyến mãi" và nút đóng */
+.detailHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.detailHeader h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.closeButton {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+/* Loading text */
+.loadingText {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Nội dung chính của popup */
+.detailContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Tiêu đề voucher: "Giảm 10%..." */
+.voucherTitle {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+/* Thời gian hết hạn */
+.voucherExpiry {
+    font-size: 14px;
+    color: #f27935; /* Màu cam hoặc tuỳ chọn */
+    margin-bottom: 16px;
+}
+
+/* Ảnh QR code / icon voucher */
+.voucherIcon {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    margin-bottom: 16px;
+}
+
+.voucherCode {
+    font-size: 14px;
+    font-weight: bold;
+    color: #f27935; /* Màu cam tuỳ chọn */
+    margin-bottom: 8px;
+  }
+
+/* Mô tả voucher */
+.voucherDescription {
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: left;
+    margin-bottom: 16px;
+    white-space: pre-line;
+}
+
+/* Link điều khoản */
+.termsLink {
+    font-size: 14px;
+    color: #0066cc;
+    text-decoration: underline;
+    margin-bottom: 16px;
+}
+
+/* Hàng chứa nút "Quay về" và "Sử dụng ngay" */
+.voucherActions {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* Nút Quay về */
+.backButton {
+    flex: 1;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    color: #333;
+    border-radius: 4px;
+    padding: 10px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+/* Nút Sử dụng ngay */
+.useButton {
+    flex: 1;
+    background-color: #f27935; /* Màu cam (tuỳ chọn) */
+    border: none;
+    color: #fff;
+    border-radius: 4px;
+    padding: 10px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 8px;
+    font-weight: bold;
+}
+
+/* Khi hover nút */
+.backButton:hover,
+.useButton:hover {
+    opacity: 0.9;
+}
+
+/* Không có voucher */
+.noVoucher {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+}
+  

@@ -73,7 +73,7 @@ const Header = () => {
               <a href="/shop/list">Cửa hàng</a>
             </li>
             <li>
-              <a href="#" onClick={openPopup}>Voucher</a>
+              <a href="#" onClick={openPopup}>Khuyến mãi</a>
             </li>
           </ul>
         </nav>
