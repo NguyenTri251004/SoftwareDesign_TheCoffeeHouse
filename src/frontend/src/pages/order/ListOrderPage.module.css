@@ -1,0 +1,176 @@
+/* Container bao bên ngoài */
+.container {
+  background-color: #f8f8f8; /* Màu nền nhẹ */
+  /* min-height: 100vh; */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Nội dung chính (giữa Header và Footer) */
+.content {
+  width: 80%;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* Tabs trạng thái đơn hàng */
+.tabs {
+  display: flex;
+  /* border: 1px solid #ccc; */
+  margin-bottom: 16px;
+  background-color: #f9f9f9;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 12px 0;
+  font-size: 14px;
+  color: #555;
+  cursor: pointer;
+  /* border-right: 1px solid #ccc; */
+  background-color: #f9f9f9;
+  transition: all 0.2s ease;
+}
+
+/* Tab cuối cùng bỏ border-right */
+.tab:last-child {
+  border-right: none;
+}
+
+/* Tab đang chọn */
+.activeTab {
+  color: #ff6600;
+  font-weight: 600;
+  background-color: #fff;
+  position: relative;
+  /* Đường gạch chân cam */
+  border-bottom: 2px solid #ff6600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Hover tab */
+.tab:hover {
+  background-color: #eee;
+}
+
+/* Danh sách đơn hàng */
+.ordersList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Thẻ hiển thị từng đơn hàng */
+.orderCard {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+}
+
+/* Header của đơn hàng */
+.orderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.branch {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Nút Xem Shop */
+.shopButton {
+  background: none;
+  border: 1px solid #ccc;
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.shopButton:hover {
+  background-color: #eee;
+}
+
+/* Mỗi item trong đơn hàng */
+.orderItem {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.orderItem:last-child {
+  border-bottom: none;
+}
+
+/* Ảnh sản phẩm */
+.productImage {
+  width: 60px;
+  height: 60px;
+  border-radius: 6px;
+  object-fit: cover;
+  margin-right: 12px;
+}
+
+/* Thông tin sản phẩm */
+.itemInfo {
+  flex: 1;
+}
+
+.productName {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.productDetails {
+  font-size: 14px;
+  color: #666;
+}
+
+.productQuantity {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Giá tiền sản phẩm */
+.productPrice {
+  font-weight: 600;
+  min-width: 80px;
+  text-align: right;
+}
+
+/* Footer của đơn hàng: trạng thái + tổng tiền */
+.orderFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Trạng thái đơn hàng */
+.orderStatus {
+  color: #ff6600;
+}
+
+/* Tổng giá đơn hàng */
+.totalPrice {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Khi không có đơn hàng */
+.noOrders {
+  text-align: center;
+  color: #666;
+  font-size: 16px;
+  margin-top: 20px;
+}

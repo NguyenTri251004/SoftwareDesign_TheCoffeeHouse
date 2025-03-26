@@ -26,6 +26,7 @@ import ModalProfile from "components/modal/ModalProfile";
 import ModalTrackOrder1 from "components/modal/ModalTrackOrder1";
 import ModalTrackOrder2 from "components/modal/ModalTrackOrder2";
 import VoucherPage from "pages/voucher/VoucherPage";
+import ListOrderPage from "pages/order/ListOrderPage";
 
 function App() {
   const menuRoutes = menuItems.flatMap((item) => {
@@ -57,6 +58,7 @@ function App() {
 
           <Route path="/drink/detail/:id" element={<DrinkDetailPage />} />
           <Route path="/order-status" element={<OrderStatus />} />
+          <Route path="/order" element={<ListOrderPage />} />
           <Route path="/redeem" element={<Redeem />} />
           {menuRoutes}
         </Routes>

@@ -80,7 +80,7 @@ const VoucherAPI = {
     // Lấy danh sách voucher
     getVouchers: async () => {
         try {
-            const response = await fetch(`${BASE_URL}/voucher/list`, {
+            const response = await fetch(`${BASE_URL}/voucher`, {
                 method: "GET",
                 credentials: "include",
                 headers: {
@@ -103,7 +103,7 @@ const VoucherAPI = {
     // Lấy chi tiết voucher theo ID
     getVoucherById: async (id) => {
         try {
-            const response = await fetch(`${BASE_URL}/voucher/detail?id=${id}`, {
+            const response = await fetch(`${BASE_URL}/voucher?id=${id}`, {
                 method: "GET",
                 credentials: "include",
                 headers: {
