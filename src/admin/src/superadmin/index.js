@@ -6,6 +6,7 @@ import { AdminList, AdminCreate, AdminEdit } from "./adminManager.js";
 import { ShopList, ShopCreate, ShopEdit } from './shopManager.js';
 import { ToppingList, ToppingCreate, ToppingEdit } from './toppingsManager.js';
 
+import dataProvider from '../api/dataProvider.js';
 import { MyLayout } from '../auth/layout'; 
 import { ProfilePage } from '../auth/profile';
 import authProvider from '../auth/authProvider';
@@ -76,83 +77,19 @@ const data = {
       name: 'Pudding trứng',
       price: 7000,
     },
-  ],
-
-  shop: [
-    {
-      address: {
-        detail: "TTTM Crescent Mall, 101 Tôn Dật Tiên, Phường Tân Phú",
-        district: "Quận 7",
-        city: "Hồ Chí Minh"
-      },
-      openingHours: { open: "07:00", close: "22:00" },
-      _id: "67da424781cca2b131c915e0",
-      name: "HCM SIGNATURE by The Coffee House",
-      phone: "",
-      images: [
-        "https://file.hstatic.net/1000075078/file/sig_outside_04bf4cce30d4436d9a957a4609fa2dc1.jpg",
-        "https://file.hstatic.net/1000075078/file/sig-03_c74a0629d8b44ac580a3e9cf51fadb0a.png"
-      ],
-      products: [],
-      carParking: true,
-      takeAway: true,
-      service: true,
-      description:
-        "SIGNATURE by The Coffee House là phiên bản đặc biệt cho những cuộc hẹn tròn đầy giữa nhịp sống bận rộn.",
-      __v: 0,
-      id: "67da424781cca2b131c915e0"
-    },
-    {
-      address: {
-        detail: "86 Nguyễn Văn Trỗi, Phường 8",
-        district: "Phú Nhuận",
-        city: "Hồ Chí Minh"
-      },
-      openingHours: { open: "06:30", close: "22:00" },
-      _id: "shop2",
-      name: "The Coffee House - Nguyễn Văn Trỗi",
-      phone: "0123456789",
-      images: [],
-      products: [],
-      carParking: false,
-      takeAway: true,
-      service: false,
-      description:
-        "Không gian hiện đại, gần trung tâm, phù hợp cho học tập và làm việc.",
-      __v: 0,
-      id: "shop2"
-    }
-  ],
-
-  admin: [
-    {
-      id: "1",
-      username: "nguyenvana",
-      email: "vana@gmail.com",
-      avatar: "https://i.pravatar.cc/150?u=admin1",
-      shopId: "67da424781cca2b131c915e0"
-    },
-    {
-      id: "2",
-      username: "lethingoc",
-      email: "ngocle@gmail.com",
-      avatar: "https://i.pravatar.cc/150?u=admin3",
-      shopId: "shop2"
-    }
-  ]
-  
+  ],  
 };
 
 
-const dataProvider = fakeDataProvider(data);
-
+//const dataProvider = fakeDataProvider(data);
+//             
+//<Resource name="drinks" list={DrinkList} create={DrinkCreate} edit={DrinkEdit} />
+//<Resource name="toppings" list={ToppingList} create={ToppingCreate} edit={ToppingEdit} />
 const SuperAdminApp = () => {
     return (
-        <Admin dataProvider={dataProvider} authProvider={authProvider}  layout={MyLayout} loginPage={LoginPage} >
+        <Admin dataProvider={dataProvider} authProvider={authProvider} layout={MyLayout} >
             <Resource name="admin" list={AdminList} create={AdminCreate} edit={AdminEdit} />
-            <Resource name="shop" list={ShopList} create={ShopCreate} edit={ShopEdit} />              
-            <Resource name="drinks" list={DrinkList} create={DrinkCreate} edit={DrinkEdit} />
-            <Resource name="toppings" list={ToppingList} create={ToppingCreate} edit={ToppingEdit} />
+            <Resource name="shop" list={ShopList} create={ShopCreate} edit={ShopEdit} />  
             <CustomRoutes>
                 <Route path="/profile" element={<ProfilePage />} />
             </CustomRoutes>

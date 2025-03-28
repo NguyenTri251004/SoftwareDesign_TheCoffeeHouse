@@ -3,10 +3,11 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+
 import authRoute from "./routes/auth.route.js"; 
 import shopRoute from "./routes/shop.route.js";
 import userRoute from "./routes/user.route.js";
-
+import adminRoute from "./routes/admin.route.js";
 
 dotenv.config();
 
@@ -28,7 +29,8 @@ app.use(cors({
     credentials: true,
     exposedHeaders: ["X-Total-Count"],
 }));
-
+app.use(express.json({ limit: '20mb' })); 
+app.use(express.urlencoded({ limit: '20mb', extended: true }));
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("MongoDB connected"))
     .catch(err => console.error("MongoDB connection error:", err));
@@ -36,6 +38,7 @@ mongoose.connect(process.env.MONGO_URI)
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
 app.use("/api/shop", shopRoute);
+app.use("/api/admin", adminRoute);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

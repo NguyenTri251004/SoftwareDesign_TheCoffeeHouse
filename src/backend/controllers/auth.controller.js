@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
+import Admin from "../models/admin.model.js";
 import mongoose from "mongoose";
 import nodemailer from "nodemailer";
 
@@ -74,10 +75,26 @@ export const register = async (req, res) => {
 
         await newUser.save();
 
+        if (role === "admin") {
+            const username = email.split("@")[0]; 
+
+            const newAdmin = new Admin({
+                _id: newUser._id,
+                shopId: null, 
+                username,
+            });
+
+            await newAdmin.save();
+        }
+
+        if (role === "customer") {
+            // ...
+        }
+
         // Gửi email xác thực
         await sendVerificationEmail(email, verificationToken);
 
-        res.status(201).json({ message: "User registered successfully. Please check your email." });
+        res.status(201).json({ message: "User registered successfully. Please check your email.", id: newUser._id });
     } catch (error) {
         res.status(500).json({ message: "Internal server error.", error: error.message });
     }

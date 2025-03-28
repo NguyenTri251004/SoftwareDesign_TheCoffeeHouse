@@ -6,7 +6,7 @@ const authProvider = {
             const response = await fetch(`${API_URL}/auth/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email: username, password }), // ✅ BE dùng email
+                body: JSON.stringify({ email: username, password }), 
                 credentials: "include",
             });
     

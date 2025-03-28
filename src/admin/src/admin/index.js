@@ -6,9 +6,11 @@ import { ToppingList } from './toppingsManager';
 import { OrderList, OrderShow, OrderEdit } from './orderManager';
 import { FlashSaleList, FlashSaleShow, FlashSaleCreate, FlashSaleEdit } from './flashSaleManager';
 
+import dataProvider from '../api/dataProvider.js';
 import { MyLayout } from '../auth/layout'; 
 import { ProfilePage } from '../auth/profile';
 import authProvider from '../auth/authProvider';
+import LoginPage from '../auth/LoginPage';
 
 const data = {
     drinks: [
@@ -149,16 +151,15 @@ const data = {
   
 };
 
-const dataProvider = fakeDataProvider(data);
+//<Resource name="orders" list={OrderList} show={OrderShow} edit={OrderEdit} />
+//<Resource name="drinks" list={DrinkList} />
+//<Resource name="toppings" list={ToppingList} />
+//<Resource name="flashsales" list={FlashSaleList} show={FlashSaleShow} create={FlashSaleCreate} edit={FlashSaleEdit}/>
 
 const AdminApp = () => {
   return (
-    <Admin dataProvider={dataProvider} authProvider={authProvider}  layout={MyLayout} >
-        <Resource name="orders" list={OrderList} show={OrderShow} edit={OrderEdit} />
-        <Resource name="drinks" list={DrinkList} />
-        <Resource name="toppings" list={ToppingList} />
-        <Resource name="flashsales" list={FlashSaleList} show={FlashSaleShow} create={FlashSaleCreate} edit={FlashSaleEdit}/>
-    
+    <Admin dataProvider={dataProvider} authProvider={authProvider} layout={MyLayout} >
+        
         <CustomRoutes>
             <Route path="/profile" element={<ProfilePage />} />
         </CustomRoutes>
