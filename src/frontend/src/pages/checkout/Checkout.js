@@ -4,24 +4,31 @@ import Footer from "components/footer/Footer";
 import { FaFile, FaTrashAlt } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
-import { BsCash } from "react-icons/bs";
-import { FaRegCreditCard } from "react-icons/fa6";
 
 import { useState } from "react";
 import AddressMap from "./AddressMap";
+import { SiGooglemaps } from "react-icons/si";
 
 const Checkout = () => {
+  // const [address, setAddress] = useState("227 Nguyễn Văn Cừ, Quận 5, TP.HCM");
 
-  const [address, setAddress] = useState("227 Nguyễn Văn Cừ, Quận 5, TP.HCM");
+  // const [showMap, setShowMap] = useState(false);
 
-  const [showMap, setShowMap] = useState(false);
+  // const handleArrowClick = () => {
+  //   setShowMap(true);
+  // };
 
-  const handleArrowClick = () => {
-    setShowMap(true);
+  // const handleCloseMap = () => {
+  //   setShowMap(false);
+  // };
+  const [showModal, setShowModal] = useState(false);
+
+  const showModalAddress = () => {
+    setShowModal(true);
   };
 
-  const handleCloseMap = () => {
-    setShowMap(false);
+  const closeModalAddress = () => {
+    setShowModal(false);
   };
 
   return (
@@ -53,7 +60,7 @@ const Checkout = () => {
                     Chi Minh 800000, Việt Nam
                   </p>
                 </div>
-                <span className={styles.arrowIcon} onClick={handleArrowClick}>
+                <span className={styles.arrowIcon} onClick={showModalAddress}>
                   <IoIosArrowForward />
                 </span>
               </div>
@@ -78,7 +85,11 @@ const Checkout = () => {
             <div className={styles.paymentMethods}>
               <label className={styles.paymentOption}>
                 <input type="radio" name="payment" defaultChecked />
-                <BsCash className={styles.paymentIcon} />
+                <img
+                  className={styles.paymentIcon}
+                  src="https://minio.thecoffeehouse.com/image/tchmobileapp/1000_photo_2021-04-06_11-17-08.jpg"
+                  alt="Cash"
+                />
                 <span> Tiền mặt </span>
               </label>
               <hr className={styles.divider} />
@@ -126,17 +137,18 @@ const Checkout = () => {
               <hr className={styles.divider} />
               <label className={styles.paymentOption}>
                 <input type="radio" name="payment" />
-                <FaRegCreditCard
+
+                <img
                   className={styles.paymentIcon}
-                  src="https://shopeepay.vn/static/media/shopeePayLogo2022.67d2e522e841720cf971c77142ace5e4.svg"
-                  alt="CreditCard"
+                  src="https://minio.thecoffeehouse.com/image/tchmobileapp/385_ic_atm@3x.png"
+                  alt="Credit Card"
                 />
                 <span>Thẻ ngân hàng </span>
               </label>
               <hr className={styles.divider} />
             </div>
             <div className={styles.terms}>
-              <input type="checkbox"/>
+              <input type="checkbox" />
               <span>
                 Đồng ý với điều khoản và điều kiện mua hàng của The Coffee House
               </span>
@@ -211,25 +223,41 @@ const Checkout = () => {
             </div>
 
             <button className={styles.cancelButton}>
-              <FaTrashAlt role="img" aria-label="trash"/>
+              <FaTrashAlt role="img" aria-label="trash" />
               <span> Xóa đơn hàng </span>
-        </button>
+            </button>
           </div>
         </div>
       </div>
       <Footer />
 
-      {showMap && (
-        <div className={styles.mapOverlay}>
-          <div className={styles.mapContainer}>
-            <button className={styles.closeButton} onClick={handleCloseMap}>
-              Đóng
-            </button>
-            <AddressMap address={address} />
+      {showModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContainer}>
+            <div className={styles.modalHeader}>
+              <button
+                className={styles.closeButton}
+                onClick={closeModalAddress}
+              >
+                x
+              </button>
+              <span>Giao hàng</span>
+            </div>
+            <div className={styles.modalContent}>
+              <input
+                type="text"
+                className={styles.inputField}
+                placeholder="Vui lòng nhập địa chỉ"
+              />
+              <button className={styles.locationButton}>
+                <span className={styles.locationIcon}><SiGooglemaps />                 
+                Dùng định vị bản đồ
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       )}
-      
     </div>
   );
 };
