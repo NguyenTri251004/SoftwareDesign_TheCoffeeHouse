@@ -9,7 +9,7 @@ import HomePage from "pages/homepage/HomePage.js";
 import ShopListPage from "pages/shop/ShopListPage";
 import ShopDetailPage from "pages/shop/DetailShop";
 import Redeem from "pages/redeem/RedeemPage";
-
+import "leaflet/dist/leaflet.css";
 import OrderStatus from "pages/order/orderStatus";
 import Menu from "pages/menu/Menu";
 import DrinkDetailPage from "pages/menu/DetailDrink";

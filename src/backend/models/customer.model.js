@@ -7,6 +7,6 @@ const AdminSchema = new Schema({
     lastname: { type: String, required: true },
     loyaltyPoints: { type: Number, default: 0 }
 });
-  
+
 const Customer = mongoose.model("Customer", customerSchema);
 export default Customer;

@@ -7,8 +7,23 @@ import { MdEdit } from "react-icons/md";
 import { BsCash } from "react-icons/bs";
 import { FaRegCreditCard } from "react-icons/fa6";
 
+import { useState } from "react";
+import AddressMap from "./AddressMap";
 
 const Checkout = () => {
+
+  const [address, setAddress] = useState("227 Nguyễn Văn Cừ, Quận 5, TP.HCM");
+
+  const [showMap, setShowMap] = useState(false);
+
+  const handleArrowClick = () => {
+    setShowMap(true);
+  };
+
+  const handleCloseMap = () => {
+    setShowMap(false);
+  };
+
   return (
     <div className={styles.checkoutContainer}>
       <Header />
@@ -38,7 +53,7 @@ const Checkout = () => {
                     Chi Minh 800000, Việt Nam
                   </p>
                 </div>
-                <span className={styles.arrowIcon}>
+                <span className={styles.arrowIcon} onClick={handleArrowClick}>
                   <IoIosArrowForward />
                 </span>
               </div>
@@ -203,6 +218,18 @@ const Checkout = () => {
         </div>
       </div>
       <Footer />
+
+      {showMap && (
+        <div className={styles.mapOverlay}>
+          <div className={styles.mapContainer}>
+            <button className={styles.closeButton} onClick={handleCloseMap}>
+              Đóng
+            </button>
+            <AddressMap address={address} />
+          </div>
+        </div>
+      )}
+      
     </div>
   );
 };
