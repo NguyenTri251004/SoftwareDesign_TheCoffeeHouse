@@ -53,11 +53,11 @@ getOne: async (resource, params) => {
         }
         const json = await response.json();
 
-        const item = json.data || json.shop; // phòng trường hợp dùng nhầm getShopById
+        const item = json.data || json.shop; 
         return {
             data: {
                 ...item,
-                id: item.id || item._id, // ✅ đảm bảo có id
+                id: item.id || item._id, 
             },
         };
     } catch (error) {
@@ -113,7 +113,12 @@ getOne: async (resource, params) => {
                 })
             ).then(arr => arr.filter(Boolean));
         }
-        
+
+        if (resource === 'product') {
+            if (data.image && typeof data.image === 'object' && data.image.src) {
+                data.image = data.image.src;
+            }
+        }        
 
         const response = await fetch(`${API_URL}/${resource}`, {
             method: 'POST',
@@ -156,6 +161,29 @@ getOne: async (resource, params) => {
         const json = await response.json();
         return { data: json.data };
     },
+
+    customMethod: async (resource, { method = 'GET', body = null }) => {
+        const response = await fetch(`${API_URL}/${resource}`, {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            ...(body && { body: JSON.stringify(body) }),
+        });
+    
+        const json = await response.json();
+    
+        const rawData = json.data;
+
+        const data = Array.isArray(rawData)
+            ? rawData.map(item => ({ ...item, id: item._id || item.id }))
+            : typeof rawData === 'object'
+            ? { ...rawData, id: rawData._id || rawData.id }
+            : rawData;
+
+        return { data };
+    },
+    
 };
 
 export default dataProvider;

@@ -126,8 +126,18 @@ export const login = async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: "1h" }
         );
+        
+        const responseData = {
+            token,
+            role: user.role
+        };
 
-        res.status(200).json({ token, role: user.role });
+        if (user.role === 'admin') {
+            const admin = await Admin.findById({ _id: user._id });
+            responseData.shopId = admin.shopId;
+        }
+        
+        return res.status(200).json(responseData);
     } catch (error) {
         res.status(500).json({ message: "Internal server error." });
     }

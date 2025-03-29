@@ -1,6 +1,5 @@
 import express from "express";
 import ShopController from "../controllers/shop.controller.js";
-import ShopModel from "../models/shop.model.js";
 
 const router = express.Router();
 
@@ -9,6 +8,9 @@ router.get("/districts", ShopController.getDistrictsByCity);
 router.get("/shops", ShopController.getShopByAddress);
 router.get("/detail", ShopController.getShopById);
 router.get("/nearbyshops", ShopController.getNearByShops);
+
+router.post("/:id/products", ShopController.addProductToShop);
+router.post("/:id/toppings", ShopController.addToppingToShop);
 
 router.get("/", ShopController.getListShops);
 router.post("/many", ShopController.getManyShops);

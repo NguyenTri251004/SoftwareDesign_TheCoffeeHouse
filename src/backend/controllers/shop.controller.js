@@ -167,7 +167,55 @@ const ShopController = {
         } catch (error) {
             return res.status(500).json({ success: false, message: "lỗi lấy near by shop", error });
         }
-    }
+    },
+
+    addProductToShop: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { productId, stock = 0 } = req.body;
+    
+            const result = await ShopModel.findByIdAndUpdate(
+                id,
+                {
+                    $addToSet: {
+                        products: { id: productId, stock }
+                    }
+                },
+                { new: true }
+            );
+    
+            if (!result) return res.status(404).json({ message: 'Shop không tồn tại' });
+    
+            return res.status(200).json({ success: true, data: result });
+        } catch (err) {
+            console.error('Lỗi khi thêm sản phẩm:', err);
+            return res.status(500).json({ success: false, message: 'Lỗi server', err });
+        }
+    },
+    
+    addToppingToShop: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { toppingId, stock = 0 } = req.body;
+    
+            const result = await ShopModel.findByIdAndUpdate(
+                id,
+                {
+                    $addToSet: {
+                        toppings: { id: toppingId, stock }
+                    }
+                },
+                { new: true }
+            );
+    
+            if (!result) return res.status(404).json({ message: 'Shop không tồn tại' });
+    
+            return res.status(200).json({ success: true, data: result });
+        } catch (err) {
+            console.error('Lỗi khi thêm topping:', err);
+            return res.status(500).json({ success: false, message: 'Lỗi server', err });
+        }
+    },
 }
 
 export default ShopController;

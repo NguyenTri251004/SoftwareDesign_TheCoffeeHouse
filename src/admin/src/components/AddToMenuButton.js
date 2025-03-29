@@ -1,18 +1,26 @@
-import { useRecordContext } from 'react-admin';
+import { useRecordContext, useNotify, useDataProvider } from 'react-admin';
 import { Button } from '@mui/material';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
 
-export const AddToMenuButton = () => {
-    const record = useRecordContext();
-    if (!record) return null;
+export const AddToMenuButton = ({ src, shopId }) => {
+  const record = useRecordContext();
+  const notify = useNotify();
+  const dataProvider = useDataProvider();
 
-    const handleClick = () => {
-        alert(`Đã chọn: ${record.name}`);
-    };
+  const handleAdd = async () => {
+    try {
+      await dataProvider.customMethod(`shop/${shopId}/${src}`, {
+        method: 'POST',
+        body: {
+          productId: record.id,
+          stock: 0,
+        },
+      });
 
-    return (
-        <Button size="small" onClick={handleClick} startIcon={<AddCircleIcon />} variant="outlined" >
-            Chọn 
-        </Button>
-    );
+      notify('Đã thêm vào menu chi nhánh', { type: 'success' });
+    } catch (err) {
+      notify('Thêm thất bại', { type: 'error' });
+    }
+  };
+
+  return <Button onClick={handleAdd}>+ Thêm</Button>;
 };

@@ -4,7 +4,7 @@ import { Create, SimpleForm, TextInput, List, Datagrid, TextField, EditButton,
 export const AdminCreate = (props) => (
     <Create {...props}>
         <SimpleForm>
-        <TextInput source="email" label="Email" validate={required()} />
+            <TextInput source="email" label="Email" validate={required()} />
         </SimpleForm>
     </Create>
 );

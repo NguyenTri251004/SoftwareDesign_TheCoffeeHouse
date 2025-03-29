@@ -17,6 +17,8 @@ const authProvider = {
             const data = await response.json();
             localStorage.setItem("token", data.token);
             localStorage.setItem("role", data.role);
+            localStorage.setItem("shopId", data.shopId);
+
     
             return Promise.resolve();
         } catch (error) {
@@ -27,6 +29,7 @@ const authProvider = {
     logout: () => {
         localStorage.removeItem("token");
         localStorage.removeItem("role");
+        localStorage.removeItem("shopId");
         return Promise.resolve();
     },
   
