@@ -26,9 +26,7 @@ function RecenterView({ center }) {
   useEffect(() => {
     // Di chuyển map đến toạ độ mới
     map.setView(center, map.getZoom());
-
-    // Hoặc nếu muốn hiệu ứng bay mượt, thay thế bằng:
-    // map.flyTo(center, map.getZoom());
+    
   }, [center, map]);
 
   return null;

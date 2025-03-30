@@ -9,6 +9,7 @@ router.get("/districts", ShopController.getDistrictsByCity);
 router.get("/shops", ShopController.getShopByAddress);
 router.get("/detail", ShopController.getShopById);
 router.get("/nearbyshops", ShopController.getNearByShops);
+router.get("/shops/address", ShopController.getAddress);
 
 router.get("/", async (req, res) => {
     try {
