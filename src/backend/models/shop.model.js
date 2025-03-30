@@ -9,7 +9,25 @@ const shopSchema = new mongoose.Schema({
     },
     phone: { type: String },
     images: { type: [String] },
-    products: { type: [String], default: [] },
+
+    products: {
+        type: [{
+            _id: false,
+            id: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
+            stock: { type: Number, default: 0 }
+        }],
+        default: []
+    },
+
+    toppings: {
+        type: [{
+            _id: false,
+            id: { type: mongoose.Schema.Types.ObjectId, ref: "Topping", required: true },
+            stock: { type: Number, default: 0 }
+        }],
+        default: []
+    },
+
     openingHours: {
         open: { type: String, required: true },
         close: { type: String, required: true },

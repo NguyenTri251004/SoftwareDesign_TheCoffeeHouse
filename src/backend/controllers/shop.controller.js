@@ -1,85 +1,100 @@
 import ShopModel from "../models/shop.model.js";
 
 const ShopController = {
-    getAllShops: async (start, end) => {
+    getListShops: async (req, res) => {
         try {
-            const shops = await ShopModel.find()
-                .skip(parseInt(start))
-                .limit(parseInt(end) - parseInt(start));
-            
-            if (!Array.isArray(shops)) {
-                console.error("ShopModel.find không trả về mảng!:", shops);
-                return [];
-            }
-            
-            return shops.map(shop => ({
-                ...shop.toObject(),
-                id: shop._id.toString(),
-            }));
+            const { start = 0, end = 10 } = req.query;
+            const skip = parseInt(start);
+            const limit = parseInt(end) - skip;
+
+            const [shops, total] = await Promise.all([
+                ShopModel.find().skip(skip).limit(limit),
+                ShopModel.countDocuments()
+            ]);
+
+            res.set("X-Total-Count", total);
+            res.set("Access-Control-Expose-Headers", "X-Total-Count");
+
+            return res.status(200).json({ success: true, data: shops });
         } catch (error) {
-            console.error("Lỗi ở getAllShops:", error);
-            return [];
+            console.error("Lỗi getListShops:", error);
+            return res.status(500).json({ success: false, message: "Lỗi khi lấy danh sách shop", error });
         }
     },
-    getOneShop: async (id) => {
+
+    getOneShop: async (req, res) => {
         try {
+            const { id } = req.params;
             const shop = await ShopModel.findById(id);
-            if (!shop) {
-                throw new Error("Shop không tìm thấy");
-            }
-            return {
-                ...shop.toObject(),
-                id: shop._id.toString(),
-            };
+            if (!shop) 
+                return res.status(404).json({ success: false, message: "Không tìm thấy shop" });
+
+            return res.status(200).json({ success: true, data: shop });
         } catch (error) {
             console.error("Lỗi ở getOneShop:", error);
-            throw error;
+            return res.status(500).json({ success: false, message: "Lỗi khi lấy shop", error });
         }
     },
-    createShop: async (data) => {
+
+    getManyShops: async (req, res) => {
         try {
-            const shop = new ShopModel(data);
+            const { ids } = req.body; 
+            const shops = await ShopModel.find({ _id: { $in: ids } });
+            
+            return res.status(200).json({ data: shops });
+        } catch (error) {
+            console.error("Lỗi getManyShops:", error);
+            return res.status(500).json({ message: "Lỗi khi lấy danh sách tất cả shop", error });
+        }
+    },
+
+    createShop: async (req, res) => {
+        try {
+            const shop = new ShopModel(req.body);
             await shop.save();
-            return {
-                ...shop.toObject(),
-                id: shop._id.toString()
-            };
+
+            return res.status(201).json({ data: shop });
         } catch (error) {
             console.error("Lỗi ở createShop:", error);
-            throw error;
+            return res.status(500).json({ success: false, message: "Lỗi khi tạo shop", error });
         }
     },
 
-    updateShop: async (id, data) => {
+    updateShop: async (req, res) => {
         try {
-            const shop = await ShopModel.findByIdAndUpdate(id, data, { 
+            const { id } = req.params;
+            const shop = await ShopModel.findByIdAndUpdate(id, req.body, {
                 new: true,
-                runValidators: true 
+                runValidators: true
             });
-            if (!shop) throw new Error("Shop không tìm thấy");
-            return {
-                ...shop.toObject(),
-                id: shop._id.toString()
-            };
+
+            if (!shop) return res.status(404).json({ message: "Shop không tồn tại" });
+
+            return res.status(200).json({ data: shop });
         } catch (error) {
             console.error("Lỗi ở updateShop:", error);
-            throw error;
+            return res.status(500).json({ message: "Lỗi khi cập nhật shop", error });
         }
     },
 
-    deleteShop: async (id) => {
+    deleteShop: async (req, res) => {
         try {
+            const { id } = req.params;
             const shop = await ShopModel.findByIdAndDelete(id);
-            if (!shop) throw new Error("Shop không tìm thấy");
-            return {
-                id: shop._id.toString()
-            };
+
+            if (!shop) return res.status(404).json({ message: "Shop không tồn tại" });
+
+            return res.status(200).json({ 
+                success: true,
+                message: "Xoá shop thành công",
+                data: { id }
+            });
         } catch (error) {
             console.error("Lỗi ở deleteShop:", error);
-            throw error;
+            return res.status(500).json({ message: "Lỗi khi xoá shop", error });
         }
     },
-    
+
     getCities: async (req, res) => {
         try {
             const cities = await ShopModel.aggregate([
@@ -152,7 +167,55 @@ const ShopController = {
         } catch (error) {
             return res.status(500).json({ success: false, message: "lỗi lấy near by shop", error });
         }
-    }
+    },
+
+    addProductToShop: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { productId, stock = 0 } = req.body;
+    
+            const result = await ShopModel.findByIdAndUpdate(
+                id,
+                {
+                    $addToSet: {
+                        products: { id: productId, stock }
+                    }
+                },
+                { new: true }
+            );
+    
+            if (!result) return res.status(404).json({ message: 'Shop không tồn tại' });
+    
+            return res.status(200).json({ success: true, data: result });
+        } catch (err) {
+            console.error('Lỗi khi thêm sản phẩm:', err);
+            return res.status(500).json({ success: false, message: 'Lỗi server', err });
+        }
+    },
+    
+    addToppingToShop: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { toppingId, stock = 0 } = req.body;
+    
+            const result = await ShopModel.findByIdAndUpdate(
+                id,
+                {
+                    $addToSet: {
+                        toppings: { id: toppingId, stock }
+                    }
+                },
+                { new: true }
+            );
+    
+            if (!result) return res.status(404).json({ message: 'Shop không tồn tại' });
+    
+            return res.status(200).json({ success: true, data: result });
+        } catch (err) {
+            console.error('Lỗi khi thêm topping:', err);
+            return res.status(500).json({ success: false, message: 'Lỗi server', err });
+        }
+    },
 }
 
 export default ShopController;
