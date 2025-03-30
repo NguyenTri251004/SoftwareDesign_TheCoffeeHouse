@@ -24,7 +24,7 @@ export const AdminEdit = (props) => (
 );
 
 export const AdminList = (props) => (
-    <List {...props}>
+    <List {...props} title="Danh sách quản lý chi nhánh">
         <Datagrid>
             <TextField source="id" label="Admin ID" />
             <TextField source="username" label="Tài khoản" />

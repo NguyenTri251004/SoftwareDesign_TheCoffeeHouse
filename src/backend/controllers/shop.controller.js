@@ -174,19 +174,19 @@ const ShopController = {
             const { id } = req.params;
             const { productId, stock = 0 } = req.body;
     
-            const result = await ShopModel.findByIdAndUpdate(
-                id,
-                {
-                    $addToSet: {
-                        products: { id: productId, stock }
-                    }
-                },
-                { new: true }
-            );
+            const shop = await ShopModel.findById(id);
+            if (!shop) return res.status(404).json({ message: 'Shop không tồn tại' });
     
-            if (!result) return res.status(404).json({ message: 'Shop không tồn tại' });
-    
-            return res.status(200).json({ success: true, data: result });
+            const index = shop.products.findIndex(t => t.id.toString() === productId);
+
+            if (index !== -1) {
+                shop.products[index].stock += stock;
+            } else {
+                shop.products.push({ id: productId, stock });
+            }
+
+            await shop.save();
+            return res.status(200).json({ success: true, message: 'Đã thêm sản phẩm', data: shop });
         } catch (err) {
             console.error('Lỗi khi thêm sản phẩm:', err);
             return res.status(500).json({ success: false, message: 'Lỗi server', err });
@@ -195,22 +195,23 @@ const ShopController = {
     
     addToppingToShop: async (req, res) => {
         try {
-            const { id } = req.params;
+            const { id } = req.params; 
             const { toppingId, stock = 0 } = req.body;
     
-            const result = await ShopModel.findByIdAndUpdate(
-                id,
-                {
-                    $addToSet: {
-                        toppings: { id: toppingId, stock }
-                    }
-                },
-                { new: true }
-            );
+            const shop = await ShopModel.findById(id);
+            if (!shop) return res.status(404).json({ message: 'Shop không tồn tại' });
     
-            if (!result) return res.status(404).json({ message: 'Shop không tồn tại' });
+            const index = shop.toppings.findIndex(t => t.id.toString() === toppingId);
+
+            if (index !== -1) {
+                shop.toppings[index].stock += stock;
+            } else {
+                shop.toppings.push({ id: toppingId, stock });
+            }
+
+            await shop.save();
     
-            return res.status(200).json({ success: true, data: result });
+            return res.status(200).json({ success: true, message: 'Đã thêm topping', data: shop });
         } catch (err) {
             console.error('Lỗi khi thêm topping:', err);
             return res.status(500).json({ success: false, message: 'Lỗi server', err });
