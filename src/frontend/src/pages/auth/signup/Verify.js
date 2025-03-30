@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
-import "./Verify.css";
+import styles from "./Verify.module.css"; // Import the CSS module
 
 const VerifyEmail = () => {
     const [searchParams] = useSearchParams();
@@ -34,18 +34,17 @@ const VerifyEmail = () => {
 
     return (
         <>
-            <div className="verify-container">
-                <div className="verify-box">
+            <div className={styles.verifyContainer}>
+                <div className={styles.verifyBox}>
                     <h2>Email Verification</h2>
                     <p>{message}</p>
                     <a href="/login">Go to Login</a>
                 </div>
-                <div className="image-section" >
+                <div className={styles.imageSection}>
                     <h1>THE COFFEE HOUSE</h1>
                 </div>
             </div>
         </>
-        
     );
 };
 

@@ -9,6 +9,8 @@ router.get("/shops", ShopController.getShopByAddress);
 router.get("/detail", ShopController.getShopById);
 router.get("/nearbyshops", ShopController.getNearByShops);
 
+router.get("/shops/address", ShopController.getAddress);
+
 router.post("/:id/products", ShopController.addProductToShop);
 router.post("/:id/toppings", ShopController.addToppingToShop);
 

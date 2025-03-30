@@ -217,6 +217,19 @@ const ShopController = {
             return res.status(500).json({ success: false, message: 'Lỗi server', err });
         }
     },
+
+    getAddress: async (req, res) => {
+        try {
+            const addresses = await ShopModel.aggregate([
+                { $group: { _id: "$address.city", districts: { $addToSet: "$address.district" }}},
+                { $sort: { _id: 1 }}
+            ]);
+            return res.status(200).json({ success: true, message: "lấy địa chỉ thành công", addresses });
+        } catch (error) {
+            return res.status(500).json({ success: false, message: "lỗi lấy danh sách địa chỉ", error });
+        }
+    }
+
 }
 
 export default ShopController;

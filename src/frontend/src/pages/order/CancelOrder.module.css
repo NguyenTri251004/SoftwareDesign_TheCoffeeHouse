@@ -1,0 +1,91 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-family: 'Open Sans', sans-serif;
+    color: #9095A1FF;
+    font-weight: bold;
+  }
+
+  .title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #5c5c69;
+  }
+  
+  .icon {
+    font-size: 20px;
+    color: #d4a019; /* vàng đồng */
+  }
+  
+  .closeBtn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #999;
+    margin-bottom: 30px;
+  }
+  
+  .message {
+    font-size: 15px;
+    margin-bottom: 1rem;
+  }
+  
+  .dropdown {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    margin-bottom: 1.5rem;
+  }
+  
+  .confirmBtn {
+    background-color: #f6a700;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    width: 100%;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .confirmBtn:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+  }
+
+  .input {
+    width: 100%;
+    padding: 0.6rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    margin-bottom: 1.5rem;
+    
+  }

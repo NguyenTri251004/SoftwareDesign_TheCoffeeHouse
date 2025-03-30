@@ -33,10 +33,11 @@
   text-decoration: none;
   color: #000;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 17px;
   transition: color 0.3s;
 }
 
+.nav ul li a.menuActive,
 .nav ul li a:hover {
   color: #ff6600;
 }
@@ -49,7 +50,7 @@
 
 .userBtn,
 .bagBtn {
-  margin: 0;
+  margin: 0 !important;
   width: 44px;
   height: 44px;
   display: flex;
@@ -64,12 +65,13 @@
 
 .userBtn:hover,
 .bagBtn:hover {
-  background: #e6e6e6 !important;
+  background: #c4e2fc !important;
 }
 
 .userBtn {
   font-size: 20px;
   background-color: #a8c6e0 !important;
+  color: white;
 }
 
 .bagBtn {
