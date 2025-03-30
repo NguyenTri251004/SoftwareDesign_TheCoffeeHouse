@@ -1,24 +1,32 @@
-const BASE_URL = "http://localhost:5000/api/user/";
+const BASE_URL = "http://localhost:5001/api/user/";
 
 const userAPI = {
     getProfile: async () => {
         try {
+            const token = localStorage.getItem("token");
             const response = await fetch(`${BASE_URL}profile`, {
                 method: "GET",
-                credentials: "include", 
+                credentials: "include",
+                headers: {
+                    "Authorization": `Bearer ${token}`, 
+                    "Content-Type": "application/json"
+                },
             });
 
+            const data = await response.json(); 
+
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.msg || "Failed to fetch profile");
+                throw new Error(data.message || "Failed to fetch profile");
             }
 
-            return await response.json(); 
+            console.log("Dữ liệu profile:", data);
+            return data;
         } catch (error) {
             console.error("Error fetching profile:", error.message);
             throw error;
         }
     },
 };
+
 
 export default userAPI;
