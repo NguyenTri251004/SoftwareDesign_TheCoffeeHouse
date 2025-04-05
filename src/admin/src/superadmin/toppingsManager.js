@@ -1,7 +1,7 @@
 import { List, Datagrid, TextField, NumberField, EditButton, DeleteButton, Edit, SimpleForm, TextInput, NumberInput, Create } from 'react-admin';
 
 export const ToppingList = (props) => (
-    <List {...props}>
+    <List {...props} title="Danh sách topping">
         <Datagrid rowClick="edit">
             <TextField source="name" label="Tên topping" />
             <NumberField source="price" label="Giá" />

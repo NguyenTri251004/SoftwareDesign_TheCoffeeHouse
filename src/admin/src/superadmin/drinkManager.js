@@ -8,7 +8,7 @@ import ImageEditSingle from '../components/ImageEditSingle';
 
 
 export const DrinkList = (props) => (
-    <List {...props}>
+    <List {...props} title="Danh sách sản phẩm">
         <Datagrid rowClick="edit">
             <TextField source="name" label="Tên đồ uống" />
             <TextField source="categoryName" label="Danh mục"  sortable={true} />

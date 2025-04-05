@@ -55,7 +55,7 @@ export const CategoryEdit = (props) => {
 
 
 export const CategoryList = (props) => (
-    <List {...props} pagination={false}>
+    <List {...props} title="Danh sách danh mục sản phẩm" pagination={false}>
         <Datagrid rowClick="edit">
             <TextField source="name" label="Tên danh mục" render={(record) => (
                 <span style={{ paddingLeft: `${(record.level || 0) * 20}px` }}>

@@ -43,24 +43,14 @@ export const ProfilePage = () => {
 
                     <Grid item xs={12} md={9}>
                         <Box display="flex" flexDirection="column" gap={2}>
-                            <TextField
-                                label="Tên người dùng"
-                                value={profile.fullName || ''}
+                            <TextField label="Tên người dùng" value={profile.fullName || ''}
                                 onChange={(e) => setProfile({ ...profile, fullName: e.target.value })}
                                 disabled={!editMode}
                                 fullWidth
                             />
-                            <TextField
-                                label="Email"
-                                value={profile.email || ''}
-                                disabled
-                                fullWidth
-                            />
+                            <TextField label="Email" value={profile.email || ''} disabled={!editMode} fullWidth />
                             <Box display="flex" justifyContent="flex-end">
-                                <Button
-                                    variant="contained"
-                                    onClick={editMode ? handleSave : () => setEditMode(true)}
-                                >
+                                <Button variant="contained" onClick={editMode ? handleSave : () => setEditMode(true)}>
                                     {editMode ? 'Lưu' : 'Chỉnh sửa'}
                                 </Button>
                             </Box>

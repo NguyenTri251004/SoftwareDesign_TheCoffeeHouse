@@ -10,7 +10,7 @@ import shipIcon from "assets/icon/ship.png";
 const AccountDropdown = ({ onClose }) => {
   return (
     <div className={styles.dropdownContainer} onMouseLeave={onClose}>
-      <a href="#" className={styles.dropdownItem}>
+      <a href="/user/profile" className={styles.dropdownItem}>
         <img src={memberIcon} alt="Member" className={styles.icon} />
         Thành viên
       </a>

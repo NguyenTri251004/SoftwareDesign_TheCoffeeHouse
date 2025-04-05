@@ -107,6 +107,27 @@ const ShopAPI = {
             console.error("Error fetching near by shop:", error.message);
             throw error;
         }
+    },
+
+    getAddress: async() => {
+        try {
+            const response = await fetch(`${BASE_URL}/shop/address`, {
+                method: "GET",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Failed to fetch address");
+            }
+
+            return await response.json(); 
+        } catch (error) {
+            console.error("Error fetching address:", error.message);
+            throw error;
+        }
     }
 }
 

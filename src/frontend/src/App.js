@@ -13,7 +13,6 @@ import "leaflet/dist/leaflet.css";
 import OrderStatus from "pages/order/orderStatus";
 import Menu from "pages/menu/Menu";
 import DrinkDetailPage from "pages/menu/DetailDrink";
-
 import {PopupProvider} from "context/PopupContext";
 
 import "./App.css";
@@ -27,6 +26,7 @@ import ModalTrackOrder1 from "components/modal/ModalTrackOrder1";
 import ModalTrackOrder2 from "components/modal/ModalTrackOrder2";
 import VoucherPage from "pages/voucher/VoucherPage";
 import ListOrderPage from "pages/order/ListOrderPage";
+import UserProfile from "pages/user/UserProfile";
 
 function App() {
   const menuRoutes = menuItems.flatMap((item) => {
@@ -56,6 +56,7 @@ function App() {
           <Route path="/shop/list" element={<ShopListPage />} />
           <Route path="/shop/detail/:_id" element={<ShopDetailPage />} />
 
+          <Route path="/user/profile" element={<UserProfile />} />
           <Route path="/drink/detail/:id" element={<DrinkDetailPage />} />
           <Route path="/order-status" element={<OrderStatus />} />
           <Route path="/order" element={<ListOrderPage />} />

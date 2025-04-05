@@ -32,7 +32,7 @@ const ImageInputArray = () => {
 };
 
 export const ShopList = (props) => (
-    <List {...props} perPage={5} pagination={<ShopPagination />}>
+    <List {...props} title="Danh sách cửa hàng" perPage={5} pagination={<ShopPagination />}>
         <Datagrid rowClick="show">
             <TextField source="name" label="Tên cửa hàng" />
             <TextField source="address.detail" label="Địa chỉ chi tiết" />

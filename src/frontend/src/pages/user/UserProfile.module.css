@@ -1,0 +1,280 @@
+/* UserProfile.module.css */
+
+.profileContainer {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #fffaf6;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;
+  color: #4a4a4a;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 24px;
+  color: #d2691e;
+}
+
+.subtitle {
+  font-size: 24px;
+  margin-top: 30px;
+  margin-bottom: 16px;
+  color: #6e6e6e;
+}
+
+/* Thông tin cá nhân */
+.personalInfo {
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px solid #f0e4d7;
+  border-radius: 6px;
+  background-color: #fff;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.field label {
+  flex: 0 0 130px;
+  font-weight: 500;
+}
+
+.field input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.field input:focus {
+  border-color: #d2691e;
+}
+
+.points {
+  font-size: 16px;
+  font-weight: bold;
+  color: #d2691e;
+}
+
+/* Danh sách địa chỉ */
+.addressList {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 24px;
+}
+
+.addressItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  border: 1px solid #f0e4d7;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+}
+
+.addressInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.addressText {
+  font-size: 16px;
+}
+
+.defaultBadge {
+  background-color: #28a745;
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.addressActions {
+  display: flex;
+  gap: 8px;
+}
+
+.setDefaultButton {
+  background-color: #ffb347;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.setDefaultButton:hover {
+  background-color: #ffa033;
+}
+
+.removeButton {
+  background-color: #f86c6b;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.removeButton:hover {
+  background-color: #f44441;
+}
+
+/* Ô nhập địa chỉ mới */
+.inputContainer {
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.inputContainer input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+  outline: none;
+}
+
+.inputContainer input:focus {
+  border-color: #d2691e;
+}
+
+.addButton {
+  background-color: #d2691e;
+  color: #fff;
+  border: none;
+  margin-left: 12px;
+  padding: 10px 18px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.addButton:hover {
+  background-color: #b35719;
+}
+
+/* Nút lưu thông tin */
+.saveContainer {
+  margin-top: 30px;
+  text-align: right;
+}
+
+.saveButton {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.saveButton:hover {
+  background-color: #218838;
+}
+
+.saveButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Custom Modal chung */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContainer {
+  background-color: #fff;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.modalHeader {
+  background-color: #d2691e;
+  color: #fff;
+  padding: 16px;
+  text-align: center;
+}
+
+.modalBody {
+  padding: 20px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.mapPreview {
+  width: 100%;
+  height: 300px;
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: space-around;
+  padding: 16px;
+  background-color: #f4f4f4;
+}
+
+.confirmButton {
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.confirmButton:hover {
+  background-color: #43a047;
+}
+
+.cancelButton {
+  background-color: #d32f2f;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.cancelButton:hover {
+  background-color: #b71c1c;
+}
