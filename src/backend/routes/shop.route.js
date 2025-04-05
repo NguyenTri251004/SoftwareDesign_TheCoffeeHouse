@@ -11,6 +11,8 @@ router.get("/nearbyshops", ShopController.getNearByShops);
 
 router.get("/shops/address", ShopController.getAddress);
 
+router.get("/shop-nearest-user", ShopController.getShopNearestUser);
+
 router.post("/:id/products", ShopController.addProductToShop);
 router.post("/:id/toppings", ShopController.addToppingToShop);
 

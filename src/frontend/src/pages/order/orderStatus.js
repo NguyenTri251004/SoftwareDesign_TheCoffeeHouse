@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styles from './OrderStatus.module.css';
+import styles from './orderStatus.module.css';
 import { FaMapMarkerAlt, FaBox, FaTruck } from 'react-icons/fa';
 import Header from 'components/header/Header';
 import CancelOrder from './CancelOrder'; // nhớ chỉnh path đúng
