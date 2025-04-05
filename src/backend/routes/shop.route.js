@@ -9,15 +9,7 @@ router.get("/shops", ShopController.getShopByAddress);
 router.get("/detail", ShopController.getShopById);
 router.get("/nearbyshops", ShopController.getNearByShops);
 
-<<<<<<< HEAD
-router.get("/cities", ShopController.getCities);
-router.get("/districts", ShopController.getDistrictsByCity);
-router.get("/shops", ShopController.getShopByAddress);
-router.get("/detail", ShopController.getShopById);
-router.get("/nearbyshops", ShopController.getNearByShops);
-=======
 router.get("/shops/address", ShopController.getAddress);
->>>>>>> a82b20ccb5eaa8d185c9d3e7a0fbdb2e5c051d94
 
 router.post("/:id/products", ShopController.addProductToShop);
 router.post("/:id/toppings", ShopController.addToppingToShop);
