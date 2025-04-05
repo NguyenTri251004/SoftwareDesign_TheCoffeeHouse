@@ -39,27 +39,27 @@ export default function AddressMap({ address }) {
 
   // Mỗi khi 'address' thay đổi, gọi Nominatim để geocoding
   useEffect(() => {
-    if (address && address.trim() !== "") {
-      fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          address
-        )}`,
-        {
-          // Thêm User-Agent nếu cần theo khuyến nghị Nominatim
-          headers: {
-            "User-Agent": "MyReactApp/1.0 (myemail@example.com)",
-          },
-        }
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          if (data && data.length > 0) {
-            const { lat, lon } = data[0];
-            setPosition([parseFloat(lat), parseFloat(lon)]);
-            console.log("Geocoding result:", lat, lon);
+    if (address.trim() !== "") {
+      const timer = setTimeout(() => {
+        fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`,
+          {
+            headers: {
+              "User-Agent": "MyReactApp/1.0 (myemail@example.com)",
+            },
           }
-        })
-        .catch((err) => console.error("Geocoding error:", err));
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            if (data && data.length > 0) {
+              const { lat, lon } = data[0];
+              setPosition([parseFloat(lat), parseFloat(lon)]);
+            }
+          })
+          .catch((err) => console.error("Geocoding error:", err));
+      }, 500); // Delay 500ms trước khi gọi API
+  
+      return () => clearTimeout(timer); // Clean up timer khi component unmount hoặc address thay đổi
     }
   }, [address]);
 

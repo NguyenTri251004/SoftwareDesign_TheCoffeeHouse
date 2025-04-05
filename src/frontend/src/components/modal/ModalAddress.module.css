@@ -5,6 +5,7 @@
     align-items: center;
     justify-content: center;
     background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
   }
   
   .modal {
@@ -47,6 +48,7 @@
     border-radius: 5px;
     margin-top: 40px;
     font-size: 16px;
+    margin-bottom: 20px;
   }
   
   .buttonContainer {
