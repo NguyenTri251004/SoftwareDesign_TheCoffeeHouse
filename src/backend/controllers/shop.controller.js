@@ -1,4 +1,50 @@
+import { get } from "mongoose";
 import ShopModel from "../models/shop.model.js";
+import axios from 'axios';
+
+const GEOCODIFY_API_KEY = 'eyd9P0oasHRZa4qYLLYS4ENljzXmegDD';
+const GEOCODIFY_BASE_URL = 'https://api.geocodify.com/v2/geocode';
+
+async function geocodeAddress(address) {
+    try {
+        const response = await axios.get(GEOCODIFY_BASE_URL, {
+        params: {
+            api_key: GEOCODIFY_API_KEY,
+            q: address,
+        }
+        });
+        if (
+            response.data &&
+            response.data.response &&
+            response.data.response.features &&
+            response.data.response.features.length > 0
+        ) {
+            const coordinates = response.data.response.features[0].geometry.coordinates;
+            return { lat: coordinates[1], lng: coordinates[0] };
+        } else {
+            console.log(`Không tìm thấy tọa độ cho địa chỉ: ${address}`);
+            return null;
+        }
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+  
+  // Hàm tính khoảng cách giữa 2 tọa độ theo công thức Haversine (đơn vị km)
+function haversineDistance(coords1, coords2) {
+    const toRad = (value) => (value * Math.PI) / 180;
+    const R = 6371; // Bán kính Trái Đất (km)
+    const dLat = toRad(coords2.lat - coords1.lat);
+    const dLng = toRad(coords2.lng - coords1.lng);
+    const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos(toRad(coords1.lat)) *
+        Math.cos(toRad(coords2.lat)) *
+        Math.sin(dLng / 2) ** 2;
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+}
 
 const ShopController = {
     getListShops: async (req, res) => {
@@ -228,8 +274,53 @@ const ShopController = {
         } catch (error) {
             return res.status(500).json({ success: false, message: "lỗi lấy danh sách địa chỉ", error });
         }
-    }
+    },
 
+    getShopNearestUser: async (req, res) => {
+        try {
+            const userAddress = req.query.address; // Địa chỉ của người dùng
+            if(!userAddress) {
+                return res.status(400).json({ success: false, message: "Địa chỉ người dùng không được cung cấp" });
+            }
+            const shops = await ShopModel.find({}); 
+            const userCoords = await geocodeAddress(userAddress); 
+
+            let nearestShop = null;
+            let minDistance = Infinity;
+
+            const results = await Promise.all(
+                shops.map(async (shop) => {
+                    const fullAddress = `${shop.address.detail}, ${shop.address.district}, thành phố ${shop.address.city}`;
+                    try {
+                        const shopCoords = await geocodeAddress(fullAddress);
+                        if (!shopCoords) return null;
+            
+                        const distance = haversineDistance(userCoords, shopCoords);
+                        // console.log(`Khoảng cách từ ${userAddress} đến ${fullAddress}: ${distance} km`);
+                        return { shop, distance };
+                    } catch (e) {
+                        return null;
+                    }
+                })
+            );
+            
+            // Tìm shop gần nhất
+            for (const result of results) {
+                if (result && result.distance < minDistance) {
+                    minDistance = result.distance;
+                    nearestShop = result.shop;
+                }
+            }
+            if (!nearestShop) {
+                return res.status(404).json({ success: true, message: "Không tìm thấy shop gần nhất" });
+            }
+            return res.status(200).json({ success: true, message: "Lấy shop gần nhất thành công", shop: nearestShop });
+        }
+        catch (error) {
+            console.error("Lỗi ở getShopNearestUser:", error);
+            return res.status(500).json({ success: false, message: "Lỗi khi lấy shop gần nhất", error });
+        }
+    }
 }
 
 export default ShopController;
