@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 import Admin from "../models/admin.model.js";
+import Customer from "../models/customer.model.js";
 import mongoose from "mongoose";
 import nodemailer from "nodemailer";
 
@@ -53,7 +54,7 @@ const sendVerificationEmail = async (email, token) => {
 
 export const register = async (req, res) => {
     try {
-        const { email, password, role } = req.body;
+        const { email, password, role, name } = req.body;
 
         console.log("📩 Incoming registration request:", req.body);
 
@@ -88,7 +89,12 @@ export const register = async (req, res) => {
         }
 
         if (role === "customer") {
-            // ...
+            const newCustomer = new Customer({
+                _id: newUser._id,
+                fullname: name
+            });
+
+            await newCustomer.save();
         }
 
         // Gửi email xác thực

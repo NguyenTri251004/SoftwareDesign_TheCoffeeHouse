@@ -76,6 +76,7 @@ getOne: async (resource, params) => {
                     ...params.data,
                     password: 'thecoffeehouse',
                     role: 'admin', 
+                    name: '',
                 }),
                 headers: { 'Content-Type': 'application/json' },
             });

@@ -16,7 +16,7 @@ export const AdminEdit = (props) => (
             <TextInput source="username" label="Tên đăng nhập" />
             <TextInput source="email" label="Email" />
             <TextInput source="avatar" label="Avatar URL" />
-            <ReferenceInput source="shopId" reference="shop" label="Chi nhánh">
+            <ReferenceInput source="shopId" reference="shop" label="Chi nhánh" perPage={100}>
                 <SelectInput optionText="name" optionValue="_id" />
             </ReferenceInput>
         </SimpleForm>

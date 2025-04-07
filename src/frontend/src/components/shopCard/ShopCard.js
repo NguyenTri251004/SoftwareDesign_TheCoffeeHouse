@@ -30,7 +30,13 @@ const ShopCard = ({ shop }) => {
             </Carousel>
   
             <h3 className={styles.shopName} onClick={() => navigate(`/shop/detail/${shop._id}`)} >{shop.name}</h3>
-            <button className={styles.mapBtn}>Xem bản đồ</button>
+            <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${shop.name} ${shop.address.detail} ${shop.address.district} ${shop.address.city}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <button className={styles.mapBtn}>Xem bản đồ</button>
+            </a>
 
             <div className={styles.shopShare}>
                 <span>Chia sẻ trên:</span>

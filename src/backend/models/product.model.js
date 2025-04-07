@@ -14,8 +14,7 @@ const DrinkSchema = new Schema({
             size: { type: String, enum: ["S", "M", "L"], required: true },
             extraPrice: { type: Number, default: 0 }
         }
-    ],
-    stock: { type: Number, required: true, default: 0 }
+    ]
 });
 
 const Drink = mongoose.model("Drink", DrinkSchema);

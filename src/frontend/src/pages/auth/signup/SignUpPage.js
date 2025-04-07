@@ -40,6 +40,7 @@ const Signup = () => {
         email,
         password,
         role: "customer",
+        name,
       });
 
       setSuccess("Please check your email to verify your account.");

@@ -9,6 +9,9 @@ import facebookIcon from "assets/icon/ic-fb.svg";
 import zaloIcon from "assets/icon/ic-zalo.svg";
 import messengerIcon from "assets/icon/ic-message.svg";
 import linkIcon from "assets/icon/ic-copylink.svg";
+
+import AddressMap from "components/map/AddressMap"; 
+
 import styles from "./DetailShop.module.css";
 
 import ShopAPI from "services/shopService";
@@ -56,6 +59,23 @@ function ShopDetailPage() {
                     {shop && shop.images.map((image, index) => (
                         <img key={index} src={image} alt={shop.name} className={styles.detailShopImage} />
                     ))}
+
+                    <div style={{ position: "relative", marginTop: "16px" }}>
+                        <a
+                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${shop.name} ${shop.address.detail} ${shop.address.district} ${shop.address.city}`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ position: "absolute", top: "10px", left: "50px", backgroundColor: "white",
+                                padding: "6px 10px", borderRadius: "4px", boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                                zIndex: 1000, fontSize: "14px", color: "#007bff", textDecoration: "none", fontWeight: "500"
+                            }}
+                        >
+                            Xem bản đồ lớn hơn
+                        </a>
+                        <AddressMap
+                            address={`${shop.address.detail}, ${shop.address.district}, ${shop.address.city}`}
+                        />
+                </div>
                 </div>
 
                 <div className={styles.shopDetailRight}>

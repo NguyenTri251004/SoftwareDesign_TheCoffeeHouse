@@ -128,7 +128,33 @@ const ShopAPI = {
             console.error("Error fetching address:", error.message);
             throw error;
         }
-    }
+    },
+
+    getShopNearestUser: async (address) => {
+        try {
+            const response = await fetch(
+                `${BASE_URL}/shop/shop-nearest-user?address=${encodeURIComponent(address)}`,
+                {
+                    method: "GET",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+    
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Failed to fetch nearest shop");
+            }
+    
+            return await response.json(); 
+        } catch (error) {
+            console.error("Error fetching nearest shop:", error.message);
+            throw error;
+        }
+    },
+    
 }
 
 export default ShopAPI;

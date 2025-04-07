@@ -49,9 +49,12 @@ const Header = () => {
   return (
     <header className={styles.header}>
       <div className={styles.headerContainer}>
-        <div className={styles.logo}>
-          <img src={logo} alt="The Coffee House" />
-        </div>
+        <a href="/">
+          <div className={styles.logo}>
+            <img src={logo} alt="The Coffee House" />
+          </div>
+        </a>
+        
 
         <nav className={styles.nav}>
           <ul>

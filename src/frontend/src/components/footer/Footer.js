@@ -28,7 +28,8 @@ const Footer = () => {
         {/* Right Section - Social & Button */}
         <div className={styles.footerSection}>
           <h3>THE COFFEE HOUSE</h3>
-          <button className={styles.menuButton}>Menu →</button>
+          <a href="/menu"><button className={styles.menuButton}>Menu →</button></a>
+          
           <div className={styles.socialIcons}>
             <a href="#"><FaFacebookF /></a>
             <a href="#"><FaTwitter /></a>
