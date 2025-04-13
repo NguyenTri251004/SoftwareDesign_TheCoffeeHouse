@@ -188,3 +188,4 @@ getOne: async (resource, params) => {
 };
 
 export default dataProvider;
+export { dataProvider }; // tạm cho cái order

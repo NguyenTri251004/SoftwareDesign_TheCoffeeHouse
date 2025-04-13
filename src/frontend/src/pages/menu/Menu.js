@@ -33,7 +33,7 @@ const Menu = () => {
     };
 
     useEffect(() => {
-        const shopId = localStorage.getItem("nearestShopId");
+        const shopId = localStorage.getItem("currentShopId");
         if (!shopId) return;
     
         const fetchMenu = async () => {

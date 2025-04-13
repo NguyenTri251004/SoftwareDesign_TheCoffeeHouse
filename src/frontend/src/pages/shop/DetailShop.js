@@ -49,6 +49,12 @@ function ShopDetailPage() {
         fetchNearbyShops(_id);
     }, [_id]);
 
+    const handleMenu = () => {
+        localStorage.setItem("currentShopId", _id);
+        window.location.href = "/menu";
+
+    }
+
     if (loading || !shop) return <p></p>;
     else return (
         <div>
@@ -88,10 +94,38 @@ function ShopDetailPage() {
                         <div className={styles.shopAddress}>
                             <div className={styles.infoLabel}>Địa chỉ:</div>
                             <div>
-                                <img src={linkIcon} alt="Link" />
-                                <img src={facebookIcon} alt="Facebook" />
-                                <img src={zaloIcon} alt="Zalo" />
-                                <img src={messengerIcon} alt="Messenger" />
+                                <img 
+                                    src={linkIcon} 
+                                    alt="Link" 
+                                    onClick={() => {
+                                        const detailLink = `${window.location.origin}/shop/detail/${shop._id}`;
+                                        navigator.clipboard.writeText(detailLink);
+                                        alert("Đã sao chép liên kết đến cửa hàng!");
+                                    }}
+                                />
+                                <img 
+                                    src={facebookIcon} 
+                                    alt="Facebook" 
+                                    onClick={() => {
+                                        const url = encodeURIComponent(`${window.location.origin}/shop/detail/${shop._id}`);
+                                        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+                                    }}
+                                />
+                                <img 
+                                    src={zaloIcon}
+                                    alt="Zalo" 
+                                    onClick={() => {
+                                        window.location.href = "zalo://";
+                                    }}
+                                />
+                                <img 
+                                    src={messengerIcon} 
+                                    alt="Messenger" 
+                                    onClick={() => {
+                                        const detailLink = `${window.location.origin}/shop/detail/${shop._id}`;
+                                        window.location.href = `sms:?body=${encodeURIComponent(detailLink)}`;
+                                    }}
+                                />
                             </div>
                         </div>
                         <div>{shop.address.detail}, {shop.address.district}, {shop.address.city}</div>
@@ -104,7 +138,7 @@ function ShopDetailPage() {
                         </div>
                     </div>
 
-                    <div className={styles.shopToMenu}>
+                    <div className={styles.shopToMenu} onClick={() => handleMenu()}>
                         <div className={styles.infoLabel}>Món ngon tại {shop.name}</div>
                         <div className={styles.foodMenuBtn}>Xem menu quán</div>
                     </div>

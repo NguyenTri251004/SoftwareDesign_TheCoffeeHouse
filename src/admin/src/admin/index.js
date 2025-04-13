@@ -7,12 +7,13 @@ import { ToppingManager, ToppingChoose } from './toppingsManager';
 import { OrderList, OrderShow, OrderEdit } from './orderManager';
 import { FlashSaleList, FlashSaleShow, FlashSaleEdit, FlashSaleCreate } from './flashSaleManager';
 
-import dataProvider from '../api/dataProvider.js';
+//import dataProvider from '../api/dataProvider.js';
+import customProvider from './mockOrdersDataProvider'; // tạm để hiện order (chưa có be), sau dùng cái trên
+
 import { MyLayout } from '../auth/layout'; 
 import { ProfilePage } from '../auth/profile';
 import authProvider from '../auth/authProvider';
 
-//<Resource name="orders" list={OrderList} show={OrderShow} edit={OrderEdit} />
 
 const AdminApp = () => {
     const rawShopId = localStorage.getItem("shopId");
@@ -20,6 +21,7 @@ const AdminApp = () => {
 
     const resources = shopId
         ? [
+            <Resource key="orders" name="orders" list={OrderList} show={OrderShow} edit={OrderEdit} />,
             <Resource key="product" name="product" list={() => <ProductManager shopId={shopId} />} />,
             <Resource key="topping" name="topping" list={() => <ToppingManager shopId={shopId} />} />,
             <Resource key="flashsale" name="flashsale" list={FlashSaleList} show={FlashSaleShow} create={FlashSaleCreate} edit={FlashSaleEdit} />
@@ -28,7 +30,7 @@ const AdminApp = () => {
       : [];
 
     return (
-        <Admin dataProvider={dataProvider} authProvider={authProvider} layout={MyLayout} >
+        <Admin dataProvider={customProvider} authProvider={authProvider} layout={MyLayout} >
             {resources}
 
             <CustomRoutes>

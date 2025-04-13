@@ -69,7 +69,8 @@ const HomePage = () => {
                 try {
                     const result = await ShopAPI.getShopNearestUser(address);
                     localStorage.setItem("nearestShopId", result.shop._id);
-                    console.log("Cửa hàng gần bạn nhất:", result.shop);
+                    localStorage.setItem("currentShopId", result.shop._id);
+                    console.log("Cửa hàng gần bạn nhất/cửa hàng hiện tại:", result.shop);
                 } catch (error) {
                     console.error("Không tìm được cửa hàng gần bạn:", error.message);
                 }
