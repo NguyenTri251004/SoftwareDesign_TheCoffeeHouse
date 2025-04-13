@@ -9,7 +9,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faShoppingBag } from "@fortawesome/free-solid-svg-icons";
 
+import DrinkAPI from "services/drinkService";
+
 const Header = () => {
+  const [menuItems, setMenuItems] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const accountDropdownRef = useRef(null);
@@ -17,6 +20,24 @@ const Header = () => {
   const toggleAccountMenu = () => {
     setIsAccountMenuOpen((prev) => !prev);
   };
+
+  useEffect(() => {
+    const shopId = localStorage.getItem("nearestShopId");
+    if (!shopId) return;
+  
+    const fetchMenu = async () => {
+      try {
+        const res = await DrinkAPI.getMenuByShopId(shopId);
+        if (res.success) {
+          setMenuItems(res.data);
+        }
+      } catch (error) {
+        console.error("Lỗi khi lấy menu trong Header:", error);
+      }
+    };
+  
+    fetchMenu();
+  }, []);
 
   useEffect(() => {
     const handleMouseLeave = (event) => {
@@ -94,7 +115,7 @@ const Header = () => {
           </button>
         </div>
       </div>
-      {isMenuOpen && <DropdownMenu onMouseLeave={() => setIsMenuOpen(false)} />}
+      {isMenuOpen && <DropdownMenu onMouseLeave={() => setIsMenuOpen(false)} menuItems={menuItems} />}
       {isAccountMenuOpen && (
         <div ref={accountDropdownRef}>
           <AccountDropdown />

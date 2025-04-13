@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "components/header/Header";
 import Footer from "components/footer/Footer";
-import DrinkAPI from "services/drinkService"; 
+import DrinkAPI from "services/drinkService";
 import styles from "./DetailDrink.module.css";
 
 function DrinkDetailPage() {
@@ -15,7 +15,8 @@ function DrinkDetailPage() {
     useEffect(() => {
         const fetchDrink = async () => {
             try {
-                const res = await DrinkAPI.getDrinkById(id);
+                const shopId = localStorage.getItem("nearestShopId");
+                const res = await DrinkAPI.getDrinkById(shopId, id);
                 setDrink(res.drink);
             } catch (err) {
                 console.error("Lỗi tải chi tiết món uống", err);
@@ -34,8 +35,8 @@ function DrinkDetailPage() {
 
     const calculateTotal = () => {
         let base = drink.price || 0;
-        let sizePrice = selectedSize?.price || 0;
-        let toppingsPrice = selectedToppings.reduce((sum, top) => sum + top.price, 0);
+        let sizePrice = selectedSize?.extraPrice || 0;
+        let toppingsPrice = selectedToppings.reduce((sum, top) => sum + (top.price || 0), 0);
         return base + sizePrice + toppingsPrice;
     };
 
@@ -44,9 +45,6 @@ function DrinkDetailPage() {
     return (
         <div>
             <Header />
-            <div className={styles.breadcrumb}>
-                Menu / <strong>Cà phê Việt Nam</strong> / <span>{drink.name}</span>
-            </div>
 
             <div className={styles.detailContainer}>
                 <div className={styles.topSection}>
@@ -63,11 +61,11 @@ function DrinkDetailPage() {
                             <div className={styles.options}>
                                 {drink.sizes.map((size) => (
                                     <button
-                                        key={size.name}
-                                        className={`${styles.optionBtn} ${selectedSize?.name === size.name ? styles.selected : ""}`}
+                                        key={size.size}
+                                        className={`${styles.optionBtn} ${selectedSize?.size === size.size ? styles.selected : ""}`}
                                         onClick={() => setSelectedSize(size)}
                                     >
-                                        {size.name} + {size.price.toLocaleString()} đ
+                                        {size.size} + {size.extraPrice.toLocaleString()} đ
                                     </button>
                                 ))}
                             </div>
@@ -78,7 +76,7 @@ function DrinkDetailPage() {
                             <div className={styles.options}>
                                 {drink.toppings.map((top) => (
                                     <button
-                                        key={top.name}
+                                        key={top._id}
                                         className={`${styles.optionBtn} ${selectedToppings.includes(top) ? styles.selected : ""}`}
                                         onClick={() => toggleTopping(top)}
                                     >
@@ -86,6 +84,10 @@ function DrinkDetailPage() {
                                     </button>
                                 ))}
                             </div>
+                        </div>
+
+                        <div className={styles.totalPrice}>
+                            Tổng cộng: {calculateTotal().toLocaleString()} đ
                         </div>
 
                         <button className={styles.addToCart}>Thêm vào giỏ hàng</button>
@@ -102,13 +104,18 @@ function DrinkDetailPage() {
                     <div className={styles.related}>
                         {drink.relatedDrinks.map((item) => (
                             <div
-                                key={item.id}
+                                key={item._id}
                                 className={styles.relatedItem}
-                                onClick={() => navigate(`/drink-detail/${item.id}`)}
+                                onClick={() => window.location.href = `/drink/detail/${item._id}`}
+                                style={{ cursor: "pointer" }}
                             >
                                 <img src={item.image} alt={item.name} />
                                 <div className={styles.relatedItemTitle}>{item.name}</div>
-                                <div>{item.price.toLocaleString()} đ</div>
+                                <div>
+                                    {typeof item.price === "number"
+                                        ? `${item.price.toLocaleString()} đ`
+                                        : "Giá không xác định"}
+                                </div>
                             </div>
                         ))}
                     </div>

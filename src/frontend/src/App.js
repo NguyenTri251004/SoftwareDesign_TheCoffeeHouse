@@ -29,18 +29,6 @@ import ListOrderPage from "pages/order/ListOrderPage";
 import UserProfile from "pages/user/UserProfile";
 
 function App() {
-  const menuRoutes = menuItems.flatMap((item) => {
-    const routes = [];
-    routes.push(<Route key={item.path} path={item.path} element={<Menu />} />); // Thêm route cho parent path
-    if (item.subMenu) {
-      item.subMenu.forEach((subItem) => {
-        routes.push(
-          <Route key={subItem.path} path={subItem.path} element={<Menu />} />
-        );
-      });
-    }
-    return routes;
-  });
   return (
     <PopupProvider>
       <Router>
@@ -61,7 +49,8 @@ function App() {
           <Route path="/order-status" element={<OrderStatus />} />
           <Route path="/order" element={<ListOrderPage />} />
           <Route path="/redeem" element={<Redeem />} />
-          {menuRoutes}
+          <Route path="/menu/*" element={<Menu />} />
+
         </Routes>
       </Router>
       <VoucherPage/>

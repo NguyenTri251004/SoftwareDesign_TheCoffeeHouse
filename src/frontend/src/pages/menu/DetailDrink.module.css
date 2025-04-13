@@ -3,22 +3,6 @@
     margin: 2rem 5rem;
 }
   
-.breadcrumb {
-    padding: 24px 40px 0;
-    font-size: 18px;
-    color: #222;
-}
-  
-.breadcrumb strong {
-    font-weight: 700;
-}
-  
-.breadcrumb span {
-    color: #888;
-    font-weight: 500;
-}
-
-  
 .topSection {
     display: flex;
     gap: 2rem;
@@ -83,7 +67,16 @@
 .optionBtn:hover {
     border-color: #ff9900;
 }
-  
+
+.totalPrice {
+    font-size: 20px;
+    font-weight: bold;
+    color: #d35400; 
+    margin-top: 20px;
+    margin-bottom: 16px;
+    text-align: right;
+}
+
 .selected {
     color: #fff;
     border-color: #ff9900;

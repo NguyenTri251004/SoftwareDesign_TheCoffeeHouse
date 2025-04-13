@@ -3,7 +3,8 @@ import ProductController from "../controllers/product.controller.js";
 
 const router = express.Router();
 
-
+router.get("/shop/:shopId/menu", ProductController.getMenuByShopId);
+router.get("/shop/:shopId/product/:drinkId", ProductController.getDetailDrink);
 
 router.get("/", ProductController.getListProducts);
 router.post("/many", ProductController.getManyProducts);
