@@ -26,6 +26,33 @@ const userAPI = {
             throw error;
         }
     },
+
+    updateCustomerProfile: async (userId, updatedProfile) => {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await fetch(`${BASE_URL}customer/${userId}/profile`, {
+                method: "PUT",
+                credentials: "include",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(updatedProfile),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Failed to update profile");
+            }
+
+            console.log("Dữ liệu cập nhật profile:", data);
+            return data;
+        } catch (error) {
+            console.error("Error updating profile:", error.message);
+            throw error;
+        }
+    }
 };
 
 
