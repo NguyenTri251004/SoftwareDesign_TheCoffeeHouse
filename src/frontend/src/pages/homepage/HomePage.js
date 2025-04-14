@@ -93,7 +93,8 @@ const HomePage = () => {
                     console.log("Fetching nearest shop for address:", address);
                     const result = await ShopAPI.getShopNearestUser(address);
                     localStorage.setItem("nearestShopId", result.shop._id);
-                    console.log("Nearest shop:", result.shop);
+                    localStorage.setItem("currentShopId", result.shop._id);
+                    console.log("Cửa hàng gần bạn nhất/cửa hàng hiện tại:", result.shop);
                 } catch (error) {
                     console.error("Error fetching nearest shop:", error.message);
                 }

@@ -41,10 +41,38 @@ const ShopCard = ({ shop }) => {
             <div className={styles.shopShare}>
                 <span>Chia sẻ trên:</span>
                 <div className={styles.shareIcons}>
-                    <img src={facebookIcon} alt="Facebook" />
-                    <img src={zaloIcon} alt="Messenger" />
-                    <img src={messengerIcon} alt="Comment" />
-                    <img src={linkIcon} alt="Copy Link" />
+                    <img 
+                        src={facebookIcon} 
+                        alt="Facebook" 
+                        onClick={() => {
+                            const url = encodeURIComponent(`${window.location.origin}/shop/detail/${shop._id}`);
+                            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+                        }}
+                    />
+                    <img 
+                        src={zaloIcon} 
+                        alt="Zalo" 
+                        onClick={() => {
+                            window.location.href = "zalo://";
+                        }}
+                    />
+                    <img 
+                        src={messengerIcon} 
+                        alt="Comment" 
+                        onClick={() => {
+                            const detailLink = `${window.location.origin}/shop/detail/${shop._id}`;
+                            window.location.href = `sms:?body=${encodeURIComponent(detailLink)}`;
+                        }}
+                    />
+                    <img 
+                        src={linkIcon} 
+                        alt="Copy Link" 
+                        onClick={() => {
+                            const detailLink = `${window.location.origin}/shop/detail/${shop._id}`;
+                            navigator.clipboard.writeText(detailLink);
+                            alert("Đã sao chép liên kết đến cửa hàng!");
+                        }}
+                    />
                 </div>
             </div>
   

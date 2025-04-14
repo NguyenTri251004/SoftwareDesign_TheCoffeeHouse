@@ -15,7 +15,7 @@ function DrinkDetailPage() {
     useEffect(() => {
         const fetchDrink = async () => {
             try {
-                const shopId = localStorage.getItem("nearestShopId");
+                const shopId = localStorage.getItem("currentShopId");
                 const res = await DrinkAPI.getDrinkById(shopId, id);
                 setDrink(res.drink);
             } catch (err) {
