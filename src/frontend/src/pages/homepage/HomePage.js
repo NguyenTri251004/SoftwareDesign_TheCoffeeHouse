@@ -157,11 +157,13 @@ const HomePage = () => {
         }
     };
 
+    console.log("HomePage rendering, user state:", user);
+    console.log("Passing isLoggedin to Header:", user !== null);
     return (
         <div className={styles.homeContainer}>
             {!showAddressModal ? (
                 <>
-                    <Header />
+                    <Header isLoggedIn={user !== null} />
                     {/* --- Banner Slider --- */}
                     <div className={styles.bannerSlider}>
                         <div className={styles.sliderContainer}>
