@@ -1,0 +1,856 @@
+{
+    "users": [
+      {
+        "user_id": "67f3e9c7d906ca15c786ff3a"
+      },
+      {
+        "user_id": "67fba7646b679b16d760b129"
+      },
+      {
+        "user_id": "67fd406ff4167fda3070d036"
+      },
+      {
+        "user_id": "67fd43728b501db83f8e363d"
+      }
+    ],
+    "products": [
+      {
+        "product_id": "67f3f0a3a2f562bee18d1677"
+      },
+      {
+        "product_id": "67f3fc6fa2f562bee18d1e70"
+      },
+      {
+        "product_id": "67f3fd1ea2f562bee18d1fb4"
+      },
+      {
+        "product_id": "67f3fe5ca2f562bee18d216e"
+      },
+      {
+        "product_id": "67f3f87da2f562bee18d1a11"
+      },
+      {
+        "product_id": "67f3fba9a2f562bee18d1dd7"
+      },
+      {
+        "product_id": "67f3f064a2f562bee18d1675"
+      },
+      {
+        "product_id": "67f3f0dca2f562bee18d1679"
+      },
+      {
+        "product_id": "67f3f318a2f562bee18d16d4"
+      },
+      {
+        "product_id": "67f3f121a2f562bee18d167b"
+      },
+      {
+        "product_id": "67f3f42ea2f562bee18d1733"
+      },
+      {
+        "product_id": "67f3f5cfa2f562bee18d184f",
+        "name": "Latte Đá",
+        "price": 55000,
+        "category": "Cà phê",
+        "shop_id": 2,
+        "description": "Latte mát lạnh với tỷ lệ sữa và cà phê hoàn hảo."
+      },
+      {
+        "product_id": "67f3f5ffa2f562bee18d187e"
+      },
+      {
+        "product_id": "PROD014",
+        "name": "Hi-Tea Đào Kombucha",
+        "price": 59000,
+        "category": "Trà",
+        "shop_id": 2,
+        "description": "Trà đào kombucha thanh mát, tốt cho sức khỏe."
+      },
+      {
+        "product_id": "67f3fd7ba2f562bee18d2024",
+        "name": "Frosty Choco Chip",
+        "price": 59000,
+        "category": "Đồ uống đá xay",
+        "shop_id": 1,
+        "description": "Đồ uống đá xay chocolate với choco chip giòn tan."
+      },
+      {
+        "product_id": "PROD016",
+        "name": "Trà Xanh Espresso Marble",
+        "price": 49000,
+        "category": "Trà",
+        "shop_id": 1,
+        "description": "Trà Xanh Espresso Marble, 49.000 đ"
+      },
+      {
+        "product_id": "PROD017",
+        "name": "Bơ Arabica",
+        "price": 49000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Bơ Arabica, 49.000 đ"
+      },
+      {
+        "product_id": "PROD018",
+        "name": "Đường Đen Sữa Đá",
+        "price": 45000,
+        "category": "Trà sữa",
+        "shop_id": 2,
+        "description": "Đường Đen Sữa Đá, 45.000 đ"
+      },
+      {
+        "product_id": "PROD019",
+        "name": "The Coffee House Sữa Đá",
+        "price": 39000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "The Coffee House Sữa Đá, 39.000 đ"
+      },
+      {
+        "product_id": "PROD020",
+        "name": "Bạc Xỉu",
+        "price": 29000,
+        "category": "Cà phê",
+        "shop_id": 2,
+        "description": "Bạc Xỉu, 29.000 đ"
+      },
+      {
+        "product_id": "PROD021",
+        "name": "Bạc Xỉu Nóng",
+        "price": 39000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Bạc Xỉu Nóng, 39.000 đ"
+      },
+      {
+        "product_id": "PROD022",
+        "name": "Cà Phê Đen Nóng",
+        "price": 39000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Cà Phê Đen Nóng, 39.000 đ"
+      },
+      {
+        "product_id": "PROD023",
+        "name": "Cà Phê Sữa Nóng",
+        "price": 39000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Cà Phê Sữa Nóng, 39.000 đ"
+      },
+      {
+        "product_id": "PROD024",
+        "name": "Cà Phê Đen Đá",
+        "price": 29000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Cà Phê Đen Đá, 29.000 đ"
+      },
+      {
+        "product_id": "PROD025",
+        "name": "Cà Phê Sữa Đá",
+        "price": 29000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Cà Phê Sữa Đá, 29.000 đ"
+      },
+      {
+        "product_id": "PROD026",
+        "name": "Bạc Xỉu Lắc Sữa Yến Mạch",
+        "price": 45000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Bạc Xỉu Lắc Sữa Yến Mạch, 45.000 đ"
+      },
+      {
+        "product_id": "PROD027",
+        "name": "A-Mê Classic",
+        "price": 39000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "A-Mê Classic, 39.000 đ"
+      },
+      {
+        "product_id": "PROD028",
+        "name": "A-Mê Đào",
+        "price": 55000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "A-Mê Đào, 55.000 đ"
+      },
+      {
+        "product_id": "PROD029",
+        "name": "A-Mê Mơ",
+        "price": 55000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "A-Mê Mơ, 55.000 đ"
+      },
+      {
+        "product_id": "PROD030",
+        "name": "A-Mê Quất",
+        "price": 55000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "A-Mê Quất, 55.000 đ"
+      },
+      {
+        "product_id": "PROD031",
+        "name": "A-Mê Tuyết Đào",
+        "price": 65000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "A-Mê Tuyết Đào, 65.000 đ"
+      },
+      {
+        "product_id": "PROD032",
+        "name": "A-Mê Tuyết Mơ",
+        "price": 65000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "A-Mê Tuyết Mơ, 65.000 đ"
+      },
+      {
+        "product_id": "PROD033",
+        "name": "A-Mê Tuyết Quất",
+        "price": 65000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "A-Mê Tuyết Quất, 65.000 đ"
+      },
+      {
+        "product_id": "PROD034",
+        "name": "Americano Nóng",
+        "price": 49000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Americano Nóng, 49.000 đ"
+      },
+      {
+        "product_id": "PROD035",
+        "name": "Cappuccino Nóng",
+        "price": 55000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Cappuccino Nóng, 55.000 đ"
+      },
+      {
+        "product_id": "PROD036",
+        "name": "Cappuccino Đá",
+        "price": 55000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Cappuccino Đá, 55.000 đ"
+      },
+      {
+        "product_id": "PROD037",
+        "name": "Caramel Macchiato Nóng",
+        "price": 55000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Caramel Macchiato Nóng, 55.000 đ"
+      },
+      {
+        "product_id": "PROD038",
+        "name": "Caramel Macchiato Đá",
+        "price": 55000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Caramel Macchiato Đá, 55.000 đ"
+      },
+      {
+        "product_id": "PROD039",
+        "name": "Espresso Nóng",
+        "price": 45000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Espresso Nóng, 45.000 đ"
+      },
+      {
+        "product_id": "PROD040",
+        "name": "Espresso Đá",
+        "price": 49000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Espresso Đá, 49.000 đ"
+      },
+      {
+        "product_id": "PROD041",
+        "name": "Latte Nóng",
+        "price": 55000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Latte Nóng, 55.000 đ"
+      },
+      {
+        "product_id": "PROD042",
+        "name": "Latte Đá",
+        "price": 55000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Latte Đá, 55.000 đ"
+      },
+      {
+        "product_id": "PROD043",
+        "name": "Cold Brew Truyền Thống",
+        "price": 45000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Cold Brew Truyền Thống, 45.000 đ"
+      },
+      {
+        "product_id": "PROD044",
+        "name": "Cold Brew Kim Quất",
+        "price": 49000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Cold Brew Kim Quất, 49.000 đ"
+      },
+      {
+        "product_id": "PROD045",
+        "name": "Cold Brew Sữa Tươi",
+        "price": 49000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Cold Brew Sữa Tươi, 49.000 đ"
+      },
+      {
+        "product_id": "PROD046",
+        "name": "Bơ Sữa Phô Mai",
+        "price": 55000,
+        "category": "Đồ uống",
+        "shop_id": 1,
+        "description": "Bơ Sữa Phô Mai, 55.000 đ"
+      },
+      {
+        "product_id": "PROD047",
+        "name": "Dâu Phô Mai",
+        "price": 55000,
+        "category": "Đồ uống",
+        "shop_id": 1,
+        "description": "Dâu Phô Mai, 55.000 đ"
+      },
+      {
+        "product_id": "PROD048",
+        "name": "Oolong Tứ Quý Sen (Nóng)",
+        "price": 59000,
+        "category": "Trà",
+        "shop_id": 2,
+        "description": "Oolong Tứ Quý Sen (Nóng), 59.000 đ"
+      },
+      {
+        "product_id": "PROD049",
+        "name": "Oolong Tứ Quý Sen",
+        "price": 49000,
+        "category": "Trà",
+        "shop_id": 2,
+        "description": "Oolong Tứ Quý Sen, 49.000 đ"
+      },
+      {
+        "product_id": "PROD050",
+        "name": "Oolong Tứ Quý Dâu Trân Châu",
+        "price": 49000,
+        "category": "Trà",
+        "shop_id": 2,
+        "description": "Oolong Tứ Quý Dâu Trân Châu, 49.000 đ"
+      },
+      {
+        "product_id": "PROD051",
+        "name": "Oolong Tứ Quý Kim Quất Trân Châu",
+        "price": 49000,
+        "category": "Trà",
+        "shop_id": 2,
+        "description": "Oolong Tứ Quý Kim Quất Trân Châu, 49.000 đ"
+      },
+      {
+        "product_id": "PROD052",
+        "name": "Oolong Tứ Quý Vải",
+        "price": 49000,
+        "category": "Trà",
+        "shop_id": 2,
+        "description": "Oolong Tứ Quý Vải, 49.000 đ"
+      },
+      {
+        "product_id": "PROD053",
+        "name": "Hi-Tea Đào Kombucha",
+        "price": 59000,
+        "category": "Trà",
+        "shop_id": 2,
+        "description": "Hi-Tea Đào Kombucha, 59.000 đ"
+      },
+      {
+        "product_id": "PROD054",
+        "name": "Hi-Tea Yuzu Kombucha",
+        "price": 59000,
+        "category": "Trà",
+        "shop_id": 2,
+        "description": "Hi-Tea Yuzu Kombucha, 59.000 đ"
+      },
+      {
+        "product_id": "PROD055",
+        "name": "Hi-Tea Yuzu Trân Châu",
+        "price": 49000,
+        "category": "Trà",
+        "shop_id": 2,
+        "description": "Hi-Tea Yuzu Trân Châu, 49.000 đ"
+      },
+      {
+        "product_id": "PROD056",
+        "name": "Hi-Tea Vải",
+        "price": 49000,
+        "category": "Trà",
+        "shop_id": 2,
+        "description": "Hi-Tea Vải, 49.000 đ"
+      },
+      {
+        "product_id": "PROD057",
+        "name": "Hi-Tea Đào",
+        "price": 49000,
+        "category": "Trà",
+        "shop_id": 2,
+        "description": "Hi-Tea Đào, 49.000 đ"
+      },
+      {
+        "product_id": "PROD058",
+        "name": "Trà Sữa Oolong Nướng Sương Sáo",
+        "price": 55000,
+        "category": "Trà sữa",
+        "shop_id": 2,
+        "description": "Trà Sữa Oolong Nướng Sương Sáo, 55.000 đ"
+      },
+      {
+        "product_id": "PROD059",
+        "name": "Trà Sữa Oolong Tứ Quý Bơ",
+        "price": 59000,
+        "category": "Trà sữa",
+        "shop_id": 2,
+        "description": "Trà Sữa Oolong Tứ Quý Bơ, 59.000 đ"
+      },
+      {
+        "product_id": "PROD060",
+        "name": "Trà Sữa Oolong Tứ Quý Sương Sáo",
+        "price": 55000,
+        "category": "Trà sữa",
+        "shop_id": 2,
+        "description": "Trà Sữa Oolong Tứ Quý Sương Sáo, 55.000 đ"
+      },
+      {
+        "product_id": "PROD061",
+        "name": "Hồng Trà Sữa Nóng",
+        "price": 55000,
+        "category": "Trà sữa",
+        "shop_id": 1,
+        "description": "Hồng Trà Sữa Nóng, 55.000 đ"
+      },
+      {
+        "product_id": "PROD062",
+        "name": "Hồng Trà Sữa Trân Châu",
+        "price": 55000,
+        "category": "Trà sữa",
+        "shop_id": 1,
+        "description": "Hồng Trà Sữa Trân Châu, 55.000 đ"
+      },
+      {
+        "product_id": "PROD063",
+        "name": "Trà Đen Macchiato",
+        "price": 55000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Trà Đen Macchiato, 55.000 đ"
+      },
+      {
+        "product_id": "PROD064",
+        "name": "Trà Sữa Oolong BLao",
+        "price": 39000,
+        "category": "Trà sữa",
+        "shop_id": 2,
+        "description": "Trà Sữa Oolong BLao, 39.000 đ"
+      },
+      {
+        "product_id": "PROD065",
+        "name": "Trà Xanh Latte (Nóng)",
+        "price": 49000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Trà Xanh Latte (Nóng), 49.000 đ"
+      },
+      {
+        "product_id": "PROD066",
+        "name": "Trà Xanh Đường Đen",
+        "price": 55000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Trà Xanh Đường Đen, 55.000 đ"
+      },
+      {
+        "product_id": "PROD067",
+        "name": "Trà Xanh Espresso Marble",
+        "price": 49000,
+        "category": "Trà",
+        "shop_id": 1,
+        "description": "Trà Xanh Espresso Marble, 49.000 đ"
+      },
+      {
+        "product_id": "PROD068",
+        "name": "Trà Xanh Latte Sữa Yến Mạch",
+        "price": 55000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Trà Xanh Latte Sữa Yến Mạch, 55.000 đ"
+      },
+      {
+        "product_id": "PROD069",
+        "name": "Trà Xanh Latte Đậm Vị",
+        "price": 49000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Trà Xanh Latte Đậm Vị, 49.000 đ"
+      },
+      {
+        "product_id": "PROD070",
+        "name": "Trà Xanh Latte",
+        "price": 45000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Trà Xanh Latte, 45.000 đ"
+      },
+      {
+        "product_id": "PROD071",
+        "name": "Trà Xanh Latte Sữa Yến Mạch (Nóng)",
+        "price": 55000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Trà Xanh Latte Sữa Yến Mạch (Nóng), 55.000 đ"
+      },
+      {
+        "product_id": "PROD072",
+        "name": "Chocolate Đá",
+        "price": 55000,
+        "category": "Đồ uống",
+        "shop_id": 1,
+        "description": "Chocolate Đá, 55.000 đ"
+      },
+      {
+        "product_id": "PROD073",
+        "name": "Chocolate Nóng",
+        "price": 55000,
+        "category": "Đồ uống",
+        "shop_id": 1,
+        "description": "Chocolate Nóng, 55.000 đ"
+      },
+      {
+        "product_id": "PROD074",
+        "name": "Frosty Bánh Kem Dâu",
+        "price": 59000,
+        "category": "Đồ uống đá xay",
+        "shop_id": 2,
+        "description": "Frosty Bánh Kem Dâu, 59.000 đ"
+      },
+      {
+        "product_id": "PROD075",
+        "name": "Frosty Choco Chip",
+        "price": 59000,
+        "category": "Đồ uống đá xay",
+        "shop_id": 2,
+        "description": "Frosty Choco Chip, 59.000 đ"
+      },
+      {
+        "product_id": "PROD076",
+        "name": "Frosty Trà Xanh",
+        "price": 59000,
+        "category": "Đồ uống đá xay",
+        "shop_id": 2,
+        "description": "Frosty Trà Xanh, 59.000 đ"
+      },
+      {
+        "product_id": "PROD077",
+        "name": "Frosty Cà Phê Đường Đen",
+        "price": 59000,
+        "category": "Đồ uống đá xay",
+        "shop_id": 2,
+        "description": "Frosty Cà Phê Đường Đen, 59.000 đ"
+      },
+      {
+        "product_id": "PROD078",
+        "name": "Frosty Caramel Arabica",
+        "price": 59000,
+        "category": "Đồ uống đá xay",
+        "shop_id": 2,
+        "description": "Frosty Caramel Arabica, 59.000 đ"
+      },
+      {
+        "product_id": "PROD079",
+        "name": "Frosty Phin-Gato",
+        "price": 55000,
+        "category": "Đồ uống đá xay",
+        "shop_id": 2,
+        "description": "Frosty Phin-Gato, 55.000 đ"
+      },
+      {
+        "product_id": "PROD080",
+        "name": "Bánh Mì Que Chà Bông Phô Mai Bơ Cay",
+        "price": 22000,
+        "category": "Bánh mì",
+        "shop_id": 3,
+        "description": "Bánh Mì Que Chà Bông Phô Mai Bơ Cay, 22.000 đ"
+      },
+      {
+        "product_id": "PROD081",
+        "name": "Bánh Mì Que Bò Nấm Xốt Bơ",
+        "price": 22000,
+        "category": "Bánh mì",
+        "shop_id": 3,
+        "description": "Bánh Mì Que Bò Nấm Xốt Bơ, 22.000 đ"
+      },
+      {
+        "product_id": "PROD082",
+        "name": "Bánh Mì Que Pate Cột Đèn",
+        "price": 19000,
+        "category": "Bánh mì",
+        "shop_id": 3,
+        "description": "Bánh Mì Que Pate Cột Đèn, 19.000 đ"
+      },
+      {
+        "product_id": "PROD083",
+        "name": "Croissant trứng muối",
+        "price": 39000,
+        "category": "Bánh ngọt",
+        "shop_id": 3,
+        "description": "Croissant trứng muối, 39.000 đ"
+      },
+      {
+        "product_id": "PROD084",
+        "name": "Butter Croissant Sữa Đặc",
+        "price": 35000,
+        "category": "Bánh ngọt",
+        "shop_id": 3,
+        "description": "Butter Croissant Sữa Đặc, 35.000 đ"
+      },
+      {
+        "product_id": "PROD085",
+        "name": "Chà Bông Phô Mai",
+        "price": 39000,
+        "category": "Bánh ngọt",
+        "shop_id": 3,
+        "description": "Chà Bông Phô Mai, 39.000 đ"
+      },
+      {
+        "product_id": "PROD086",
+        "name": "Mít Sấy",
+        "price": 20000,
+        "category": "Đồ ăn vặt",
+        "shop_id": 3,
+        "description": "Mít Sấy, 20.000 đ"
+      },
+      {
+        "product_id": "PROD087",
+        "name": "Mochi Kem Trà Sữa Trân Châu",
+        "price": 19000,
+        "category": "Đồ ăn vặt",
+        "shop_id": 3,
+        "description": "Mochi Kem Trà Sữa Trân Châu, 19.000 đ"
+      },
+      {
+        "product_id": "PROD088",
+        "name": "Mochi Kem Phúc Bồn Tử",
+        "price": 19000,
+        "category": "Đồ ăn vặt",
+        "shop_id": 3,
+        "description": "Mochi Kem Phúc Bồn Tử, 19.000 đ"
+      },
+      {
+        "product_id": "PROD089",
+        "name": "Mochi Kem Việt Quất",
+        "price": 19000,
+        "category": "Đồ ăn vặt",
+        "shop_id": 3,
+        "description": "Mochi Kem Việt Quất, 19.000 đ"
+      },
+      {
+        "product_id": "PROD090",
+        "name": "Mochi Kem Chocolate",
+        "price": 19000,
+        "category": "Đồ ăn vặt",
+        "shop_id": 3,
+        "description": "Mochi Kem Chocolate, 19.000 đ"
+      },
+      {
+        "product_id": "PROD091",
+        "name": "Mochi Kem Matcha",
+        "price": 19000,
+        "category": "Đồ ăn vặt",
+        "shop_id": 3,
+        "description": "Mochi Kem Matcha, 19.000 đ"
+      },
+      {
+        "product_id": "PROD092",
+        "name": "Mousse Tiramisu",
+        "price": 35000,
+        "category": "Đồ ăn vặt",
+        "shop_id": 3,
+        "description": "Mousse Tiramisu, 35.000 đ"
+      },
+      {
+        "product_id": "PROD093",
+        "name": "Mousse Gấu Chocolate",
+        "price": 39000,
+        "category": "Đồ ăn vặt",
+        "shop_id": 3,
+        "description": "Mousse Gấu Chocolate, 39.000 đ"
+      },
+      {
+        "product_id": "PROD094",
+        "name": "Butter Croissant",
+        "price": 29000,
+        "category": "Bánh ngọt",
+        "shop_id": 3,
+        "description": "Butter Croissant, 29.000 đ"
+      },
+      {
+        "product_id": "PROD095",
+        "name": "Choco Croffle",
+        "price": 39000,
+        "category": "Bánh ngọt",
+        "shop_id": 3,
+        "description": "Choco Croffle, 39.000 đ"
+      },
+      {
+        "product_id": "PROD096",
+        "name": "Pate Chaud",
+        "price": 39000,
+        "category": "Bánh ngọt",
+        "shop_id": 3,
+        "description": "Pate Chaud, 39.000 đ"
+      },
+      {
+        "product_id": "PROD097",
+        "name": "Cà Phê Đen Đá Hộp (14 gói x 16g)",
+        "price": 66000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Cà Phê Đen Đá Hộp (14 gói x 16g), 66.000 đ"
+      },
+      {
+        "product_id": "PROD098",
+        "name": "Cà Phê Sữa Đá Hòa Tan Túi 25x22G",
+        "price": 127000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Cà Phê Sữa Đá Hòa Tan Túi 25x22G, 127.000 đ"
+      },
+      {
+        "product_id": "PROD099",
+        "name": "Cà Phê Sữa Đá Hòa Tan (10 gói x 22g)",
+        "price": 53000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Cà Phê Sữa Đá Hòa Tan (10 gói x 22g), 53.000 đ"
+      },
+      {
+        "product_id": "PROD100",
+        "name": "Cà Phê Rang Xay Original 1 250G",
+        "price": 82000,
+        "category": "Cà phê",
+        "shop_id": 1,
+        "description": "Cà Phê Rang Xay Original 1 250G, 82.000 đ"
+      }
+    ],
+    "interactions": [
+      {
+        "user_id": "67f3e9c7d906ca15c786ff3a",
+        "product_id": "67f3f0a3a2f562bee18d1677",
+        "event_type": "purchase",
+        "timestamp": "2025-04-01T10:15:00Z"
+      },
+      {
+        "user_id": "67f3e9c7d906ca15c786ff3a",
+        "product_id": "67f3f064a2f562bee18d1675",
+        "event_type": "purchase",
+        "timestamp": "2025-04-01T10:20:00Z"
+      },
+      {
+        "user_id": "67f3e9c7d906ca15c786ff3a",
+        "product_id": "67f3f318a2f562bee18d16d4",
+        "event_type": "purchase",
+        "timestamp": "2025-04-02T14:00:00Z"
+      },
+      {
+        "user_id": "67f3e9c7d906ca15c786ff3a",
+        "product_id": "67f3f42ea2f562bee18d1733",
+        "event_type": "purchase",
+        "timestamp": "2025-04-03T09:30:00Z"
+      },
+      {
+        "user_id": "67f3e9c7d906ca15c786ff3a",
+        "product_id": "PROD013",
+        "event_type": "purchase",
+        "timestamp": "2025-04-04T11:00:00Z"
+      },
+      {
+        "user_id": "67fba7646b679b16d760b129",
+        "product_id": "67f3f0a3a2f562bee18d1677",
+        "event_type": "purchase",
+        "timestamp": "2025-04-01T11:00:00Z"
+      },
+      {
+        "user_id": "67fba7646b679b16d760b129",
+        "product_id": "67f3f318a2f562bee18d16d4",
+        "event_type": "purchase",
+        "timestamp": "2025-04-02T15:10:00Z"
+      },
+      {
+        "user_id": "67fba7646b679b16d760b129",
+        "product_id": "67f3f121a2f562bee18d167b",
+        "event_type": "purchase",
+        "timestamp": "2025-04-03T16:20:00Z"
+      },
+      {
+        "user_id": "67fba7646b679b16d760b129",
+        "product_id": "67f3f5cfa2f562bee18d184f",
+        "event_type": "purchase",
+        "timestamp": "2025-04-04T17:00:00Z"
+      },
+      {
+        "user_id": "67fba7646b679b16d760b129",
+        "product_id": "67f3f5ffa2f562bee18d187e",
+        "event_type": "purchase",
+        "timestamp": "2025-04-05T12:00:00Z"
+      },
+      {
+        "user_id": "67fd406ff4167fda3070d036",
+        "product_id": "67f3fc6fa2f562bee18d1e70",
+        "event_type": "purchase",
+        "timestamp": "2025-04-01T08:30:00Z"
+      },
+      {
+        "user_id": "67fd406ff4167fda3070d036",
+        "product_id": "67f3fc6fa2f562bee18d1e70",
+        "event_type": "purchase",
+        "timestamp": "2025-04-02T09:00:00Z"
+      },
+      {
+        "user_id": "67fd406ff4167fda3070d036",
+        "product_id": "67f3fba9a2f562bee18d1dd7",
+        "event_type": "purchase",
+        "timestamp": "2025-04-03T10:15:00Z"
+      },
+      {
+        "user_id": "67fd43728b501db83f8e363d",
+        "product_id": "67f3fd7ba2f562bee18d2024",
+        "event_type": "purchase",
+        "timestamp": "2025-04-01T09:00:00Z"
+      },
+      {
+        "user_id": "67fd43728b501db83f8e363d",
+        "product_id": "67f3fd7ba2f562bee18d2024",
+        "event_type": "purchase",
+        "timestamp": "2025-04-02T10:00:00Z"
+      },
+      {
+        "user_id": "67fd43728b501db83f8e363d",
+        "product_id": "67f3fd7ba2f562bee18d2024",
+        "event_type": "purchase",
+        "timestamp": "2025-04-03T11:30:00Z"
+      }
+    ]
+  }
