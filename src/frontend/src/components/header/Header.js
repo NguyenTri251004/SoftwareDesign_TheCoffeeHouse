@@ -11,12 +11,12 @@ import { faShoppingBag } from "@fortawesome/free-solid-svg-icons";
 
 import DrinkAPI from "services/drinkService";
 
-const Header = () => {
+const Header = ({isLoggedIn}) => {
   const [menuItems, setMenuItems] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const accountDropdownRef = useRef(null);
-
+  
   const toggleAccountMenu = () => {
     setIsAccountMenuOpen((prev) => !prev);
   };
@@ -24,7 +24,7 @@ const Header = () => {
   useEffect(() => {
     const shopId = localStorage.getItem("nearestShopId");
     if (!shopId) return;
-  
+
     const fetchMenu = async () => {
       try {
         const res = await DrinkAPI.getMenuByShopId(shopId);
@@ -35,7 +35,7 @@ const Header = () => {
         console.error("Lỗi khi lấy menu trong Header:", error);
       }
     };
-  
+
     fetchMenu();
   }, []);
 
@@ -75,7 +75,6 @@ const Header = () => {
             <img src={logo} alt="The Coffee House" />
           </div>
         </a>
-        
 
         <nav className={styles.nav}>
           <ul>
@@ -97,7 +96,9 @@ const Header = () => {
               <a href="/shop/list">Cửa hàng</a>
             </li>
             <li>
-              <a href="#" onClick={openPopup}>Khuyến mãi</a>
+              <a href="#" onClick={openPopup}>
+                Khuyến mãi
+              </a>
             </li>
           </ul>
         </nav>
@@ -115,10 +116,15 @@ const Header = () => {
           </button>
         </div>
       </div>
-      {isMenuOpen && <DropdownMenu onMouseLeave={() => setIsMenuOpen(false)} menuItems={menuItems} />}
+      {isMenuOpen && (
+        <DropdownMenu
+          onMouseLeave={() => setIsMenuOpen(false)}
+          menuItems={menuItems}
+        />
+      )}
       {isAccountMenuOpen && (
         <div ref={accountDropdownRef}>
-          <AccountDropdown />
+          <AccountDropdown isLoggedIn={isLoggedIn} />
         </div>
       )}
     </header>
