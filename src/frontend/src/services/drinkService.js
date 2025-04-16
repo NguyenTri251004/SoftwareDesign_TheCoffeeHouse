@@ -45,6 +45,31 @@ const DrinkAPI = {
             throw error;
         }
     },
+
+    getMultipleDrinks: async (productIds) => {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await fetch(`${BASE_URL}/product/many`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ ids: productIds }), 
+            });
+    
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Failed to fetch recommended products");
+            }
+    
+            const res = await response.json();
+            return res.data || []; 
+        } catch (error) {
+            console.error("Error fetching multiple drinks:", error.message);
+            throw error;
+        }
+    }
 };
 
 export default DrinkAPI;
