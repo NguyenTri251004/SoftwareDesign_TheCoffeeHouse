@@ -1,3 +1,4 @@
+// Header.js
 import React, { useState, useRef, useEffect } from "react";
 import styles from "./Header.module.css";
 import logo from "assets/logo.svg";
@@ -11,12 +12,14 @@ import { faShoppingBag } from "@fortawesome/free-solid-svg-icons";
 
 import DrinkAPI from "services/drinkService";
 
-const Header = ({isLoggedIn}) => {
+const Header = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const accountDropdownRef = useRef(null);
-  
+
+  const checkIsLoggedIn = !!localStorage.getItem("token"); 
+
   const toggleAccountMenu = () => {
     setIsAccountMenuOpen((prev) => !prev);
   };
@@ -124,7 +127,7 @@ const Header = ({isLoggedIn}) => {
       )}
       {isAccountMenuOpen && (
         <div ref={accountDropdownRef}>
-          <AccountDropdown isLoggedIn={isLoggedIn} />
+          <AccountDropdown isLoggedIn={checkIsLoggedIn} />
         </div>
       )}
     </header>
