@@ -5,5 +5,6 @@ import authMiddleware from "../middlewares/auth.middleware.js";
 
 router.get("/profile", authMiddleware, userController.getProfile);
 router.put("/customer/:id/profile", authMiddleware, userController.updateCustomerProfile);
+router.post("/redeem-points", authMiddleware, userController.redeemPoints);
 
 export default router;

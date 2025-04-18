@@ -1,11 +1,13 @@
 import UserModel from "../models/user.model.js";
 import CustomerModel from "../models/customer.model.js";
+import DiscountModel from "../models/discount.model.js";
 
 const userController = {
   getProfile: async (req, res) => {
     try {
       const user = await UserModel.findById(req.user._id).select("-password");
-      if (!user) return res.status(404).json({ msg: "Không tìm thấy người dùng" });
+      if (!user)
+        return res.status(404).json({ msg: "Không tìm thấy người dùng" });
 
       let profile = {
         id: user._id,
@@ -106,6 +108,82 @@ const userController = {
         message: "Lỗi server",
         error: error.message,
       });
+    }
+  },
+  redeemPoints: async (req, res) => {
+    try {
+      const { pointsToRedeem } = req.body;
+
+      // Lấy thông tin người dùng
+      const user = await UserModel.findById(req.user._id).select("-password");
+      if (!user)
+        return res
+          .status(404)
+          .json({ success: false, message: "Không tìm thấy người dùng" });
+
+      // Kiểm tra role là customer
+      if (user.role !== "customer") {
+        return res
+          .status(403)
+          .json({
+            success: false,
+            message: "Chỉ khách hàng mới có thể đổi điểm",
+          });
+      }
+
+      // Lấy thông tin khách hàng
+      const customer = await CustomerModel.findById(user._id);
+      if (!customer)
+        return res
+          .status(404)
+          .json({
+            success: false,
+            message: "Không tìm thấy thông tin khách hàng",
+          });
+
+      // Kiểm tra điểm tích lũy
+      if (customer.loyaltyPoints < pointsToRedeem) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Không đủ điểm để đổi" });
+      }
+
+      // Trừ điểm
+      customer.loyaltyPoints -= pointsToRedeem;
+      await customer.save();
+
+      // Tạo mã giảm giá
+      const discountCode = `DISCOUNT-${Date.now()}`;
+      const discountAmount = pointsToRedeem * 100;
+      const expiryDate = new Date();
+      expiryDate.setDate(expiryDate.getDate() + 30);
+
+      const discount = new DiscountModel({
+        code: discountCode,
+        description: `Giảm ${discountAmount.toLocaleString()}đ`,
+        isPercentage: false,
+        discountAmount,
+        expiryDate,
+        isActive: true,
+        userId: user._id, // Gán userId cho voucher
+      });
+
+      await discount.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "Đổi điểm thành công",
+        data: {
+          discountCode: discount.code,
+          discountAmount: discount.discountAmount,
+          expiryDate: discount.expiryDate,
+        },
+      });
+    } catch (error) {
+      console.error("Lỗi redeemPoints:", error);
+      return res
+        .status(500)
+        .json({ success: false, message: "Lỗi server", error: error.message });
     }
   },
 };

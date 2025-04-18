@@ -69,7 +69,7 @@
 }
 
 .redeemButton {
-  width: 80px;
+  width: 150px;
   background: RGB(222, 129, 0, 0.34);
   color: #772500;
   font-weight: bold;
@@ -82,4 +82,65 @@
 .redeemButton:hover {
   background: RGB(222, 129, 0, 0.25);
   transition: 0.3s;
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popupContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 25%;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.popupContent p {
+  width: 80%;
+}
+
+.popupActions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.confirmButton {
+  background: #28a745;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px 15px;
+}
+
+.cancelButton {
+  background: #dc3545;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px 15px;
+}
+
+.confirmButton:hover,
+.cancelButton:hover {
+  opacity: 0.9;
 }

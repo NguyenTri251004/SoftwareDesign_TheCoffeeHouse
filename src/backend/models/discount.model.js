@@ -3,6 +3,7 @@ const { Schema } = mongoose;
 
 const DiscountSchema = new Schema({
     shopId: { type: Schema.Types.ObjectId, ref: "Shop", default: null }, // null = all shop
+    userId: { type: Schema.Types.ObjectId, ref: "User", default: null }, // null = voucher chung
     code: { type: String, required: true, unique: true, trim: true },
     description: {
         type: String,

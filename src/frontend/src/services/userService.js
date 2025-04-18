@@ -52,7 +52,33 @@ const userAPI = {
             console.error("Error updating profile:", error.message);
             throw error;
         }
-    }
+    },
+    redeemPoints: async (pointsToRedeem) => {
+        try {
+              const token = localStorage.getItem("token");
+              const response = await fetch(`${BASE_URL}redeem-points`, {
+                  method: "POST",
+                  credentials: "include",
+                  headers: {
+                      "Authorization": `Bearer ${token}`,
+                      "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ pointsToRedeem }),
+              });
+
+              const data = await response.json();
+
+              if (!response.ok) {
+                  throw new Error(data.message || "Failed to redeem points");
+              }
+
+              console.log("Đổi điểm thành công:", data);
+              return data;
+        } catch (error) {
+              console.error("Error redeeming points:", error.message);
+              throw error;
+        }
+    },
 };
 
 
