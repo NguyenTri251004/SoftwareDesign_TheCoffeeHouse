@@ -46,7 +46,7 @@ function App() {
 
           <Route path="/user/profile" element={<UserProfile />} />
           <Route path="/drink/detail/:id" element={<DrinkDetailPage />} />
-          <Route path="/order-status" element={<OrderStatus />} />
+          <Route path="/order-status/:orderId" element={<OrderStatus />} />
           <Route path="/order" element={<ListOrderPage />} />
           <Route path="/redeem" element={<Redeem />} />
           <Route path="/menu/*" element={<Menu />} />
