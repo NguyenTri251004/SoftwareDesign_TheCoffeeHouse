@@ -4,6 +4,7 @@ const dataProvider = {
     getList: async (resource, params) => {
         const { page, perPage } = params.pagination;
         const { field, order } = params.sort;
+        const { shopId } = params.filter;
         const start = (page - 1) * perPage;
         const end = start + perPage;
 
@@ -12,6 +13,7 @@ const dataProvider = {
             end: end.toString(),
             sort: field,
             order: order,
+            shopId: shopId
         }).toString();
 
         const response = await fetch(`${API_URL}/${resource}?${query}`);

@@ -59,8 +59,11 @@ const OrderSchema = new Schema({
             },
             topping: [
                 {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: 'Topping'
+                    toppingId: {
+                        type: mongoose.Schema.Types.ObjectId,
+                        ref: 'Topping',
+                        required: true
+                    },
                 }
             ]
         }
