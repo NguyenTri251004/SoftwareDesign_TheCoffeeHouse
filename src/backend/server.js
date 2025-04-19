@@ -13,6 +13,7 @@ import productRoute from "./routes/product.route.js";
 import toppingRoute from "./routes/topping.route.js";
 import flashsaleRoute from "./routes/flashsale.route.js";
 import discountRoute from "./routes/discount.route.js";
+import orderRoute from "./routes/order.route.js";
 
 dotenv.config();
 
@@ -49,6 +50,7 @@ app.use("/api/product", productRoute);
 app.use("/api/topping", toppingRoute);
 app.use("/api/flashsale", flashsaleRoute);
 app.use("/api/discount", discountRoute);
+app.use("/api/order", orderRoute);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
