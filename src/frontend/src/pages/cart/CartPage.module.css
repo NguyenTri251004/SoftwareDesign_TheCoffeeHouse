@@ -1,0 +1,107 @@
+.container {
+  display: flex;
+  flex-direction: column; /* Đổi lại thành column để header, sidebar, content xếp chồng */
+}
+
+.cartContainer {
+    padding: 50px;
+    font-family: Arial, sans-serif;
+}
+  
+  .heading {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .wrapper {
+    display: flex;
+    gap: 40px;
+  }
+  
+  .left,
+  .right {
+    flex: 1;
+  }
+  
+  .section {
+    margin-bottom: 20px;
+  }
+  
+  .section h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  input[type='text'] {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .paymentOption {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 5px 0;
+  }
+  
+  .terms {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  
+  .terms input {
+    margin-right: 5px;
+  }
+  
+  .right h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .item {
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  
+  .price {
+    font-weight: bold;
+  }
+  
+  .summary {
+    margin-top: 10px;
+  }
+  
+  .total {
+    font-size: 18px;
+    color: #d35400;
+    margin-top: 10px;
+  }
+  
+  .orderButton {
+    width: 100%;
+    background: orange;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-size: 16px;
+  }
+  
+  .cancelButton {
+    width: 100%;
+    background: none;
+    color: red;
+    border: none;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  

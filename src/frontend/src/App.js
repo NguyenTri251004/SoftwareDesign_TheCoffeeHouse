@@ -27,6 +27,7 @@ import ModalTrackOrder2 from "components/modal/ModalTrackOrder2";
 import VoucherPage from "pages/voucher/VoucherPage";
 import ListOrderPage from "pages/order/ListOrderPage";
 import UserProfile from "pages/user/UserProfile";
+import CartPage from "pages/cart/CartPage";
 
 function App() {
   return (
@@ -50,6 +51,8 @@ function App() {
           <Route path="/order" element={<ListOrderPage />} />
           <Route path="/redeem" element={<Redeem />} />
           <Route path="/menu/*" element={<Menu />} />
+
+          <Route path="/cart" element={<CartPage/>} />
 
         </Routes>
       </Router>
