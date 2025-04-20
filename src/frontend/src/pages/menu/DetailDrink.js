@@ -123,7 +123,8 @@ function DrinkDetailPage() {
           name: drink.name,
           size: selectedSize.size,
           sizePrice: selectedSize.extraPrice,
-          basePrice: drink.price,
+          unitPrice: drink.price,
+          amount: 1,
           topping: selectedToppings.map((top) => ({
             toppingId: top._id,
             name: top.name,

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './CartPage.module.css';
 import Header from 'components/header/Header';
 import Footer from 'components/footer/Footer';
+import OrderAPI from 'services/orderService';
 
 const PaymentMethods = [
   { id: 'cash', label: 'Tiền mặt' },
@@ -20,8 +21,7 @@ const CartPage = () => {
   const [note, setNote] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('cash');
 
-  // Tính phí ship/khuyến mãi cố định (bạn có thể tùy chỉnh theo logic)
-  const shippingFee = 15000;
+  const shippingFee = products.length > 0 ? 15000 : 0;
   const discount = 0;
 
   useEffect(() => {
@@ -32,31 +32,45 @@ const CartPage = () => {
   const totalAmount = products.reduce((sum, item) => sum + item.totalPrice, 0);
   const finalAmount = totalAmount + shippingFee - discount;
 
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
     if (!recipientName || !deliveryAddress || !phone) {
       alert('Vui lòng điền đầy đủ thông tin người nhận!');
       return;
     }
+    
+    const shopId = localStorage.getItem("currentShopId") || "67e832a5d0be3d6ab71556a0";
 
-    const order = {
-      recipientName,
+    const orderPayload = {
+      useName: recipientName,
+      shopId: shopId,
       deliveryAddress,
       phone,
-      note,
-      products,
+      status: 'Pending',
+      refundStatus: 'None',
+      products: products.map((p) => ({
+        productId: p.productId,
+        size: p.size,
+        amount: p.amount,
+        unitPrice: p.unitPrice,
+        totalPrice: p.totalPrice,
+        topping: p.topping?.map((t) => ({ toppingId: t.toppingId })) || [],
+      })),
       totalAmount,
       shippingFee,
       discount,
       finalAmount,
-      paymentMethod,
     };
-
-    localStorage.setItem('order', JSON.stringify(order));
-    alert('Đặt hàng thành công! Đơn hàng đã được lưu.');
-
-    // Xoá cart nếu muốn reset lại:
-    // localStorage.removeItem('cart');
+  
+    const res = await OrderAPI.postOrder(orderPayload);
+    if (res && res.success !== false) {
+      alert('Đặt hàng thành công!');
+      localStorage.removeItem('cart');
+      setProducts([]);
+    } else {
+      alert('Đặt hàng thất bại. Vui lòng thử lại!');
+    }
   };
+  
 
   const handleDeleteOrder = () => {
     localStorage.removeItem('cart');
@@ -136,7 +150,7 @@ const CartPage = () => {
               products.map((item, index) => (
                 <div key={index} className={styles.item}>
                   <p>
-                    1 x {item.name || 'Sản phẩm'} ({item.size})
+                    {item.amount} x {item.name || 'Sản phẩm'} ({item.size})
                   </p>
                   <ul>
                     {item.topping && item.topping.length > 0 ? (

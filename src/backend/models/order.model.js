@@ -3,9 +3,8 @@ const { Schema } = mongoose;
 
 const OrderSchema = new Schema({
     _id: { type: Schema.Types.ObjectId, auto: true },
-    useId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Customer',
+    useName: {
+        type: String,
         required: true
     },
     shopId: {
