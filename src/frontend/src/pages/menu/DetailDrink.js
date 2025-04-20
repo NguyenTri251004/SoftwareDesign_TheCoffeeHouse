@@ -39,7 +39,7 @@ function DrinkDetailPage() {
             }
 
             try {
-                const shopId = localStorage.getItem("currentShopId");
+                const shopId = localStorage.getItem("currentShopId") || "67e832a5d0be3d6ab71556a0";
                 const res = await DrinkAPI.getDrinkById(shopId, id);
                 setDrink(res.drink);
             } catch (err) {
