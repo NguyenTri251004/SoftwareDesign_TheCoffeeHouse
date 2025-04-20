@@ -114,7 +114,14 @@ const Header = () => {
           >
             <FontAwesomeIcon icon={faUser} />
           </button>
-          <button className={styles.bagBtn}>
+          <button 
+            className={styles.bagBtn}
+            onClick={() => {
+              // if (checkIsLoggedIn) {
+                window.location.href = "/cart";
+              // }
+            }}
+          >
             <FontAwesomeIcon icon={faShoppingBag} />
           </button>
         </div>

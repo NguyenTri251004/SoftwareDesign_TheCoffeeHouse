@@ -39,7 +39,7 @@ function DrinkDetailPage() {
             }
 
             try {
-                const shopId = localStorage.getItem("currentShopId");
+                const shopId = localStorage.getItem("currentShopId") || "67e832a5d0be3d6ab71556a0";
                 const res = await DrinkAPI.getDrinkById(shopId, id);
                 setDrink(res.drink);
             } catch (err) {
@@ -112,6 +112,35 @@ function DrinkDetailPage() {
         return base + sizePrice + toppingsPrice;
     };
 
+    const handleAddToCart = () => {
+        if (!selectedSize) {
+          alert("Vui lòng chọn size trước khi thêm vào giỏ hàng!");
+          return;
+        }
+      
+        const cartItem = {
+          productId: drink._id,
+          name: drink.name,
+          size: selectedSize.size,
+          sizePrice: selectedSize.extraPrice,
+          unitPrice: drink.price,
+          amount: 1,
+          topping: selectedToppings.map((top) => ({
+            toppingId: top._id,
+            name: top.name,
+            price: top.price,
+          })),
+          totalPrice: calculateTotal(),
+          image: drink.image,
+        };
+      
+        const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+        const updatedCart = [...existingCart, cartItem];
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
+      
+        alert("Đã thêm vào giỏ hàng!");
+      };      
+
     if (!drink) return null;
 
     return (
@@ -156,7 +185,7 @@ function DrinkDetailPage() {
                         <div className={styles.totalPrice}>
                             Tổng cộng: {calculateTotal().toLocaleString()} đ
                         </div>
-                        <button className={styles.addToCart}>Thêm vào giỏ hàng</button>
+                        <button className={styles.addToCart} onClick={handleAddToCart}>Thêm vào giỏ hàng</button>
                     </div>
                 </div>
                 <div className={styles.descSection}>

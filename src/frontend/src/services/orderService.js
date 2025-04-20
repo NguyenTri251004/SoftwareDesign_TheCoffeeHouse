@@ -117,6 +117,29 @@ const OrderAPI = {
             console.error("Error fetching order details:", error.message);
             return fallbackData.orders.find(v => v.id === id) || null;
         }
+    },
+
+    postOrder: async (orderData) => {
+        try {
+            const response = await fetch(`${BASE_URL}/order`, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(orderData),
+            });
+
+            if (!response.ok) {
+                console.warn("API failed: postOrder");
+                return { success: false };
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error("Error posting order:", error.message);
+            return { success: false };
+        }
     }
 };
 
