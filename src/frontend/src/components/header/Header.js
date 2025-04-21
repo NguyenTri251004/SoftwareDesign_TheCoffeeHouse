@@ -1,5 +1,5 @@
-// Header.js
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
 import logo from "assets/logo.svg";
 import DropdownMenu from "./DropdownMenu";
@@ -17,8 +17,9 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const accountDropdownRef = useRef(null);
+  const navigate = useNavigate();
 
-  const checkIsLoggedIn = !!localStorage.getItem("token"); 
+  const checkIsLoggedIn = !!localStorage.getItem("token");
 
   const toggleAccountMenu = () => {
     setIsAccountMenuOpen((prev) => !prev);
@@ -70,6 +71,15 @@ const Header = () => {
 
   const { openPopup } = usePopup();
 
+  const handleCartClick = () => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    if (cart.length === 0) {
+      navigate("/");
+    } else {
+      navigate("/checkout");
+    }
+  };
+
   return (
     <header className={styles.header}>
       <div className={styles.headerContainer}>
@@ -114,14 +124,7 @@ const Header = () => {
           >
             <FontAwesomeIcon icon={faUser} />
           </button>
-          <button 
-            className={styles.bagBtn}
-            onClick={() => {
-              // if (checkIsLoggedIn) {
-                window.location.href = "/cart";
-              // }
-            }}
-          >
+          <button className={styles.bagBtn} onClick={handleCartClick}>
             <FontAwesomeIcon icon={faShoppingBag} />
           </button>
         </div>

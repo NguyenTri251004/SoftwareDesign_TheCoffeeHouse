@@ -1,55 +1,90 @@
-// Checkout.js
-import styles from "./Checkout.module.css";
-import Header from "components/header/Header";
-import Footer from "components/footer/Footer";
-import { FaFile, FaTrashAlt } from "react-icons/fa";
-import { IoIosArrowForward } from "react-icons/io";
-import { MdEdit } from "react-icons/md";
-import { useState } from "react";
-import AddressMap from "../../components/map/AddressMap";
-import { SiGooglemaps } from "react-icons/si";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styles from './Checkout.module.css';
+import Header from 'components/header/Header';
+import Footer from 'components/footer/Footer';
+import { FaFile, FaTrashAlt } from 'react-icons/fa';
+import { IoIosArrowForward } from 'react-icons/io';
+import { MdEdit } from 'react-icons/md';
+import { SiGooglemaps } from 'react-icons/si';
+import AddressMap from '../../components/map/AddressMap';
+import OrderAPI from 'services/orderService';
 
+const PaymentMethods = [
+  { id: 'cash', label: 'Tiền mặt' },
+  { id: 'vnpay', label: 'VNPAY' },
+  { id: 'momo', label: 'MoMo' },
+  { id: 'zalopay', label: 'ZaloPay' },
+  { id: 'shopeepay', label: 'ShopeePay' },
+  { id: 'card', label: 'Thẻ ngân hàng' },
+];
 
 const Checkout = () => {
-  // Các state cho modal và định vị
+  const [products, setProducts] = useState([]);
+  const [deliveryAddress, setDeliveryAddress] = useState('');
+  const [recipientName, setRecipientName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [note, setNote] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('cash');
   const [showModal, setShowModal] = useState(false);
-  const [modalAddress, setModalAddress] = useState("");
+  const [modalAddress, setModalAddress] = useState('');
   const [showMapInModal, setShowMapInModal] = useState(false);
   const [routeInfo, setRouteInfo] = useState(null);
+  const navigate = useNavigate();
 
-  // Tọa độ cửa hàng (đặt cố định)
   const storeCoordinates = { lat: 10.762622, lon: 106.660172 };
+  const shippingFee = products.length > 0 ? 15000 : 0;
+  const discount = 0;
 
-  // Mở modal nhập địa chỉ
+  // Load cart, userAddress, and deliveryAddress from localStorage on mount
+  useEffect(() => {
+    const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
+    const savedUserAddress = localStorage.getItem('userAddress') || '';
+    setProducts(savedCart);
+    setDeliveryAddress(savedUserAddress); // Use userAddress for deliveryAddress
+    setModalAddress(savedUserAddress);
+  }, []);
+
+  // Calculate total and final amounts
+  const totalAmount = products.reduce((sum, item) => sum + item.totalPrice, 0);
+  const finalAmount = totalAmount + shippingFee - discount;
+
+  // Modal address handling
   const showModalAddress = () => {
+    setModalAddress(deliveryAddress);
     setShowModal(true);
   };
 
-  // Đóng modal và reset trạng thái
   const closeModalAddress = () => {
     setShowModal(false);
     setShowMapInModal(false);
     setRouteInfo(null);
   };
 
-  // Khi nhấn "Dùng định vị bản đồ", tính khoảng cách bằng OSRM
+  // Confirm address from modal and save to localStorage as userAddress and deliveryAddress
+  const confirmModalAddress = () => {
+    setDeliveryAddress(modalAddress);
+    localStorage.setItem('userAddress', modalAddress);
+    localStorage.setItem('deliveryAddress', modalAddress);
+    closeModalAddress();
+  };
+
+  // Calculate route using OSRM
   const handleUseMap = async () => {
+    if (!modalAddress) {
+      alert('Vui lòng nhập địa chỉ!');
+      return;
+    }
     try {
-      // Gọi API Nominatim để chuyển địa chỉ người dùng sang tọa độ
       const nomRes = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          modalAddress
-        )}`,
-        {
-          headers: { "User-Agent": "MyApp/1.0 (myemail@example.com)" },
-        }
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(modalAddress)}`,
+        { headers: { 'User-Agent': 'MyApp/1.0 (myemail@example.com)' } }
       );
       const nomData = await nomRes.json();
       if (nomData.length > 0) {
         const { lat, lon } = nomData[0];
         const userLat = parseFloat(lat);
         const userLon = parseFloat(lon);
-        // Gọi API OSRM để tính toán khoảng cách và thời gian giữa cửa hàng và địa chỉ người dùng
         const osrmRes = await fetch(
           `https://router.project-osrm.org/route/v1/driving/${storeCoordinates.lon},${storeCoordinates.lat};${userLon},${userLat}?overview=false`
         );
@@ -57,14 +92,77 @@ const Checkout = () => {
         if (osrmData.routes && osrmData.routes.length > 0) {
           setRouteInfo(osrmData.routes[0]);
         }
-        // Hiển thị bản đồ với địa chỉ người dùng
         setShowMapInModal(true);
       } else {
-        alert("Không tìm thấy địa chỉ, vui lòng thử lại.");
+        alert('Không tìm thấy địa chỉ, vui lòng thử lại.');
       }
     } catch (error) {
-      console.error("Error calculating route:", error);
-      alert("Có lỗi khi tính khoảng cách. Vui lòng thử lại.");
+      console.error('Lỗi khi tính khoảng cách:', error);
+      alert('Có lỗi khi tính khoảng cách. Vui lòng thử lại.');
+    }
+  };
+
+  // Place order
+  const handlePlaceOrder = async () => {
+    if (!recipientName || !deliveryAddress || !phone) {
+      alert('Vui lòng điền đầy đủ thông tin người nhận!');
+      return;
+    }
+
+    const shopId = localStorage.getItem('currentShopId') || '67e832a5d0be3d6ab71556a0';
+
+    const orderPayload = {
+      useName: recipientName,
+      shopId,
+      deliveryAddress,
+      phone,
+      status: 'Pending',
+      refundStatus: 'None',
+      products: products.map((p) => ({
+        productId: p.productId,
+        size: p.size,
+        amount: p.amount,
+        unitPrice: p.unitPrice,
+        totalPrice: p.totalPrice,
+        topping: p.topping?.map((t) => ({ toppingId: t.toppingId })) || [],
+      })),
+      totalAmount,
+      shippingFee,
+      discount,
+      finalAmount,
+      note,
+      paymentMethod,
+    };
+
+    try {
+      const res = await OrderAPI.postOrder(orderPayload);
+      if (res && res.success !== false) {
+        alert('Đặt hàng thành công!');
+        localStorage.removeItem('cart');
+        setProducts([]);
+        setRecipientName('');
+        setPhone('');
+        setNote('');
+        navigate('/');
+      } else {
+        alert('Đặt hàng thất bại. Vui lòng thử lại!');
+      }
+    } catch (error) {
+      console.error('Error placing order:', error);
+      alert('Đặt hàng thất bại. Vui lòng thử lại!');
+    }
+  };
+
+  // Delete cart with confirmation and redirect to homepage
+  const handleDeleteOrder = () => {
+    const confirmDelete = window.confirm('Bạn có chắc muốn xóa đơn hàng này không?');
+    if (confirmDelete) {
+      localStorage.removeItem('cart');
+      localStorage.removeItem('userAddress');
+      localStorage.removeItem('deliveryAddress');
+      setProducts([]);
+      setDeliveryAddress('');
+      navigate('/');
     }
   };
 
@@ -79,7 +177,9 @@ const Checkout = () => {
           <div className={styles.shippingSection}>
             <div className={styles.sectionHeader}>
               <h3>Giao hàng</h3>
-              <button className={styles.editButton}>Đổi phương thức</button>
+              <button className={styles.editButton} onClick={showModalAddress}>
+                Đổi địa chỉ
+              </button>
             </div>
             <div className={styles.addressBox}>
               <div className={styles.addressContent}>
@@ -90,14 +190,10 @@ const Checkout = () => {
                 />
                 <div className={styles.addressText}>
                   <p>
-                    <strong>227 Nguyễn Văn Cừ</strong>
+                    <strong>{deliveryAddress || 'Chưa chọn địa chỉ'}</strong>
                   </p>
-                  <p>
-                    227 Nguyễn Văn Cừ, Phường 4, Quận 5, Thành phố Hồ Chí Minh,
-                    Việt Nam
-                  </p>
+                  <p>{deliveryAddress || 'Vui lòng chọn địa chỉ giao hàng'}</p>
                 </div>
-                {/* Nhấn vào icon mũi tên để mở modal nhập địa chỉ */}
                 <span className={styles.arrowIcon} onClick={showModalAddress}>
                   <IoIosArrowForward />
                 </span>
@@ -107,86 +203,67 @@ const Checkout = () => {
               type="text"
               placeholder="Tên người nhận"
               className={styles.inputField}
+              value={recipientName}
+              onChange={(e) => setRecipientName(e.target.value)}
             />
             <input
               type="text"
               placeholder="Số điện thoại"
               className={styles.inputField}
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
             />
             <input
               type="text"
-              placeholder="Thêm hướng dẫn giao hàng"
+              placeholder="Thêm ghi chú (nếu có)"
               className={styles.inputField}
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
             />
 
             <h3 className={styles.sectionHeader}>Phương thức thanh toán</h3>
             <div className={styles.paymentMethods}>
-              {/* Các tùy chọn thanh toán */}
-              <label className={styles.paymentOption}>
-                <input type="radio" name="payment" defaultChecked />
-                <img
-                  className={styles.paymentIcon}
-                  src="https://minio.thecoffeehouse.com/image/tchmobileapp/1000_photo_2021-04-06_11-17-08.jpg"
-                  alt="Cash"
-                />
-                <span> Tiền mặt </span>
-              </label>
-              <hr className={styles.divider} />
-              <label className={styles.paymentOption}>
-                <input type="radio" name="payment" />
-                <img
-                  className={styles.paymentIcon}
-                  src="https://stcd02206177151.cloud.edgevnpay.vn/assets/images/logo-icon/logo-primary.svg"
-                  alt="VNPay"
-                />
-                <span>VNPAY </span>
-              </label>
-              <hr className={styles.divider} />
-              <label className={styles.paymentOption}>
-                <input type="radio" name="payment" />
-                <img
-                  className={styles.paymentIcon}
-                  src="https://homepage.momocdn.net/fileuploads/svg/momo-file-240411162904.svg"
-                  alt="Momo"
-                />
-                <span>Momo </span>
-              </label>
-              <hr className={styles.divider} />
-              <label className={styles.paymentOption}>
-                <input type="radio" name="payment" />
-                <img
-                  className={styles.paymentIcon}
-                  src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgumCewiq6XqWwa4PkX7fLDKGEWOOVdksz180lH7NNEI4Mw5ArNn1aLKbLyEKy3UOuDupIhTvyNGiSyKEdmL7iPq3Ja667bo2umKl_LnnGQMdkuUl602_rLA4MgtwThR5pSDEKHRf44TFRHY_g6-nYHxs4pss-aB8JZdLMuTvlvW14-16Co-uCw8tRu/s72-c/ZaloPay.jpg"
-                  alt="Zalopay"
-                />
-                <span>Zalopay </span>
-              </label>
-              <hr className={styles.divider} />
-              <label className={styles.paymentOption}>
-                <input type="radio" name="payment" />
-                <img
-                  className={styles.paymentIcon}
-                  src="https://shopeepay.vn/static/media/shopeePayLogo2022.67d2e522e841720cf971c77142ace5e4.svg"
-                  alt="ShopeePay"
-                />
-                <span>ShopeePay </span>
-              </label>
-              <hr className={styles.divider} />
-              <label className={styles.paymentOption}>
-                <input type="radio" name="payment" />
-                <img
-                  className={styles.paymentIcon}
-                  src="https://minio.thecoffeehouse.com/image/tchmobileapp/385_ic_atm@3x.png"
-                  alt="Credit Card"
-                />
-                <span>Thẻ ngân hàng </span>
-              </label>
-              <hr className={styles.divider} />
+              {PaymentMethods.map((method) => (
+                <div key={method.id}>
+                  <label className={styles.paymentOption}>
+                    <input
+                      type="radio"
+                      name="payment"
+                      value={method.id}
+                      checked={paymentMethod === method.id}
+                      onChange={() => setPaymentMethod(method.id)}
+                    />
+                    <img
+                      className={styles.paymentIcon}
+                      src={
+                        method.id === 'cash'
+                          ? 'https://minio.thecoffeehouse.com/image/tchmobileapp/1000_photo_2021-04-06_11-17-08.jpg'
+                          : method.id === 'vnpay'
+                          ? 'https://stcd02206177151.cloud.edgevnpay.vn/assets/images/logo-icon/logo-primary.svg'
+                          : method.id === 'momo'
+                          ? 'https://homepage.momocdn.net/fileUploads/svg/momo-file-240411162904.svg'
+                          : method.id === 'zalopay'
+                          ? 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgumCewiq6XqWwa4PkX7fLDKGEWOOVdksz180lH7NNEI4Mw5ArNn1aLKbLyEKy3UOuDupIhTvyNGiSyKEdmL7iPq3Ja667bo2umKl_LnnGQMdkuUl602_rLA4MgtwThR5pSDEKHRf44TFRHY_g6-nYHxs4pss-aB8JZdLMuTvlvW14-16Co-uCw8tRu/s72-c/ZaloPay.jpg'
+                          : method.id === 'shopeepay'
+                          ? 'https://shopeepay.vn/static/media/shopeePayLogo2022.67d2e522e841720cf971c77142ace5e4.svg'
+                          : 'https://minio.thecoffeehouse.com/image/tchmobileapp/385_ic_atm@3x.png'
+                      }
+                      alt={method.label}
+                    />
+                    <span>{method.label}</span>
+                  </label>
+                  <hr className={styles.divider} />
+                </div>
+              ))}
             </div>
             <div className={styles.terms}>
-              <input type="checkbox" />
+              <input type="checkbox" defaultChecked />
               <span>
-                Đồng ý với điều khoản và điều kiện mua hàng của The Coffee House
+                Đồng ý với các{' '}
+                <a href="#" target="_blank" rel="noreferrer">
+                  điều khoản và điều kiện
+                </a>{' '}
+                mua hàng của The Coffee House
               </span>
             </div>
           </div>
@@ -197,87 +274,73 @@ const Checkout = () => {
                 <h3 className={styles.sectionHeader}>Các món đã chọn</h3>
                 <button className={styles.addMoreButton}>Thêm món</button>
               </div>
-              <div className={styles.orderItem}>
-                <div className={styles.orderItemContent}>
-                  <MdEdit className={styles.editIcon} />
-                  <div className={styles.orderItemContentDetail}>
-                    <p className={styles.drinkName}>
-                      <strong>1 x A-mê Đào</strong>
-                    </p>
-                    <p>Lớn</p>
-                    <p>Xóa</p>
+              {products.length === 0 ? (
+                <p>Chưa có sản phẩm nào trong đơn hàng.</p>
+              ) : (
+                products.map((item, index) => (
+                  <div key={index} className={styles.orderItem}>
+                    <div className={styles.orderItemContent}>
+                      <MdEdit className={styles.editIcon} />
+                      <div className={styles.orderItemContentDetail}>
+                        <p className={styles.drinkName}>
+                          <strong>
+                            {item.amount} x {item.name || 'Sản phẩm'} ({item.size})
+                          </strong>
+                        </p>
+                        <ul>
+                          {item.topping && item.topping.length > 0 ? (
+                            item.topping.map((t, i) => <li key={i}>{t.name}</li>)
+                          ) : (
+                            <li>Không có topping</li>
+                          )}
+                        </ul>
+                      </div>
+                    </div>
+                    <p className={styles.price}>{item.totalPrice.toLocaleString()}đ</p>
                   </div>
-                </div>
-                <p className={styles.price}>55.000đ</p>
-              </div>
-              <div className={styles.orderItem}>
-                <div className={styles.orderItemContent}>
-                  <MdEdit className={styles.editIcon} />
-                  <div className={styles.orderItemContentDetail}>
-                    <p className={styles.drinkName}>
-                      <strong>1 x Matcha Latte</strong>
-                    </p>
-                    <p>Lớn</p>
-                    <p>Xóa</p>
-                  </div>
-                </div>
-                <p className={styles.price}>55.000đ</p>
-              </div>
-              <h3 className={styles.sectionHeader}> Tổng cộng</h3>
+                ))
+              )}
+              <h3 className={styles.sectionHeader}>Tổng cộng</h3>
               <div className={styles.summaryRow}>
                 <p>Thành tiền</p>
-                <p className={styles.price}>110.000đ</p>
+                <p className={styles.price}>{totalAmount.toLocaleString()}đ</p>
               </div>
               <hr className={styles.divider} />
               <div className={styles.summaryRow}>
                 <p>Phí giao hàng</p>
-                <p className={styles.price}>18.000đ</p>
-              </div>
-              <div className={styles.summaryRow}>
-                <p>Bạn có mã Freeship trong mục ưu đãi</p>
-                <p className={`${styles.price} ${styles.strikeThrough}`}>
-                  0đ
-                </p>
+                <p className={styles.price}>{shippingFee.toLocaleString()}đ</p>
               </div>
               <hr className={styles.divider} />
-              <div className={styles.summaryDiscountRow}>
-                <div className={styles.discountContainer}>
-                  <p className={styles.discountLabel}>Khuyến mãi</p>
-                  <div className={styles.discountRow}>
-                    <p className={styles.discountDetail}>Miễn phí vận chuyển</p>
-                    <p className={styles.price}>-18.000đ</p>
-                  </div>
-                  <p className={styles.removeDiscount}>Xóa</p>
-                </div>
+              <div className={styles.summaryRow}>
+                <p>Khuyến mãi</p>
+                <p className={styles.price}>-{discount.toLocaleString()}đ</p>
               </div>
             </div>
 
             <div className={styles.totalSection}>
               <div className={styles.totalDetails}>
                 <h3 className={styles.sectionTotal}>Thành tiền</h3>
-                <p className={styles.sectionPrice}>110.000đ</p>
+                <p className={styles.sectionPrice}>{finalAmount.toLocaleString()}đ</p>
               </div>
-              <button className={styles.confirmButton}>Đặt hàng</button>
+              <button className={styles.confirmButton} onClick={handlePlaceOrder}>
+                Đặt hàng
+              </button>
             </div>
 
-            <button className={styles.cancelButton}>
+            <button className={styles.cancelButton} onClick={handleDeleteOrder}>
               <FaTrashAlt role="img" aria-label="trash" />
-              <span> Xóa đơn hàng </span>
+              <span>Xóa đơn hàng</span>
             </button>
           </div>
         </div>
       </div>
       <Footer />
 
-      {/* Popup modal nhập địa chỉ và định vị bản đồ */}
       {showModal && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContainer}>
             <div className={styles.modalHeader}>
-              <button
-                className={styles.closeButton}
-                onClick={closeModalAddress}
-              >
+              <button className={styles.closeButton} onClick={closeModalAddress}>
                 x
               </button>
               <span>Giao hàng</span>
@@ -290,24 +353,19 @@ const Checkout = () => {
                 value={modalAddress}
                 onChange={(e) => setModalAddress(e.target.value)}
               />
-              <button
-                className={styles.locationButton}
-                onClick={handleUseMap}
-              >
+              <button className={styles.locationButton} onClick={handleUseMap}>
                 <span className={styles.locationIcon}>
                   <SiGooglemaps />
                 </span>
                 Dùng định vị bản đồ
               </button>
+              <button className={styles.confirmButton} onClick={confirmModalAddress}>
+                Xác nhận địa chỉ
+              </button>
               {routeInfo && (
                 <div className={styles.routeInfo}>
-                  <p>
-                    Khoảng cách: {(routeInfo.distance / 1000).toFixed(2)} km
-                  </p>
-                  <p>
-                    Thời gian ước tính: {(routeInfo.duration / 60).toFixed(0)}{" "}
-                    phút
-                  </p>
+                  <p>Khoảng cách: {(routeInfo.distance / 1000).toFixed(2)} km</p>
+                  <p>Thời gian ước tính: {(routeInfo.duration / 60).toFixed(0)} phút</p>
                 </div>
               )}
               {showMapInModal && (

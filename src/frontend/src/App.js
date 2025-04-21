@@ -53,7 +53,7 @@ function App() {
           <Route path="/menu/*" element={<Menu />} />
 
           <Route path="/cart" element={<CartPage/>} />
-
+          <Route path="/checkout" element={<Checkout/>} />
         </Routes>
       </Router>
       <VoucherPage/>

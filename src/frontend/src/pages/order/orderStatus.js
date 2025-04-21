@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import styles from './orderStatus.module.css';
+import styles from './OrderStatus.module.css';
 import { FaMapMarkerAlt, FaBox, FaTruck } from 'react-icons/fa';
 import Header from 'components/header/Header';
 import CancelOrder from './CancelOrder';
