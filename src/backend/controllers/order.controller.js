@@ -25,6 +25,7 @@ const OrderController = {
                         model: 'Topping',
                         select: 'name price'
                     })
+                    
                     .skip(skip)
                     .limit(limit),
                 OrderModel.countDocuments(query)
@@ -72,17 +73,35 @@ const OrderController = {
     getOneOrder: async (req, res) => {
         try {
             const { id } = req.params;
-            const order = await OrderModel.findById(id)
-                .populate({
-                    path: 'products.productId',
-                    model: 'Drink',
-                    select: 'name description category image price'
-                })
-                .populate({
-                    path: 'products.topping.toppingId',
-                    model: 'Topping',
-                    select: 'name price'
-                });
+            let order;
+            
+            // Check if the ID is a valid MongoDB ObjectId
+            if (mongoose.Types.ObjectId.isValid(id)) {
+                order = await OrderModel.findById(id)
+                    .populate({
+                        path: 'products.productId',
+                        model: 'Drink',
+                        select: 'name description category image price'
+                    })
+                    .populate({
+                        path: 'products.topping.toppingId',
+                        model: 'Topping',
+                        select: 'name price'
+                    });
+            } else {
+                // If not a valid ObjectId, try to find by another field (like a custom id field)
+                order = await OrderModel.findOne({ id })
+                    .populate({
+                        path: 'products.productId',
+                        model: 'Drink',
+                        select: 'name description category image price'
+                    })
+                    .populate({
+                        path: 'products.topping.toppingId',
+                        model: 'Topping',
+                        select: 'name price'
+                    });
+            }
                 
             if (!order)
                 return res.status(404).json({ success: false, message: "Không tìm thấy đơn hàng" });
@@ -90,7 +109,7 @@ const OrderController = {
             return res.status(200).json({ success: true, data: order });
         } catch (error) {
             console.error("Lỗi getOneOrder:", error);
-            return res.status(500).json({ success: false, message: "Lỗi khi lấy đơn hàng", error });
+            return res.status(500).json({ success: false, message: "Lỗi khi lấy đơn hàng", error: error.message });
         }
     },
 
@@ -237,6 +256,11 @@ const OrderController = {
                     model: 'Topping',
                     select: 'name price' // Chọn các trường cần thiết từ topping
                 })
+                .populate({
+                    path: 'shopId',
+                    model: 'Shop',
+                    select: 'name' // Chọn các trường cần thiết từ shop
+                })
                 .sort({ createdAt: -1 }); // Sắp xếp theo thời gian tạo mới nhất
             
             return res.status(200).json(orders);
@@ -248,7 +272,69 @@ const OrderController = {
                 error: error.message 
             });
         }
-    }
+    },
+
+    getOrdersByStatus: async (req, res) => {
+        try {
+            const { status } = req.query;
+            const userId = req.userId;
+            
+            if (!userId) {
+                return res.status(401).json({ 
+                    success: false, 
+                    message: "Không tìm thấy thông tin người dùng, vui lòng đăng nhập lại" 
+                });
+            }
+
+            // Xây dựng query dựa trên status được cung cấp
+            const query = { userId };
+            
+            // Nếu có status và status hợp lệ, thêm vào query
+            if (status && ['Pending', 'Confirmed', 'Preparing', 'Delivering', 'Delivered', 'Cancelled'].includes(status)) {
+                query.status = status;
+            } else if (status === 'All') {
+                // Không thêm bất kỳ bộ lọc status nào nếu là 'All'
+            } else if (status) {
+                // Nếu status được cung cấp nhưng không hợp lệ
+                return res.status(400).json({ 
+                    success: false, 
+                    message: "Trạng thái đơn hàng không hợp lệ. Trạng thái hợp lệ: Pending, Confirmed, Preparing, Delivering, Delivered, Cancelled" 
+                });
+            }
+            
+            // Tìm tất cả đơn hàng phù hợp với query và populate thông tin chi tiết
+            const orders = await OrderModel.find(query)
+                .populate({
+                    path: 'products.productId',
+                    model: 'Drink',
+                    select: 'name description category image price'
+                })
+                .populate({
+                    path: 'products.topping.toppingId',
+                    model: 'Topping',
+                    select: 'name price'
+                })
+                .populate({
+                    path: 'shopId',
+                    model: 'Shop',
+                    select: 'name' // Chọn các trường cần thiết từ shop
+                })
+                .sort({ createdAt: -1 }); // Sắp xếp theo thời gian tạo mới nhất
+            
+            return res.status(200).json({
+                success: true,
+                count: orders.length,
+                data: orders
+            });
+        } catch (error) {
+            console.error("Lỗi getOrdersByStatus:", error);
+            return res.status(500).json({ 
+                success: false, 
+                message: "Lỗi khi lọc danh sách đơn hàng theo trạng thái", 
+                error: error.message 
+            });
+        }
+    },
 };
 
 export default OrderController;

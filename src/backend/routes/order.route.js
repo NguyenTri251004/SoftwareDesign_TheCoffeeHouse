@@ -5,7 +5,8 @@ import { verifyToken } from "../middlewares/auth.middleware.js";
 const router = express.Router();
 
 router.get("/", OrderController.getListOrders);
-router.get("/user", verifyToken, OrderController.getUserOrders); // Endpoint mới để lấy đơn hàng của user đã đăng nhập
+router.get("/user", verifyToken, OrderController.getUserOrders); // Endpoint để lấy đơn hàng của user đã đăng nhập
+router.get("/user/status", verifyToken, OrderController.getOrdersByStatus); // Endpoint mới để lọc đơn hàng theo trạng thái
 router.get("/many", OrderController.getManyOrders);
 router.get("/:id", OrderController.getOneOrder);
 

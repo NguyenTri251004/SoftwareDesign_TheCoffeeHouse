@@ -143,10 +143,93 @@ const OrderAPI = {
         }
     },
 
+    // Lấy đơn hàng của người dùng theo trạng thái
+    getUserOrdersByStatus: async (status) => {
+        try {
+            const token = localStorage.getItem('token');
+            
+            if (!token) {
+                console.error("Không tìm thấy token đăng nhập");
+                return { success: false, message: "Vui lòng đăng nhập để xem đơn hàng", data: [] };
+            }
+
+            let url = `${BASE_URL}/order/user/status`;
+            if (status && status !== 'Tất cả đơn hàng') {
+                // Map frontend status names to backend status values
+                const statusMap = {
+                    "Chờ xác nhận": "Pending",
+                    "Đã xác nhận": "Confirmed",
+                    "Đang chuẩn bị hàng": "Preparing", 
+                    "Đang vận chuyển": "Delivering",
+                    "Đã nhận hàng": "Delivered",
+                    "Trả hàng/Hoàn tiền": "Cancelled"
+                };
+
+                const backendStatus = statusMap[status] || status;
+                url += `?status=${backendStatus}`;
+            } else {
+                url += `?status=All`;
+            }
+
+            const response = await fetch(url, {
+                method: "GET",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                console.warn("API failed: getUserOrdersByStatus", errorData);
+                
+                // Trả về fallback data trong môi trường phát triển
+                if (process.env.NODE_ENV === 'development') {
+                    console.log("Đang sử dụng dữ liệu mẫu cho đơn hàng với status:", status);
+                    // Filter fallback data based on status
+                    if (status && status !== 'Tất cả đơn hàng') {
+                        return { 
+                            success: true, 
+                            data: fallbackData.orders.filter(order => order.status === status) 
+                        };
+                    }
+                    return { success: true, data: fallbackData.orders };
+                }
+                
+                return { success: false, message: errorData.message || "Không thể lấy đơn hàng", data: [] };
+            }
+
+            const responseData = await response.json();
+            return responseData;
+        } catch (error) {
+            console.error("Error fetching filtered orders:", error.message);
+            
+            // Trả về fallback data trong môi trường phát triển
+            if (process.env.NODE_ENV === 'development') {
+                console.log("Đang sử dụng dữ liệu mẫu cho đơn hàng do lỗi:", error.message);
+                // Filter fallback data based on status
+                if (status && status !== 'Tất cả đơn hàng') {
+                    return { 
+                        success: true, 
+                        data: fallbackData.orders.filter(order => order.status === status) 
+                    };
+                }
+                return { success: true, data: fallbackData.orders };
+            }
+            
+            return { 
+                success: false, 
+                message: "Lỗi kết nối, vui lòng thử lại sau", 
+                data: [] 
+            };
+        }
+    },
+
     // Lấy chi tiết order theo ID
     getOrderById: async (id) => {
         try {
-            const response = await fetch(`${BASE_URL}/order?id=${id}`, {
+            const response = await fetch(`${BASE_URL}/order/${id}`, {
                 method: "GET",
                 credentials: "include",
                 headers: {

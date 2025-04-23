@@ -20,9 +20,9 @@ function ListOrderPage() {
   // Danh sách tab trạng thái
   const orderStatuses = [
     "Tất cả đơn hàng",
+    "Chờ xác nhận",
     "Đã xác nhận",
     "Đang chuẩn bị hàng",
-    "Đã giao cho vận chuyển",
     "Đang vận chuyển",
     "Đã nhận hàng",
     "Trả hàng/Hoàn tiền",
@@ -52,11 +52,21 @@ function ListOrderPage() {
         dispatch(setUser(userData));
       }
 
-      // Lấy danh sách đơn hàng của người dùng đã đăng nhập
-      const ordersData = await OrderAPI.getUserOrders();
-      console.log("Dữ liệu đơn hàng của người dùng:", ordersData);
-      // Đảm bảo ordersData là mảng, nếu không thì gán mảng rỗng
-      setOrders(Array.isArray(ordersData) ? ordersData : []);
+      // Lấy danh sách đơn hàng của người dùng dựa theo trạng thái đã chọn
+      if (selectedStatus !== "Tất cả đơn hàng") {
+        const response = await OrderAPI.getUserOrdersByStatus(selectedStatus);
+        if (response.success) {
+          setOrders(response.data || []);
+        } else {
+          console.error("Lỗi khi lọc đơn hàng:", response.message);
+          setError(response.message || "Không thể lọc đơn hàng theo trạng thái.");
+        }
+      } else {
+        // Nếu là "Tất cả đơn hàng", lấy tất cả đơn hàng
+        const ordersData = await OrderAPI.getUserOrders();
+        console.log("Dữ liệu đơn hàng của người dùng:", ordersData);
+        setOrders(Array.isArray(ordersData) ? ordersData : []);
+      }
     } catch (error) {
       console.error("Lỗi khi lấy thông tin:", error);
       setError("Không thể tải dữ liệu. Vui lòng thử lại!");
@@ -71,7 +81,7 @@ function ListOrderPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [user?._id, dispatch, navigate]); // Chỉ phụ thuộc vào user._id thay vì toàn bộ user
+  }, [user?._id, dispatch, navigate, selectedStatus]); // Thêm selectedStatus vào dependencies
 
   useEffect(() => {
     fetchProfileAndOrders();
@@ -83,15 +93,10 @@ function ListOrderPage() {
     if (!Array.isArray(orders)) {
       return []; // Trả về mảng rỗng nếu orders không phải là mảng
     }
-    if (selectedStatus === "Tất cả đơn hàng") {
-      return orders;
-    }
-    // Xử lý đặc biệt cho tab "Đã xác nhận" để hiển thị đơn hàng có status "Pending"
-    if (selectedStatus === "Đã xác nhận") {
-      return orders.filter((order) => order.status === "Pending" || order.status === "Confirmed");
-    }
-    return orders.filter((order) => order.status === selectedStatus);
-  }, [orders, selectedStatus]);
+    
+    // Không cần phải lọc thêm ở frontend vì đã lọc ở backend rồi
+    return orders;
+  }, [orders]);
 
   // Xử lý khi nhấn nút "Chi tiết đơn hàng"
   const handleOrderDetails = useCallback((orderId) => {
@@ -139,7 +144,7 @@ function ListOrderPage() {
             filteredOrdersList.map((order) => (
               <div key={order.id || order._id} className={styles.orderCard}>
                 <div className={styles.orderHeader}>
-                  <h3 className={styles.branch}>{order.branch}</h3>
+                  <h3 className={styles.branch}>{order.shopId?.name || "Chi nhánh không xác định"}</h3>
                   <button
                     className={styles.shopButton}
                     onClick={() => handleOrderDetails(order.id || order._id)}
