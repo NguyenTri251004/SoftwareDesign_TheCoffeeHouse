@@ -56,8 +56,6 @@ export const register = async (req, res) => {
     try {
         const { email, password, role, name } = req.body;
 
-        console.log("📩 Incoming registration request:", req.body);
-
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: "User already exists." });
@@ -171,8 +169,6 @@ export const forgotPassword = async (req, res) => {
     try {
         const { email } = req.body;
 
-        console.log("📩 Incoming forgot password request:", req.body);
-
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(404).json({ message: "User not found." });
@@ -199,8 +195,6 @@ export const forgotPassword = async (req, res) => {
                 <p>This code will expire in 15 minutes.</p>
             `,
         };
-
-        console.log("📩 Sending password reset code:", resetCode);
 
         await transporter.sendMail(mailOptions);
 

@@ -22,7 +22,7 @@ async function geocodeAddress(address) {
             const coordinates = response.data.response.features[0].geometry.coordinates;
             return { lat: coordinates[1], lng: coordinates[0] };
         } else {
-            console.log(`Không tìm thấy tọa độ cho địa chỉ: ${address}`);
+            //console.log(`Không tìm thấy tọa độ cho địa chỉ: ${address}`);
             return null;
         }
     } catch (error) {

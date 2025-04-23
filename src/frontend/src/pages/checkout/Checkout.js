@@ -416,7 +416,7 @@ const Checkout = () => {
                   disabled={isLoading}
                 />
               ) : (
-                <span>{recipientName || 'Chưa có thông tin'}</span>
+                <span>{ ' ' + recipientName || ' Chưa có thông tin'}</span>
               )}
             </div>
             <div className={styles.field}>
@@ -430,7 +430,7 @@ const Checkout = () => {
                   disabled={isLoading}
                 />
               ) : (
-                <span>{phone || 'Chưa có thông tin'}</span>
+                <span>{' ' + phone || ' Chưa có thông tin'}</span>
               )}
             </div>
             <div className={styles.field}>
@@ -438,7 +438,7 @@ const Checkout = () => {
               <input
                 type="text"
                 className={styles.inputField}
-                placeholder="Thêm ghi chú (nếu có)"
+                placeholder=" Thêm ghi chú (nếu có)"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 disabled={isLoading}

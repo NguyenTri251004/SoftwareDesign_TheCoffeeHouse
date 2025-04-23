@@ -221,8 +221,8 @@ const HomePage = () => {
                                 alt="Trà Xanh Tây Bắc"
                                 className={styles.teaTitleImage}
                             />
-                            <p className={styles.teaDescription}>...</p>
-                            <button className={styles.teaButton}>Thử ngay</button>
+                            <p className={styles.teaDescription}>Được trồng trọt và chăm chút kỹ lưỡng, nuôi dưỡng từ thổ nhưỡng phì nhiêu, nguồn nước mát lành, bao bọc bởi mây và sương cùng nền nhiệt độ mát mẻ quanh năm, những búp trà ở Tây Bắc mập mạp và xanh mướt, hội tụ đầy đủ dưỡng chất, sinh khí, và tinh hoa đất trời.Chính khí hậu đặc trưng cùng phương pháp canh tác của đồng bào dân tộc nơi đây đã tạo ra Trà Xanh vị mộc dễ uống, dễ yêu, không thể trộn lẫn với bất kỳ vùng miền nào khác.</p>
+                            <button className={styles.teaButton} onClick={() => navigate("/menu/tra-xanh---chocolate/tra-xanh-tay-bac")}>Thử ngay</button>
                         </div>
                     </div>
                     {/* --- Signature Section --- */}
@@ -232,8 +232,8 @@ const HomePage = () => {
                                 SIGNATURE BY
                                 <br /> THE COFFEE HOUSE
                             </h2>
-                            <p>...</p>
-                            <button className={styles.signatureButton}>Tìm hiểu thêm</button>
+                            <p>Nơi cuộc hẹn tròn đầy với Cà phê đặc sản, Món ăn đa bản sắc và Không gian cảm hứng.</p>
+                            <button className={styles.signatureButton} onClick={() => navigate(`/shop/detail/67e832a5d0be3d6ab71556a0`)}>Tìm hiểu thêm</button>
                         </div>
                         <div className={styles.signatureImageContainer}>
                             <img
