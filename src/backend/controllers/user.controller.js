@@ -124,23 +124,19 @@ const userController = {
 
       // Kiểm tra role là customer
       if (user.role !== "customer") {
-        return res
-          .status(403)
-          .json({
-            success: false,
-            message: "Chỉ khách hàng mới có thể đổi điểm",
-          });
+        return res.status(403).json({
+          success: false,
+          message: "Chỉ khách hàng mới có thể đổi điểm",
+        });
       }
 
       // Lấy thông tin khách hàng
       const customer = await CustomerModel.findById(user._id);
       if (!customer)
-        return res
-          .status(404)
-          .json({
-            success: false,
-            message: "Không tìm thấy thông tin khách hàng",
-          });
+        return res.status(404).json({
+          success: false,
+          message: "Không tìm thấy thông tin khách hàng",
+        });
 
       // Kiểm tra điểm tích lũy
       if (customer.loyaltyPoints < pointsToRedeem) {
@@ -161,12 +157,13 @@ const userController = {
 
       const discount = new DiscountModel({
         code: discountCode,
-        description: `Giảm ${discountAmount.toLocaleString()}đ`,
+        description: `Giảm ${discountAmount.toLocaleString()}đ cho đơn từ 0đ`,
         isPercentage: false,
         discountAmount,
         expiryDate,
         isActive: true,
         userId: user._id, // Gán userId cho voucher
+        icon: "https://minio.thecoffeehouse.com/image/admin/1709222265_deli-copy-7.jpg",
       });
 
       await discount.save();
