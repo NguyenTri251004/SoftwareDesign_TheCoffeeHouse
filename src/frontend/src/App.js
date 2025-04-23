@@ -14,6 +14,8 @@ import OrderStatus from "pages/order/orderStatus";
 import Menu from "pages/menu/Menu";
 import DrinkDetailPage from "pages/menu/DetailDrink";
 import {PopupProvider} from "context/PopupContext";
+import DemoPayment from "pages/payment/DemoPayment";
+import PaymentResult from "pages/payment/PaymentResult";
 
 import "./App.css";
 
@@ -54,6 +56,8 @@ function App() {
 
           <Route path="/cart" element={<CartPage/>} />
           <Route path="/checkout" element={<Checkout/>} />
+          <Route path="/demo-payment" element={<DemoPayment/>} />
+          <Route path="/payment-result" element={<PaymentResult/>} />
         </Routes>
       </Router>
       <VoucherPage/>

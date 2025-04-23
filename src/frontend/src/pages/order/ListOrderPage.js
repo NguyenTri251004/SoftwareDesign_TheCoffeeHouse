@@ -144,7 +144,9 @@ function ListOrderPage() {
             filteredOrdersList.map((order) => (
               <div key={order.id || order._id} className={styles.orderCard}>
                 <div className={styles.orderHeader}>
-                  <h3 className={styles.branch}>{order.shopId?.name || "Chi nhánh không xác định"}</h3>
+                  <h3 className={styles.branch}>
+                    {order.shopId && order.shopId.name ? order.shopId.name : 'Không có tên cửa hàng'}
+                  </h3>
                   <button
                     className={styles.shopButton}
                     onClick={() => handleOrderDetails(order.id || order._id)}

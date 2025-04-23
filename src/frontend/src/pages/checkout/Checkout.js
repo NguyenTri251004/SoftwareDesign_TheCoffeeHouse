@@ -12,6 +12,7 @@ import { SiGooglemaps } from 'react-icons/si';
 import AddressMap from '../../components/map/AddressMap';
 import OrderAPI from 'services/orderService';
 import userAPI from "services/userService";
+import PaymentAPI from "services/paymentService";
 
 const PaymentMethods = [
   { id: 'cash', label: 'Tiền mặt' },
@@ -297,13 +298,41 @@ const Checkout = () => {
       setIsLoading(true);
       setError(null);
       const res = await OrderAPI.postOrder(orderPayload);
+      
       if (res && res.success !== false) {
-        alert('Đặt hàng thành công!');
+        // Xóa giỏ hàng sau khi đặt hàng thành công
         localStorage.removeItem('cart');
         setProducts([]);
-        navigate('/orders');
+        
+        // Nếu chọn thanh toán MoMo, chuyển hướng đến trang thanh toán MoMo
+        if (paymentMethod === 'momo') {
+          try {
+            const paymentRes = await PaymentAPI.createMomoPayment({
+              orderId: res.data._id,
+              amount: finalAmount,
+              orderInfo: `Thanh toán đơn hàng The Coffee House #${res.data._id}`
+            });
+            
+            if (paymentRes.success) {
+              // Chuyển hướng đến trang thanh toán MoMo
+              window.location.href = paymentRes.paymentUrl;
+            } else {
+              // Xử lý khi tạo thanh toán thất bại
+              alert(paymentRes.message || "Không thể tạo thanh toán MoMo. Đơn hàng đã được đặt nhưng cần thanh toán sau.");
+              navigate('/order');
+            }
+          } catch (paymentError) {
+            console.error("Lỗi khi tạo thanh toán MoMo:", paymentError);
+            alert("Đơn hàng đã được đặt thành công nhưng không thể tạo thanh toán MoMo. Vui lòng thanh toán sau.");
+            navigate('/order');
+          }
+        } else {
+          // Nếu không phải thanh toán MoMo, chuyển hướng đến trang đơn hàng
+          alert('Đặt hàng thành công!');
+          navigate('/order');
+        }
       } else {
-        throw new Error('Đặt hàng thất bại.');
+        throw new Error(res.message || 'Đặt hàng thất bại.');
       }
     } catch (error) {
       console.error('Error placing order:', error);

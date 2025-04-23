@@ -247,6 +247,11 @@ const OrderController = {
             // Tìm tất cả đơn hàng của user và populate thông tin chi tiết sản phẩm và topping
             const orders = await OrderModel.find({ userId })
                 .populate({
+                    path: 'shopId',
+                    model: 'Shop',
+                    select: 'name address phone image'
+                })
+                .populate({
                     path: 'products.productId',
                     model: 'Drink', // Thay đổi từ 'Product' thành 'Drink'
                     select: 'name description category image price' // Chọn các trường cần thiết từ product
@@ -255,11 +260,6 @@ const OrderController = {
                     path: 'products.topping.toppingId',
                     model: 'Topping',
                     select: 'name price' // Chọn các trường cần thiết từ topping
-                })
-                .populate({
-                    path: 'shopId',
-                    model: 'Shop',
-                    select: 'name' // Chọn các trường cần thiết từ shop
                 })
                 .sort({ createdAt: -1 }); // Sắp xếp theo thời gian tạo mới nhất
             
