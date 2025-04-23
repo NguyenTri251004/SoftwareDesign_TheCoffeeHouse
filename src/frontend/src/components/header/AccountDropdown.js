@@ -4,7 +4,7 @@ import styles from "./AccountDropdown.module.css";
 // Import các ảnh
 import memberIcon from "assets/icon/member.png";
 import beanIcon from "assets/icon/bean.png";
-import couponIcon from "assets/icon/coupon.png";
+import orderIcon from "assets/icon/order-history.png";
 import shipIcon from "assets/icon/ship.png";
 import signupIcon from "assets/icon/signup.png";
 import signinIcon from "assets/icon/signin.png";
@@ -23,11 +23,11 @@ const AccountDropdown = ({ isLoggedIn }) => {
             <img src={beanIcon} alt="Đổi BEAN" className={styles.icon} />
             Đổi BEAN
           </a>
-          <a href="#" className={styles.dropdownItem}>
-            <img src={couponIcon} alt="Khuyến mãi" className={styles.icon} />
-            Khuyến mãi
+          <a href="/order" className={styles.dropdownItem}>
+            <img src={orderIcon} alt="Đơn hàng" className={styles.icon} />
+            Đơn hàng
           </a>
-          <a href="#" className={styles.dropdownItem}>
+          <a href="/menu" className={styles.dropdownItem}>
             <img src={shipIcon} alt="Giao hàng" className={styles.icon} />
             Giao hàng
           </a>
