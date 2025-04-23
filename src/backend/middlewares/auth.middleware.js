@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-const authMiddleware = (req, res, next) => {
+export const verifyToken = (req, res, next) => {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
 
@@ -10,10 +10,8 @@ const authMiddleware = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = {
-            _id: decoded.userId,
-            role: decoded.role
-        };
+        req.userId = decoded.userId;
+        req.userRole = decoded.role;
         next();
     } catch (error) {
         console.error(error);
@@ -21,4 +19,5 @@ const authMiddleware = (req, res, next) => {
     }
 };
 
-export default authMiddleware;
+// Giữ lại export mặc định để tương thích ngược
+export default verifyToken;

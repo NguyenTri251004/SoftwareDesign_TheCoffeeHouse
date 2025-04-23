@@ -5,7 +5,13 @@ import DiscountModel from "../models/discount.model.js";
 const userController = {
   getProfile: async (req, res) => {
     try {
-      const user = await UserModel.findById(req.user._id).select("-password");
+      // Lấy userId từ middleware xác thực
+      const userId = req.userId;
+      if (!userId) {
+        return res.status(401).json({ msg: "Không tìm thấy thông tin người dùng, vui lòng đăng nhập lại" });
+      }
+
+      const user = await UserModel.findById(userId).select("-password");
       if (!user)
         return res.status(404).json({ msg: "Không tìm thấy người dùng" });
 
@@ -45,22 +51,23 @@ const userController = {
 
       res.json(profile);
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ msg: "Lỗi server" });
+      console.error("Lỗi getProfile:", error);
+      res.status(500).json({ msg: "Lỗi server", error: error.message });
     }
   },
 
   updateCustomerProfile: async (req, res) => {
     try {
-      // Sử dụng req.user từ authMiddleware
-      if (!req.user || !req.user._id) {
+      // Lấy userId từ middleware xác thực
+      const userId = req.userId;
+      if (!userId) {
         return res.status(401).json({
           success: false,
           message: "Unauthorized: User not authenticated.",
         });
       }
 
-      const user = await UserModel.findById(req.user._id).select("-password");
+      const user = await UserModel.findById(userId).select("-password");
       if (!user) {
         return res.status(404).json({
           success: false,
@@ -115,8 +122,17 @@ const userController = {
     try {
       const { pointsToRedeem } = req.body;
 
+      // Lấy userId từ middleware xác thực
+      const userId = req.userId;
+      if (!userId) {
+        return res.status(401).json({ 
+          success: false, 
+          message: "Không tìm thấy thông tin người dùng, vui lòng đăng nhập lại" 
+        });
+      }
+
       // Lấy thông tin người dùng
-      const user = await UserModel.findById(req.user._id).select("-password");
+      const user = await UserModel.findById(userId).select("-password");
       if (!user)
         return res
           .status(404)
@@ -140,9 +156,10 @@ const userController = {
 
       // Kiểm tra điểm tích lũy
       if (customer.loyaltyPoints < pointsToRedeem) {
-        return res
-          .status(400)
-          .json({ success: false, message: "Không đủ điểm để đổi" });
+        return res.status(400).json({ 
+          success: false, 
+          message: "Không đủ điểm để đổi" 
+        });
       }
 
       // Trừ điểm
@@ -179,9 +196,11 @@ const userController = {
       });
     } catch (error) {
       console.error("Lỗi redeemPoints:", error);
-      return res
-        .status(500)
-        .json({ success: false, message: "Lỗi server", error: error.message });
+      return res.status(500).json({ 
+        success: false, 
+        message: "Lỗi server", 
+        error: error.message 
+      });
     }
   },
 };

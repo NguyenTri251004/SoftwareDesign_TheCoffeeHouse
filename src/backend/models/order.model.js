@@ -3,7 +3,12 @@ const { Schema } = mongoose;
 
 const OrderSchema = new Schema({
     _id: { type: Schema.Types.ObjectId, auto: true },
-    useName: {
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+      },
+    userName: {
         type: String,
         required: true
     },
@@ -33,6 +38,15 @@ const OrderSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    note: {
+        type: String,
+        default: ''
+    },
+    paymentMethod: {
+        type: String,
+        enum: ['cash', 'vnpay', 'momo', 'zalopay', 'shopeepay', 'card'],
+        default: 'cash'
     },
     products: [
         {
@@ -94,6 +108,8 @@ const OrderSchema = new Schema({
         min: 0
     }
 });
+
+OrderSchema.index({ userId: 1, status: 1 });
 
 const Order = mongoose.model('Order', OrderSchema);
 export default Order;

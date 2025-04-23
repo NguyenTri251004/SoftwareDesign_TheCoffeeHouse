@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { setUser, clearUser } from "../../redux/userSlice";
 import styles from './Checkout.module.css';
 import Header from 'components/header/Header';
 import Footer from 'components/footer/Footer';
@@ -9,6 +11,7 @@ import { MdEdit } from 'react-icons/md';
 import { SiGooglemaps } from 'react-icons/si';
 import AddressMap from '../../components/map/AddressMap';
 import OrderAPI from 'services/orderService';
+import userAPI from "services/userService";
 
 const PaymentMethods = [
   { id: 'cash', label: 'Tiền mặt' },
@@ -20,6 +23,9 @@ const PaymentMethods = [
 ];
 
 const Checkout = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.user.user); // Lấy thông tin user từ Redux
   const [products, setProducts] = useState([]);
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [recipientName, setRecipientName] = useState('');
@@ -30,26 +36,139 @@ const Checkout = () => {
   const [modalAddress, setModalAddress] = useState('');
   const [showMapInModal, setShowMapInModal] = useState(false);
   const [routeInfo, setRouteInfo] = useState(null);
-  const navigate = useNavigate();
-
-  const storeCoordinates = { lat: 10.762622, lon: 106.660172 };
-  const shippingFee = products.length > 0 ? 15000 : 0;
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [editMode, setEditMode] = useState(false); // Chế độ chỉnh sửa thông tin
+  const [storeCoordinates, setStoreCoordinates] = useState({ lat: 10.762622, lon: 106.660172 }); // Default coordinates for store
+  const [deliveryDistance, setDeliveryDistance] = useState(0);
+  const [shippingFee, setShippingFee] = useState(0);
   const discount = 0;
+  
+  // Hệ số tính phí giao hàng (5,000 VND/km)
+  const SHIPPING_RATE = 5000;
 
-  // Load cart, userAddress, and deliveryAddress from localStorage on mount
+  // Load thông tin người dùng, giỏ hàng, địa chỉ giao hàng và tọa độ cửa hàng
   useEffect(() => {
-    const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
-    const savedUserAddress = localStorage.getItem('userAddress') || '';
-    setProducts(savedCart);
-    setDeliveryAddress(savedUserAddress); // Use userAddress for deliveryAddress
-    setModalAddress(savedUserAddress);
-  }, []);
+    const fetchUserAndCart = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
 
-  // Calculate total and final amounts
+        // Lấy thông tin user nếu chưa có trong Redux
+        if (!user?.id) {
+          const userData = await userAPI.getProfile();
+          if (!userData || !userData.id) {
+            throw new Error("Không tìm thấy thông tin người dùng hoặc ID.");
+          }
+          dispatch(setUser(userData));
+          setRecipientName(userData.fullname || '');
+          setPhone(userData.phone || '');
+          const defaultAddress = userData.addresses?.find(addr => addr.isDefault)?.address || localStorage.getItem('userAddress') || '';
+          setDeliveryAddress(defaultAddress);
+          setModalAddress(defaultAddress);
+        } else {
+          setRecipientName(user.fullname || '');
+          setPhone(user.phone || '');
+          const defaultAddress = user.addresses?.find(addr => addr.isDefault)?.address || localStorage.getItem('userAddress') || '';
+          setDeliveryAddress(defaultAddress);
+          setModalAddress(defaultAddress);
+        }
+
+        // Lấy giỏ hàng từ localStorage
+        const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
+        setProducts(savedCart);
+
+        // Lấy thông tin tọa độ cửa hàng từ localStorage hoặc sử dụng giá trị mặc định
+        const shopId = localStorage.getItem("currentShopId");
+        if (shopId) {
+          const storedCoordinates = localStorage.getItem(`shop_${shopId}_coordinates`);
+          if (storedCoordinates) {
+            setStoreCoordinates(JSON.parse(storedCoordinates));
+          }
+        }
+
+        // Tính khoảng cách và phí giao hàng nếu đã có địa chỉ
+        if (deliveryAddress) {
+          calculateDeliveryFee(deliveryAddress);
+        }
+      } catch (error) {
+        console.error("Lỗi khi lấy thông tin:", error);
+        setError(error.message);
+        if (
+          error.message.includes("No token found") ||
+          error.message.includes("Invalid or expired token")
+        ) {
+          localStorage.removeItem("token");
+          dispatch(clearUser());
+          navigate("/login");
+        } else if (error.message.includes("Tọa độ cửa hàng không hợp lệ")) {
+          navigate("/stores"); // Chuyển hướng đến trang chọn cửa hàng
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchUserAndCart();
+  }, [user, dispatch, navigate]);
+
+  // Hàm tính phí giao hàng dựa trên địa chỉ
+  const calculateDeliveryFee = async (address) => {
+    if (!address || !storeCoordinates?.lat || !storeCoordinates?.lon) {
+      return;
+    }
+
+    try {
+      // Chuyển đổi địa chỉ thành tọa độ
+      const nomRes = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`,
+        { headers: { 'User-Agent': 'TheCoffeeHouse/1.0' } }
+      );
+      const nomData = await nomRes.json();
+      
+      if (nomData.length > 0) {
+        const { lat, lon } = nomData[0];
+        const userLat = parseFloat(lat);
+        const userLon = parseFloat(lon);
+        
+        // Tính toán lộ trình và khoảng cách
+        const osrmRes = await fetch(
+          `https://router.project-osrm.org/route/v1/driving/${storeCoordinates.lon},${storeCoordinates.lat};${userLon},${userLat}?overview=false`
+        );
+        const osrmData = await osrmRes.json();
+        
+        if (osrmData.routes && osrmData.routes.length > 0) {
+          // Lấy khoảng cách (m) và chuyển đổi sang km
+          const distanceInKm = osrmData.routes[0].distance / 1000;
+          setDeliveryDistance(distanceInKm);
+          
+          // Tính phí giao hàng: 5,000đ/km, làm tròn lên 1,000đ
+          const fee = Math.ceil(distanceInKm * SHIPPING_RATE / 1000) * 1000;
+          setShippingFee(fee);
+          
+          // Lưu thông tin lộ trình
+          setRouteInfo(osrmData.routes[0]);
+          
+          console.log(`Khoảng cách: ${distanceInKm.toFixed(2)}km, Phí giao hàng: ${fee.toLocaleString()}đ`);
+          return;
+        }
+      }
+      
+      // Nếu không tính được, đặt phí mặc định
+      setShippingFee(15000);
+      setDeliveryDistance(0);
+    } catch (error) {
+      console.error('Lỗi khi tính phí giao hàng:', error);
+      // Nếu có lỗi, đặt phí mặc định
+      setShippingFee(15000);
+      setDeliveryDistance(0);
+    }
+  };
+
+  // Tính toán tổng tiền
   const totalAmount = products.reduce((sum, item) => sum + item.totalPrice, 0);
   const finalAmount = totalAmount + shippingFee - discount;
 
-  // Modal address handling
+  // Xử lý modal địa chỉ
   const showModalAddress = () => {
     setModalAddress(deliveryAddress);
     setShowModal(true);
@@ -61,24 +180,32 @@ const Checkout = () => {
     setRouteInfo(null);
   };
 
-  // Confirm address from modal and save to localStorage as userAddress and deliveryAddress
+  // Xác nhận địa chỉ từ modal và lưu vào localStorage
   const confirmModalAddress = () => {
     setDeliveryAddress(modalAddress);
     localStorage.setItem('userAddress', modalAddress);
     localStorage.setItem('deliveryAddress', modalAddress);
+    // Tính lại phí ship khi xác nhận địa chỉ mới
+    calculateDeliveryFee(modalAddress);
     closeModalAddress();
   };
 
-  // Calculate route using OSRM
+  // Tính toán lộ trình bằng OSRM
   const handleUseMap = async () => {
     if (!modalAddress) {
-      alert('Vui lòng nhập địa chỉ!');
+      alert('Vui lòng chọn hoặc nhập địa chỉ!');
       return;
     }
+    
+    if (!storeCoordinates || !storeCoordinates.lat || !storeCoordinates.lon) {
+      alert('Không có thông tin tọa độ cửa hàng. Vui lòng chọn cửa hàng trước.');
+      return;
+    }
+    
     try {
       const nomRes = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(modalAddress)}`,
-        { headers: { 'User-Agent': 'MyApp/1.0 (myemail@example.com)' } }
+        { headers: { 'User-Agent': 'TheCoffeeHouse/1.0' } }
       );
       const nomData = await nomRes.json();
       if (nomData.length > 0) {
@@ -90,6 +217,13 @@ const Checkout = () => {
         );
         const osrmData = await osrmRes.json();
         if (osrmData.routes && osrmData.routes.length > 0) {
+          const distanceInKm = osrmData.routes[0].distance / 1000;
+          setDeliveryDistance(distanceInKm);
+          
+          // Tính phí giao hàng: 5,000đ/km, làm tròn lên 1,000đ
+          const fee = Math.ceil(distanceInKm * SHIPPING_RATE / 1000) * 1000;
+          setShippingFee(fee);
+          
           setRouteInfo(osrmData.routes[0]);
         }
         setShowMapInModal(true);
@@ -102,17 +236,42 @@ const Checkout = () => {
     }
   };
 
-  // Place order
+  // Validate thông tin trước khi đặt hàng
+  const validateInputs = () => {
+    if (!recipientName.trim()) {
+      return "Tên người nhận không được để trống!";
+    }
+    if (!phone.trim() || !/^\d{10,11}$/.test(phone)) {
+      return "Số điện thoại phải có 10-11 chữ số!";
+    }
+    if (!deliveryAddress.trim()) {
+      return "Địa chỉ giao hàng không được để trống!";
+    }
+    if (products.length === 0) {
+      return "Giỏ hàng trống, không thể đặt hàng!";
+    }
+    return null;
+  };
+
+  // Đặt hàng
   const handlePlaceOrder = async () => {
-    if (!recipientName || !deliveryAddress || !phone) {
-      alert('Vui lòng điền đầy đủ thông tin người nhận!');
+    const validationError = validateInputs();
+    if (validationError) {
+      alert(validationError);
       return;
     }
 
-    const shopId = localStorage.getItem('currentShopId') || '67e832a5d0be3d6ab71556a0';
+    if (!user?.id) {
+      alert('Vui lòng đăng nhập để đặt hàng!');
+      navigate("/login");
+      return;
+    }
+
+    const shopId = localStorage.getItem("currentShopId") || "67e832a5d0be3d6ab71556a0";
 
     const orderPayload = {
-      useName: recipientName,
+      userId: user.id,
+      userName: recipientName,
       shopId,
       deliveryAddress,
       phone,
@@ -135,25 +294,26 @@ const Checkout = () => {
     };
 
     try {
+      setIsLoading(true);
+      setError(null);
       const res = await OrderAPI.postOrder(orderPayload);
       if (res && res.success !== false) {
         alert('Đặt hàng thành công!');
         localStorage.removeItem('cart');
         setProducts([]);
-        setRecipientName('');
-        setPhone('');
-        setNote('');
-        navigate('/');
+        navigate('/orders');
       } else {
-        alert('Đặt hàng thất bại. Vui lòng thử lại!');
+        throw new Error('Đặt hàng thất bại.');
       }
     } catch (error) {
       console.error('Error placing order:', error);
-      alert('Đặt hàng thất bại. Vui lòng thử lại!');
+      setError('Đặt hàng thất bại. Vui lòng thử lại!');
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Delete cart with confirmation and redirect to homepage
+  // Xóa giỏ hàng với xác nhận
   const handleDeleteOrder = () => {
     const confirmDelete = window.confirm('Bạn có chắc muốn xóa đơn hàng này không?');
     if (confirmDelete) {
@@ -166,6 +326,22 @@ const Checkout = () => {
     }
   };
 
+  const handleEditToggle = () => {
+    setEditMode(!editMode);
+  };
+
+  if (isLoading) {
+    return (
+      <div className={styles.checkoutContainer}>
+        <Header />
+        <div className={styles.checkoutContent}>
+          <p>Đang tải dữ liệu...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className={styles.checkoutContainer}>
       <Header />
@@ -173,12 +349,13 @@ const Checkout = () => {
         <h2 className={styles.title}>
           <FaFile color="orange" /> Xác nhận đơn hàng
         </h2>
+        {error && <div className={styles.errorMessage}>{error}</div>}
         <div className={styles.orderContainer}>
           <div className={styles.shippingSection}>
             <div className={styles.sectionHeader}>
-              <h3>Giao hàng</h3>
-              <button className={styles.editButton} onClick={showModalAddress}>
-                Đổi địa chỉ
+              <h3>Thông tin giao hàng</h3>
+              <button className={styles.editButton} onClick={handleEditToggle}>
+                {editMode ? 'Hủy chỉnh sửa' : 'Chỉnh sửa thông tin'}
               </button>
             </div>
             <div className={styles.addressBox}>
@@ -199,27 +376,45 @@ const Checkout = () => {
                 </span>
               </div>
             </div>
-            <input
-              type="text"
-              placeholder="Tên người nhận"
-              className={styles.inputField}
-              value={recipientName}
-              onChange={(e) => setRecipientName(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Số điện thoại"
-              className={styles.inputField}
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Thêm ghi chú (nếu có)"
-              className={styles.inputField}
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-            />
+            <div className={styles.field}>
+              <label>Tên người nhận:  </label>
+              {editMode ? (
+                <input
+                  type="text"
+                  className={styles.inputField}
+                  value={recipientName}
+                  onChange={(e) => setRecipientName(e.target.value)}
+                  disabled={isLoading}
+                />
+              ) : (
+                <span>{recipientName || 'Chưa có thông tin'}</span>
+              )}
+            </div>
+            <div className={styles.field}>
+              <label>Số điện thoại:  </label>
+              {editMode ? (
+                <input
+                  type="text"
+                  className={styles.inputField}
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  disabled={isLoading}
+                />
+              ) : (
+                <span>{phone || 'Chưa có thông tin'}</span>
+              )}
+            </div>
+            <div className={styles.field}>
+              <label>Ghi chú thêm (nếu có):  </label>
+              <input
+                type="text"
+                className={styles.inputField}
+                placeholder="Thêm ghi chú (nếu có)"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                disabled={isLoading}
+              />
+            </div>
 
             <h3 className={styles.sectionHeader}>Phương thức thanh toán</h3>
             <div className={styles.paymentMethods}>
@@ -232,6 +427,7 @@ const Checkout = () => {
                       value={method.id}
                       checked={paymentMethod === method.id}
                       onChange={() => setPaymentMethod(method.id)}
+                      disabled={isLoading}
                     />
                     <img
                       className={styles.paymentIcon}
@@ -257,7 +453,7 @@ const Checkout = () => {
               ))}
             </div>
             <div className={styles.terms}>
-              <input type="checkbox" defaultChecked />
+              <input type="checkbox" defaultChecked disabled={isLoading} />
               <span>
                 Đồng ý với các{' '}
                 <a href="#" target="_blank" rel="noreferrer">
@@ -307,7 +503,7 @@ const Checkout = () => {
               </div>
               <hr className={styles.divider} />
               <div className={styles.summaryRow}>
-                <p>Phí giao hàng</p>
+                <p>Phí giao hàng {deliveryDistance > 0 ? `(${deliveryDistance.toFixed(1)}km)` : ''}</p>
                 <p className={styles.price}>{shippingFee.toLocaleString()}đ</p>
               </div>
               <hr className={styles.divider} />
@@ -322,12 +518,12 @@ const Checkout = () => {
                 <h3 className={styles.sectionTotal}>Thành tiền</h3>
                 <p className={styles.sectionPrice}>{finalAmount.toLocaleString()}đ</p>
               </div>
-              <button className={styles.confirmButton} onClick={handlePlaceOrder}>
+              <button className={styles.confirmButton} onClick={handlePlaceOrder} disabled={isLoading}>
                 Đặt hàng
               </button>
             </div>
 
-            <button className={styles.cancelButton} onClick={handleDeleteOrder}>
+            <button className={styles.cancelButton} onClick={handleDeleteOrder} disabled={isLoading}>
               <FaTrashAlt role="img" aria-label="trash" />
               <span>Xóa đơn hàng</span>
             </button>
@@ -346,26 +542,45 @@ const Checkout = () => {
               <span>Giao hàng</span>
             </div>
             <div className={styles.modalContent}>
-              <input
-                type="text"
-                className={styles.inputField}
-                placeholder="Vui lòng nhập địa chỉ"
-                value={modalAddress}
-                onChange={(e) => setModalAddress(e.target.value)}
-              />
-              <button className={styles.locationButton} onClick={handleUseMap}>
+              {user.addresses && user.addresses.length > 0 ? (
+                <select
+                  value={modalAddress}
+                  onChange={(e) => setModalAddress(e.target.value)}
+                  disabled={isLoading}
+                  className={styles.inputField}
+                >
+                  <option value="">Chọn địa chỉ giao hàng</option>
+                  {user.addresses.map((addr, index) => (
+                    <option key={index} value={addr.address}>
+                      {addr.address} {addr.isDefault ? "(Mặc định)" : ""}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <div>
+                  <p>Chưa có địa chỉ giao hàng. Vui lòng thêm địa chỉ!</p>
+                  <button
+                    onClick={() => navigate('/profile')}
+                    className={styles.addAddressButton}
+                  >
+                    Thêm địa chỉ
+                  </button>
+                </div>
+              )}
+              <button className={styles.locationButton} onClick={handleUseMap} disabled={isLoading}>
                 <span className={styles.locationIcon}>
                   <SiGooglemaps />
                 </span>
                 Dùng định vị bản đồ
               </button>
-              <button className={styles.confirmButton} onClick={confirmModalAddress}>
+              <button className={styles.confirmButton} onClick={confirmModalAddress} disabled={isLoading}>
                 Xác nhận địa chỉ
               </button>
               {routeInfo && (
                 <div className={styles.routeInfo}>
                   <p>Khoảng cách: {(routeInfo.distance / 1000).toFixed(2)} km</p>
                   <p>Thời gian ước tính: {(routeInfo.duration / 60).toFixed(0)} phút</p>
+                  <p>Phí giao hàng: {Math.ceil((routeInfo.distance / 1000) * SHIPPING_RATE / 1000) * 1000} đ (5.000đ/km)</p>
                 </div>
               )}
               {showMapInModal && (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser, clearUser } from "../../redux/userSlice"; // Import actions từ Redux
@@ -20,6 +20,7 @@ function ListOrderPage() {
   // Danh sách tab trạng thái
   const orderStatuses = [
     "Tất cả đơn hàng",
+    "Đã xác nhận",
     "Đang chuẩn bị hàng",
     "Đã giao cho vận chuyển",
     "Đang vận chuyển",
@@ -27,60 +28,75 @@ function ListOrderPage() {
     "Trả hàng/Hoàn tiền",
   ];
 
-  // Lấy thông tin user giống UserProfile.js
-  useEffect(() => {
-    const fetchProfileAndOrders = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
+  // Tách hàm fetchProfileAndOrders ra khỏi useEffect và cache lại bằng useCallback
+  const fetchProfileAndOrders = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
 
-        // Lấy thông tin user nếu chưa có trong Redux
-        if (!user?.id) {
-          const userData = await userAPI.getProfile();
-          if (!userData || !userData.id) {
-            throw new Error("Không tìm thấy thông tin người dùng hoặc ID.");
-          }
-          dispatch(setUser(userData));
-        }
-
-        // Lấy danh sách đơn hàng
-        const ordersData = await OrderAPI.getOrders();
-        console.log("Dữ liệu đơn hàng từ API:", ordersData); // Debug dữ liệu trả về
-        // Đảm bảo ordersData là mảng, nếu không thì gán mảng rỗng
-        setOrders(Array.isArray(ordersData) ? ordersData : []);
-      } catch (error) {
-        console.error("Lỗi khi lấy thông tin:", error);
-        setError("Không thể tải dữ liệu. Vui lòng thử lại!");
-        if (
-          error.message.includes("No token found") ||
-          error.message.includes("Invalid or expired token")
-        ) {
-          localStorage.removeItem("token");
-          dispatch(clearUser());
-          navigate("/login");
-        }
-      } finally {
-        setIsLoading(false);
+      // Kiểm tra token trước
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No token found");
       }
-    };
-    fetchProfileAndOrders();
-  }, [user, dispatch, navigate]);
 
-  // Hàm lọc đơn hàng theo trạng thái
-  const filteredOrders = () => {
+      // Lấy thông tin user nếu chưa có trong Redux
+      let currentUser = user;
+      if (!currentUser || !currentUser._id) {
+        const userData = await userAPI.getProfile();
+        // Kiểm tra nếu userData có id hoặc _id
+        if (!userData || (!userData.id && !userData._id)) {
+          throw new Error("Không tìm thấy thông tin người dùng hoặc ID.");
+        }
+        currentUser = userData;
+        dispatch(setUser(userData));
+      }
+
+      // Lấy danh sách đơn hàng của người dùng đã đăng nhập
+      const ordersData = await OrderAPI.getUserOrders();
+      console.log("Dữ liệu đơn hàng của người dùng:", ordersData);
+      // Đảm bảo ordersData là mảng, nếu không thì gán mảng rỗng
+      setOrders(Array.isArray(ordersData) ? ordersData : []);
+    } catch (error) {
+      console.error("Lỗi khi lấy thông tin:", error);
+      setError("Không thể tải dữ liệu. Vui lòng thử lại!");
+      if (
+        error.message.includes("No token found") ||
+        error.message.includes("Invalid or expired token")
+      ) {
+        localStorage.removeItem("token");
+        dispatch(clearUser());
+        navigate("/login");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, [user?._id, dispatch, navigate]); // Chỉ phụ thuộc vào user._id thay vì toàn bộ user
+
+  useEffect(() => {
+    fetchProfileAndOrders();
+    // useEffect chỉ chạy khi user ID thay đổi hoặc component mount
+  }, [fetchProfileAndOrders]);
+
+  // Memoize kết quả lọc đơn hàng để tránh tính toán lại nhiều lần
+  const filteredOrdersList = useMemo(() => {
     if (!Array.isArray(orders)) {
       return []; // Trả về mảng rỗng nếu orders không phải là mảng
     }
     if (selectedStatus === "Tất cả đơn hàng") {
       return orders;
     }
+    // Xử lý đặc biệt cho tab "Đã xác nhận" để hiển thị đơn hàng có status "Pending"
+    if (selectedStatus === "Đã xác nhận") {
+      return orders.filter((order) => order.status === "Pending" || order.status === "Confirmed");
+    }
     return orders.filter((order) => order.status === selectedStatus);
-  };
+  }, [orders, selectedStatus]);
 
   // Xử lý khi nhấn nút "Chi tiết đơn hàng"
-  const handleOrderDetails = (orderId) => {
-    navigate(`/order/${orderId}`); // Chuyển hướng đến trang chi tiết đơn hàng
-  };
+  const handleOrderDetails = useCallback((orderId) => {
+    navigate(`/order-status/${orderId}`); // Sửa lại đường dẫn để khớp với định nghĩa trong App.js
+  }, [navigate]);
 
   if (isLoading) {
     return (
@@ -119,46 +135,53 @@ function ListOrderPage() {
 
         {/* Danh sách đơn hàng sau khi lọc */}
         <div className={styles.ordersList}>
-          {filteredOrders().length > 0 ? (
-            filteredOrders().map((order) => (
-              <div key={order.id} className={styles.orderCard}>
+          {filteredOrdersList.length > 0 ? (
+            filteredOrdersList.map((order) => (
+              <div key={order.id || order._id} className={styles.orderCard}>
                 <div className={styles.orderHeader}>
                   <h3 className={styles.branch}>{order.branch}</h3>
                   <button
                     className={styles.shopButton}
-                    onClick={() => handleOrderDetails(order.id)}
+                    onClick={() => handleOrderDetails(order.id || order._id)}
                   >
                     Chi tiết đơn hàng
                   </button>
                 </div>
 
-                {order.items.map((item, idx) => (
-                  <div key={idx} className={styles.orderItem}>
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className={styles.productImage}
-                    />
-                    <div className={styles.itemInfo}>
-                      <h4 className={styles.productName}>{item.name}</h4>
-                      <p className={styles.productDetails}>
-                        Phân loại hàng: {item.toppings}
-                      </p>
-                      <p className={styles.productQuantity}>
-                        x{item.quantity}
-                      </p>
+                {order.products && order.products.map((product, idx) => {
+                  // Lấy thông tin chi tiết từ dữ liệu đã populate
+                  const productDetails = product.productId || {};
+                  
+                  return (
+                    <div key={idx} className={styles.orderItem}>
+                      <img
+                        src={productDetails.image || ''}
+                        alt={productDetails.name || 'Sản phẩm'}
+                        className={styles.productImage}
+                      />
+                      <div className={styles.itemInfo}>
+                        <h4 className={styles.productName}>{productDetails.name || 'Không có tên'}</h4>
+                        <p className={styles.productDetails}>
+                          Size: {product.size || 'S'} 
+                          {product.topping && product.topping.length > 0 && ', Topping: ' + 
+                            product.topping.map(t => t.toppingId?.name || '').filter(Boolean).join(', ')}
+                        </p>
+                        <p className={styles.productQuantity}>
+                          x{product.amount || 1}
+                        </p>
+                      </div>
+                      <span className={styles.productPrice}>
+                        {(product.totalPrice !== undefined ? product.totalPrice : 0).toLocaleString()}đ
+                      </span>
                     </div>
-                    <span className={styles.productPrice}>
-                      {item.price.toLocaleString()}đ
-                    </span>
-                  </div>
-                ))}
+                  );
+                })}
 
                 {/* Thông tin đơn hàng */}
                 <div className={styles.orderFooter}>
                   <span className={styles.orderStatus}>{order.status}</span>
                   <span className={styles.totalPrice}>
-                    {order.totalPrice.toLocaleString()}đ
+                    {(order.finalAmount !== undefined ? order.finalAmount : 0).toLocaleString()}đ
                   </span>
                 </div>
               </div>
