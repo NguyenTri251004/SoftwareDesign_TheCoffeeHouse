@@ -24,6 +24,7 @@ const VoucherPage = () => {
         try {
           const data = await VoucherAPI.getVouchers();
           setVouchers(data.data);
+          console.log("Vouchers:", vouchers);
         } catch (error) {
           console.error("Error loading vouchers:", error);
         } finally {
@@ -36,6 +37,7 @@ const VoucherPage = () => {
 
   // Mở VoucherDetail => Đóng VoucherPage
   const handleUseVoucher = (voucherId) => {
+    console.log("Selected Voucher ID:", voucherId);
     setSelectedVoucherId(voucherId);
     closePopup(); // Đóng popup VoucherPage
     setIsVoucherDetailOpen(true); // Mở popup VoucherDetail
@@ -89,8 +91,11 @@ const VoucherPage = () => {
           <p className={styles.loadingText}>Đang tải...</p>
         ) : vouchers.length > 0 ? (
           <div className={styles.voucherList}>
-            {vouchers.map((voucher) => (
-              <div key={voucher.id} className={styles.voucherItem}>
+            {vouchers.map((voucher, index) => (
+              <div
+                key={voucher.id || voucher._id || index}
+                className={styles.voucherItem}
+              >
                 <div>
                   <img
                     src={voucher.icon}
@@ -105,7 +110,13 @@ const VoucherPage = () => {
                   </p>
                   <p
                     className={styles.useButton}
-                    onClick={() => handleUseVoucher(voucher.id)}
+                    onClick={() => {
+                      console.log(
+                        "Voucher ID clicked:",
+                        voucher.id || voucher._id
+                      ); // Kiểm tra giá trị ID
+                      handleUseVoucher(voucher.id || voucher._id);
+                    }}
                   >
                     Sử dụng ngay
                   </p>
