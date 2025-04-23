@@ -4,6 +4,8 @@ import Header from "components/header/Header";
 import Footer from "components/footer/Footer";
 import DrinkAPI from "services/drinkService";
 import userAPI from "services/userService";
+import CartAPI from "services/cartService";
+
 import styles from "./DetailDrink.module.css";
 
 function DrinkDetailPage() {
@@ -19,7 +21,6 @@ function DrinkDetailPage() {
     const [error, setError] = useState(null);
     const [isGuest, setIsGuest] = useState(true);
 
-    // Lấy thông tin user và drink
     useEffect(() => {
         const fetchUserAndDrink = async () => {
             try {
@@ -112,34 +113,55 @@ function DrinkDetailPage() {
         return base + sizePrice + toppingsPrice;
     };
 
-    const handleAddToCart = () => {
+    const handleAddToCart = async () => {
         if (!selectedSize) {
-          alert("Vui lòng chọn size trước khi thêm vào giỏ hàng!");
-          return;
+            alert("Vui lòng chọn size trước khi thêm vào giỏ hàng!");
+            return;
         }
-      
+    
         const cartItem = {
-          productId: drink._id,
-          name: drink.name,
-          size: selectedSize.size,
-          sizePrice: selectedSize.extraPrice,
-          unitPrice: drink.price,
-          amount: 1,
-          topping: selectedToppings.map((top) => ({
-            toppingId: top._id,
-            name: top.name,
-            price: top.price,
-          })),
-          totalPrice: calculateTotal(),
-          image: drink.image,
+            productId: drink._id,
+            size: selectedSize.size,
+            toppings: selectedToppings.map((top) => ({
+                toppingId: top._id,
+                quantity: 1,
+            })),
+            quantity: 1,
+            unitPrice: drink.price,
+            totalPrice: calculateTotal(),
         };
-      
-        const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-        const updatedCart = [...existingCart, cartItem];
-        localStorage.setItem("cart", JSON.stringify(updatedCart));
-      
-        alert("Đã thêm vào giỏ hàng!");
-      };      
+    
+        try {
+            if (user && user.id) {
+                const payload = {
+                    userId: user.id,
+                    item: cartItem,
+                };
+                await CartAPI.addToCart(payload);
+                alert("Đã thêm vào giỏ hàng!");
+            } else {
+                const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+                const updatedCart = [...existingCart, {
+                    ...cartItem,
+                    name: drink.name,
+                    image: drink.image,
+                    topping: selectedToppings.map((top) => ({
+                        toppingId: top._id,
+                        name: top.name,
+                        price: top.price,
+                    })),
+                }];
+                localStorage.setItem("cart", JSON.stringify(updatedCart));
+                alert("Đã thêm vào giỏ hàng (localStorage)!");
+            }
+            setSelectedSize(null);
+            setSelectedToppings([]);
+        } catch (error) {
+            console.error("Lỗi khi thêm vào giỏ hàng:", error);
+            alert("Không thể thêm vào giỏ hàng. Vui lòng thử lại.");
+        }
+    };
+    
 
     if (!drink) return null;
 
@@ -201,7 +223,7 @@ function DrinkDetailPage() {
                                     <div
                                         key={item._id}
                                         className={styles.relatedItem}
-                                        onClick={() => navigate(`/drink/detail/${item._id}`)}
+                                        onClick={() => window.location.href = `/drink/detail/${item._id}`}
                                         style={{ cursor: "pointer" }}
                                     >
                                         <img src={item.image} alt={item.name} />
@@ -230,7 +252,7 @@ function DrinkDetailPage() {
                                         <div
                                             key={product._id}
                                             className={styles.relatedItem}
-                                            onClick={() => navigate(`/drink/detail/${product._id}`)}
+                                            onClick={() => window.location.href = `/drink/detail/${product._id}`}
                                             style={{ cursor: "pointer" }}
                                         >
                                             {product.image && (

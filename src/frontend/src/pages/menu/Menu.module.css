@@ -83,6 +83,7 @@
   background-color: #fff; /* Thêm màu nền trắng */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Thêm đổ bóng */
   position: relative; /* Để relative cho pseudo-element */
+  cursor: pointer;
 }
 
 .imageContainer {

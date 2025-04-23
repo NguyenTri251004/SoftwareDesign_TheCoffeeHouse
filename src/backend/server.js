@@ -15,6 +15,8 @@ import flashsaleRoute from "./routes/flashsale.route.js";
 import discountRoute from "./routes/discount.route.js";
 import orderRoute from "./routes/order.route.js";
 import paymentRoute from "./routes/payment.route.js";
+import cartRoute from "./routes/cart.route.js";
+
 dotenv.config();
 
 const app = express();
@@ -52,6 +54,7 @@ app.use("/api/flashsale", flashsaleRoute);
 app.use("/api/discount", discountRoute);
 app.use("/api/order", orderRoute);
 app.use("/api/payment", paymentRoute);
+app.use("/api/cart", cartRoute);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

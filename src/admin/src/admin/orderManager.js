@@ -38,9 +38,8 @@ export const OrderList = (props) => {
     const shopId = rawShopId && rawShopId !== "null" ? rawShopId : "67e832a5d0be3d6ab71556a1";
 
     return (
-    <List {...props} title="Quản lý đơn hàng" filter={{ shopId }}>
+    <List {...props} title="Quản lý đơn hàng" filter={{ shopId }} sort={{ field: 'createdAt', order: 'DESC' }}>
         <Datagrid rowClick="show">
-            <TextField source="id" label="Mã đơn" />
             <ReferenceField source="shopId" reference="shop" label="Cửa hàng" link={false}>
                 <TextField source="name" />
             </ReferenceField>

@@ -1,4 +1,5 @@
 import UserModel from "../models/user.model.js";
+import AdminModel from "../models/admin.model.js";
 import CustomerModel from "../models/customer.model.js";
 import DiscountModel from "../models/discount.model.js";
 
