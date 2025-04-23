@@ -96,9 +96,6 @@ export default function UserProfile() {
                     addresses: userData.addresses || [],
                 });
                 dispatch(setUser(userData));
-
-                const defaultAddress = userData.addresses?.find((addr) => addr.isDefault);
-                
             } catch (error) {
                 console.error("Lỗi khi lấy thông tin người dùng:", error);
                 setError("Không thể tải thông tin người dùng. Vui lòng thử lại!");
@@ -148,7 +145,10 @@ export default function UserProfile() {
                 isDefault: addresses.length === 0,
             };
             const updatedAddresses = [...addresses, newAddrObj];
-            const updatedUser = await userAPI.updateProfile({
+            if (!user.id) {
+                throw new Error("Không tìm thấy user ID. Vui lòng đăng nhập lại.");
+            }
+            const updatedUser = await userAPI.updateCustomerProfile(user._id, {
                 fullname: fullName,
                 email,
                 phone,
@@ -195,7 +195,10 @@ export default function UserProfile() {
                     ? { ...addr, isDefault: true }
                     : { ...addr, isDefault: false }
             );
-            const updatedUser = await userAPI.updateProfile({
+            if (!user._id) {
+                throw new Error("Không tìm thấy user ID. Vui lòng đăng nhập lại.");
+            }
+            const updatedUser = await userAPI.updateCustomerProfile(user.id, {
                 fullname: fullName,
                 email,
                 phone,
@@ -251,7 +254,10 @@ export default function UserProfile() {
             const updatedAddresses = addresses.filter(
                 (addr) => addr.id !== candidateDeleteAddress
             );
-            const updatedUser = await userAPI.updateProfile({
+            if (!user.id) {
+                throw new Error("Không tìm thấy user ID. Vui lòng đăng nhập lại.");
+            }
+            const updatedUser = await userAPI.updateCustomerProfile(user._id, {
                 fullname: fullName,
                 email,
                 phone,
@@ -295,7 +301,10 @@ export default function UserProfile() {
         try {
             setIsLoading(true);
             setError(null);
-            const updatedUser = await userAPI.updateProfile({
+            if (!user.id) {
+                throw new Error("Không tìm thấy user ID. Vui lòng đăng nhập lại.");
+            }
+            const updatedUser = await userAPI.updateCustomerProfile(user.id, {
                 fullname: fullName,
                 email,
                 phone,

@@ -17,6 +17,7 @@ const userController = {
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
         avatar: user.avatar,
+        phone: user.phone,
       };
 
       if (user.role === "customer") {

@@ -9,7 +9,8 @@ const UserSchema = new Schema({
     role: { type: String, enum: ["customer", "admin", "superAdmin"], default: "customer" },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
-    avatar: { type: String, default: "" }
+    avatar: { type: String, default: "" },
+    phone: { type: String, default: "" },
 });
 
 const User = mongoose.model("User", UserSchema);
