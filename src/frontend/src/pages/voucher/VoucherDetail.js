@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
-import { QRCodeCanvas  } from "qrcode.react";
+import { QRCodeCanvas } from "qrcode.react";
 import VoucherAPI from "services/voucherService";
 import styles from "./VoucherDetail.module.css";
 
@@ -46,19 +46,17 @@ const VoucherDetail = ({ voucherId, isOpen, onRequestClose }) => {
         <p className={styles.loadingText}>Đang tải thông tin voucher...</p>
       ) : voucherDetail ? (
         <div className={styles.detailContent}>
-          {/* Title voucher */}
-          <p className={styles.voucherTitle}>{voucherDetail.title}</p>
-          {/* Thông tin hết hạn */}
+          <p className={styles.voucherTitle}>{voucherDetail.description}</p>
           <p className={styles.voucherExpiry}>
-            Hết hạn trong {voucherDetail.expiresIn}
+            Hết hạn vào{" "}
+            {new Date(voucherDetail.expiryDate).toLocaleDateString("vi-VN")}
           </p>
-          {/* QR Code (icon) */}
           {voucherDetail.code && (
             <div className={styles.qrContainer}>
               <QRCodeCanvas
                 value={voucherDetail.code} // Giá trị cần mã hóa thành QR code
-                size={150}                 // Kích thước QR code
-                level="H"                  // Mức độ chịu lỗi: L, M, Q, H
+                size={150} // Kích thước QR code
+                level="H" // Mức độ chịu lỗi: L, M, Q, H
               />
             </div>
           )}
@@ -70,14 +68,12 @@ const VoucherDetail = ({ voucherId, isOpen, onRequestClose }) => {
 
           {voucherDetail.code && (
             <p className={styles.voucherCode}>
-                Mã khuyến mãi: <span>{voucherDetail.code}</span>
+              Mã khuyến mãi: <span>{voucherDetail.code}</span>
             </p>
-            )}
+          )}
 
           {/* Mô tả voucher */}
-          <p className={styles.voucherDescription}>
-            {voucherDetail.description}
-          </p>
+          <p className={styles.voucherDescription}>{voucherDetail.detail}</p>
           {/* Link điều khoản nếu có (tuỳ chỉnh) */}
           {voucherDetail.termsLink && (
             <a

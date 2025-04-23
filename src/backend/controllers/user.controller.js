@@ -8,7 +8,11 @@ const userController = {
       // Lấy userId từ middleware xác thực
       const userId = req.userId;
       if (!userId) {
-        return res.status(401).json({ msg: "Không tìm thấy thông tin người dùng, vui lòng đăng nhập lại" });
+        return res
+          .status(401)
+          .json({
+            msg: "Không tìm thấy thông tin người dùng, vui lòng đăng nhập lại",
+          });
       }
 
       const user = await UserModel.findById(userId).select("-password");
@@ -125,9 +129,10 @@ const userController = {
       // Lấy userId từ middleware xác thực
       const userId = req.userId;
       if (!userId) {
-        return res.status(401).json({ 
-          success: false, 
-          message: "Không tìm thấy thông tin người dùng, vui lòng đăng nhập lại" 
+        return res.status(401).json({
+          success: false,
+          message:
+            "Không tìm thấy thông tin người dùng, vui lòng đăng nhập lại",
         });
       }
 
@@ -156,9 +161,9 @@ const userController = {
 
       // Kiểm tra điểm tích lũy
       if (customer.loyaltyPoints < pointsToRedeem) {
-        return res.status(400).json({ 
-          success: false, 
-          message: "Không đủ điểm để đổi" 
+        return res.status(400).json({
+          success: false,
+          message: "Không đủ điểm để đổi",
         });
       }
 
@@ -175,6 +180,11 @@ const userController = {
       const discount = new DiscountModel({
         code: discountCode,
         description: `Giảm ${discountAmount.toLocaleString()}đ cho đơn từ 0đ`,
+        detail: `Giảm ${discountAmount.toLocaleString()}đ cho đơn từ 0đ
+                  – Áp dụng cho mọi hình thức đặt hàng qua App/Web The Coffee House.
+                  - Áp dụng cho nước, bánh, topping,...
+                  - Không áp dụng chung với các khuyến mãi khác.
+                  - Chỉ áp dụng 1 lần/ tài khoản.`,
         isPercentage: false,
         discountAmount,
         expiryDate,
@@ -196,10 +206,10 @@ const userController = {
       });
     } catch (error) {
       console.error("Lỗi redeemPoints:", error);
-      return res.status(500).json({ 
-        success: false, 
-        message: "Lỗi server", 
-        error: error.message 
+      return res.status(500).json({
+        success: false,
+        message: "Lỗi server",
+        error: error.message,
       });
     }
   },

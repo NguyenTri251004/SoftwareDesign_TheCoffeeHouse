@@ -102,7 +102,7 @@ const VoucherAPI = {
   // Lấy chi tiết voucher theo ID
   getVoucherById: async (id) => {
     try {
-      const response = await fetch(`${BASE_URL}/voucher?id=${id}`, {
+      const response = await fetch(`${BASE_URL}/discount/${id}`, {
         method: "GET",
         credentials: "include",
         headers: {
@@ -115,7 +115,8 @@ const VoucherAPI = {
         return fallbackData.vouchers.find((v) => v.id === id) || null;
       }
 
-      return await response.json();
+      const result = await response.json();
+      return result.data;
     } catch (error) {
       console.error("Error fetching voucher details:", error.message);
       return fallbackData.vouchers.find((v) => v.id === id) || null;

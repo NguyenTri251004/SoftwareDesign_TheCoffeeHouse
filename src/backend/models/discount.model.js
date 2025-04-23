@@ -17,6 +17,7 @@ const DiscountSchema = new Schema({
     trim: true,
     maxlength: 255,
   },
+  detail: { type: String, default: "", trim: true },
   isPercentage: { type: Boolean, required: true }, // true: %, false: tiền
   discountAmount: { type: Number, required: true },
   freeShip: { type: Boolean, default: false },
@@ -26,7 +27,7 @@ const DiscountSchema = new Schema({
   usedCount: { type: Number, default: 0 },
   isActive: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now },
-  icon: { type: String, default: "" }, // Thêm trường icon
+  icon: { type: String, default: "" },
 });
 
 const Discount = mongoose.model("Discount", DiscountSchema);
