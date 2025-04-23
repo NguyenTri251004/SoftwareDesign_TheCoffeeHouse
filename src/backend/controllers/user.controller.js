@@ -174,12 +174,13 @@ const userController = {
 
       const discount = new DiscountModel({
         code: discountCode,
-        description: `Giảm ${discountAmount.toLocaleString()}đ`,
+        description: `Giảm ${discountAmount.toLocaleString()}đ cho đơn từ 0đ`,
         isPercentage: false,
         discountAmount,
         expiryDate,
         isActive: true,
         userId: user._id, // Gán userId cho voucher
+        icon: "https://minio.thecoffeehouse.com/image/admin/1709222265_deli-copy-7.jpg",
       });
 
       await discount.save();

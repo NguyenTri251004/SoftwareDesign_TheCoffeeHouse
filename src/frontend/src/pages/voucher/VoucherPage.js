@@ -9,7 +9,7 @@ import styles from "./VoucherPage.module.css";
 Modal.setAppElement("#root");
 
 const VoucherPage = () => {
-  const { isOpen, openPopup, closePopup } = usePopup(); 
+  const { isOpen, openPopup, closePopup } = usePopup();
   const [vouchers, setVouchers] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -23,7 +23,7 @@ const VoucherPage = () => {
         setLoading(true);
         try {
           const data = await VoucherAPI.getVouchers();
-          setVouchers(data);
+          setVouchers(data.data);
         } catch (error) {
           console.error("Error loading vouchers:", error);
         } finally {
@@ -37,15 +37,29 @@ const VoucherPage = () => {
   // Mở VoucherDetail => Đóng VoucherPage
   const handleUseVoucher = (voucherId) => {
     setSelectedVoucherId(voucherId);
-    closePopup();            // Đóng popup VoucherPage
+    closePopup(); // Đóng popup VoucherPage
     setIsVoucherDetailOpen(true); // Mở popup VoucherDetail
   };
 
   // Đóng VoucherDetail => Mở lại VoucherPage
   const closeVoucherDetail = () => {
-    setIsVoucherDetailOpen(false); 
-    openPopup();             // Mở lại popup VoucherPage
+    setIsVoucherDetailOpen(false);
+    openPopup(); // Mở lại popup VoucherPage
     setSelectedVoucherId(null);
+  };
+
+  const calculateDaysLeft = (expiryDate) => {
+    const now = new Date();
+    const expiry = new Date(expiryDate);
+
+    // Chuyển đổi thời gian từ UTC sang múi giờ địa phương
+    const localExpiry = new Date(
+      expiry.toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" })
+    );
+
+    const diffTime = localExpiry - now; // Thời gian chênh lệch (ms)
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Chuyển đổi sang ngày
+    return diffDays > 0 ? `Hết hạn trong ${diffDays} ngày` : "Hết hạn";
   };
 
   return (
@@ -59,7 +73,9 @@ const VoucherPage = () => {
       >
         <div className={styles.voucherHeader}>
           <h2>Khuyến mãi</h2>
-          <button className={styles.closeButton} onClick={closePopup}>✖</button>
+          <button className={styles.closeButton} onClick={closePopup}>
+            ✖
+          </button>
         </div>
 
         <div className={styles.inputContainer}>
@@ -83,9 +99,9 @@ const VoucherPage = () => {
                   />
                 </div>
                 <div className={styles.voucherDetails}>
-                  <p className={styles.voucherTitle}>{voucher.title}</p>
+                  <p className={styles.voucherTitle}>{voucher.description}</p>
                   <p className={styles.voucherExpiry}>
-                    Hết hạn trong {voucher.expiresIn}
+                    {calculateDaysLeft(voucher.expiryDate)}
                   </p>
                   <p
                     className={styles.useButton}
