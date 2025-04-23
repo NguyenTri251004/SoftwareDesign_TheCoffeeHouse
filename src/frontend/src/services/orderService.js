@@ -96,6 +96,53 @@ const OrderAPI = {
         }
     },
 
+    // Lấy đơn hàng của người dùng đã đăng nhập
+    getUserOrders: async () => {
+        try {
+            const token = localStorage.getItem('token');
+            
+            if (!token) {
+                console.error("Không tìm thấy token đăng nhập");
+                return [];
+            }
+
+            const response = await fetch(`${BASE_URL}/order/user`, {
+                method: "GET",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                console.warn("API failed: getUserOrders", errorData);
+                
+                // Trả về fallback data trong môi trường phát triển
+                if (process.env.NODE_ENV === 'development') {
+                    console.log("Đang sử dụng dữ liệu mẫu cho đơn hàng");
+                    return fallbackData.orders;
+                }
+                
+                return [];
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error("Error fetching user orders:", error.message);
+            
+            // Trả về fallback data trong môi trường phát triển
+            if (process.env.NODE_ENV === 'development') {
+                console.log("Đang sử dụng dữ liệu mẫu cho đơn hàng do lỗi:", error.message);
+                return fallbackData.orders;
+            }
+            
+            return [];
+        }
+    },
+
     // Lấy chi tiết order theo ID
     getOrderById: async (id) => {
         try {
@@ -121,24 +168,45 @@ const OrderAPI = {
 
     postOrder: async (orderData) => {
         try {
+            const token = localStorage.getItem('token');
+            
+            if (!token) {
+                console.error("Không tìm thấy token đăng nhập");
+                return { 
+                    success: false, 
+                    message: "Vui lòng đăng nhập để đặt hàng"
+                };
+            }
+
             const response = await fetch(`${BASE_URL}/order`, {
                 method: "POST",
                 credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify(orderData),
             });
 
+            const responseData = await response.json();
+
             if (!response.ok) {
-                console.warn("API failed: postOrder");
-                return { success: false };
+                console.error("API failed: postOrder", responseData);
+                return { 
+                    success: false, 
+                    message: responseData.message || "Đặt hàng thất bại, vui lòng thử lại sau",
+                    error: responseData.error
+                };
             }
 
-            return await response.json();
+            return responseData;
         } catch (error) {
             console.error("Error posting order:", error.message);
-            return { success: false };
+            return { 
+                success: false, 
+                message: "Lỗi kết nối, vui lòng thử lại sau",
+                error: error.message 
+            };
         }
     }
 };
