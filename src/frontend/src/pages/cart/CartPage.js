@@ -41,7 +41,7 @@ const CartPage = () => {
     const shopId = localStorage.getItem("currentShopId") || "67e832a5d0be3d6ab71556a0";
 
     const orderPayload = {
-      useName: recipientName,
+      useName: recipientName, // Lưu ý: Có thể đây là lỗi đánh máy, nên là `userName`?
       shopId: shopId,
       deliveryAddress,
       phone,
@@ -50,7 +50,7 @@ const CartPage = () => {
       products: products.map((p) => ({
         productId: p.productId,
         size: p.size,
-        amount: p.amount,
+        amount: p.quantity, // Sửa từ amount thành quantity
         unitPrice: p.unitPrice,
         totalPrice: p.totalPrice,
         topping: p.topping?.map((t) => ({ toppingId: t.toppingId })) || [],
@@ -150,7 +150,7 @@ const CartPage = () => {
               products.map((item, index) => (
                 <div key={index} className={styles.item}>
                   <p>
-                    {item.amount} x {item.name || 'Sản phẩm'} ({item.size})
+                    {item.quantity} x {item.name || 'Sản phẩm'} ({item.size}) {/* Sửa từ item.amount thành item.quantity */}
                   </p>
                   <ul>
                     {item.topping && item.topping.length > 0 ? (

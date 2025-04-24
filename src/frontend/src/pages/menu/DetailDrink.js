@@ -140,17 +140,40 @@ function DrinkDetailPage() {
                 await CartAPI.addToCart(payload);
                 alert("Đã thêm vào giỏ hàng!");
             } else {
-                const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-                const updatedCart = [...existingCart, {
-                    ...cartItem,
-                    name: drink.name,
-                    image: drink.image,
-                    topping: selectedToppings.map((top) => ({
-                        toppingId: top._id,
-                        name: top.name,
-                        price: top.price,
-                    })),
-                }];
+                let existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+    
+                // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
+                const existingItemIndex = existingCart.findIndex(
+                    (item) =>
+                        item.productId === cartItem.productId &&
+                        item.size === cartItem.size &&
+                        JSON.stringify(item.toppings) === JSON.stringify(cartItem.toppings)
+                );
+    
+                let updatedCart;
+                if (existingItemIndex !== -1) {
+                    // Nếu sản phẩm đã tồn tại, tăng quantity
+                    updatedCart = [...existingCart];
+                    updatedCart[existingItemIndex].quantity += 1;
+                    updatedCart[existingItemIndex].totalPrice =
+                        updatedCart[existingItemIndex].quantity * updatedCart[existingItemIndex].unitPrice;
+                } else {
+                    // Nếu sản phẩm chưa tồn tại, thêm mới
+                    updatedCart = [
+                        ...existingCart,
+                        {
+                            ...cartItem,
+                            name: drink.name,
+                            image: drink.image,
+                            topping: selectedToppings.map((top) => ({
+                                toppingId: top._id,
+                                name: top.name,
+                                price: top.price,
+                            })),
+                        },
+                    ];
+                }
+    
                 localStorage.setItem("cart", JSON.stringify(updatedCart));
                 alert("Đã thêm vào giỏ hàng (localStorage)!");
             }

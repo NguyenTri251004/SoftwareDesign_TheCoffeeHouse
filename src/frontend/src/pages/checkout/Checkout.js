@@ -281,7 +281,7 @@ const Checkout = () => {
       products: products.map((p) => ({
         productId: p.productId,
         size: p.size,
-        amount: p.amount,
+        amount: p.quantity, // Sửa từ amount thành quantity
         unitPrice: p.unitPrice,
         totalPrice: p.totalPrice,
         topping: p.topping?.map((t) => ({ toppingId: t.toppingId })) || [],
@@ -466,7 +466,7 @@ const Checkout = () => {
                           : method.id === 'vnpay'
                           ? 'https://stcd02206177151.cloud.edgevnpay.vn/assets/images/logo-icon/logo-primary.svg'
                           : method.id === 'momo'
-                          ? 'https://homepage.momocdn.net/fileUploads/svg/momo-file-240411162904.svg'
+                          ? 'https://i.pinimg.com/736x/dd/28/7d/dd287d17f1d0d43f69f3f4373df70cc5.jpg'
                           : method.id === 'zalopay'
                           ? 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgumCewiq6XqWwa4PkX7fLDKGEWOOVdksz180lH7NNEI4Mw5ArNn1aLKbLyEKy3UOuDupIhTvyNGiSyKEdmL7iPq3Ja667bo2umKl_LnnGQMdkuUl602_rLA4MgtwThR5pSDEKHRf44TFRHY_g6-nYHxs4pss-aB8JZdLMuTvlvW14-16Co-uCw8tRu/s72-c/ZaloPay.jpg'
                           : method.id === 'shopeepay'
@@ -509,7 +509,7 @@ const Checkout = () => {
                       <div className={styles.orderItemContentDetail}>
                         <p className={styles.drinkName}>
                           <strong>
-                            {item.amount} x {item.name || 'Sản phẩm'} ({item.size})
+                            {item.quantity} x {item.name || 'Sản phẩm'} ({item.size}) {/* Sửa từ item.amount thành item.quantity */}
                           </strong>
                         </p>
                         <ul>
