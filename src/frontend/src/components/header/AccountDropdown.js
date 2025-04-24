@@ -10,6 +10,7 @@ import shipIcon from "assets/icon/ship.png";
 import signupIcon from "assets/icon/signup.png";
 import signinIcon from "assets/icon/signin.png";
 import logoutIcon from "assets/icon/logout.png";
+import searchIcon from "assets/icon/seo.png";
 
 import authAPI from "services/authService";
 import { useNavigate } from "react-router-dom";
@@ -67,16 +68,24 @@ const AccountDropdown = ({ isLoggedIn }) => {
           </a>
           {/* Thêm liên kết tra cứu đơn hàng cho người dùng chưa đăng nhập */}
           <a href="/track-order" className={styles.dropdownItem}>
-            <img src={orderIcon} alt="Tra cứu đơn hàng" className={styles.icon} />
+            <img
+              src={orderIcon}
+              alt="Tra cứu đơn hàng"
+              className={styles.icon}
+            />
             Tra cứu đơn hàng
           </a>
         </>
       )}
-      
+
       {/* Luôn hiển thị liên kết tra cứu đơn hàng ở cuối menu dù đã đăng nhập hay chưa */}
       {isLoggedIn && (
         <a href="/track-order" className={styles.dropdownItem}>
-          <img src={orderIcon} alt="Tra cứu đơn hàng" className={styles.icon} />
+          <img
+            src={searchIcon}
+            alt="Tra cứu đơn hàng"
+            className={styles.icon}
+          />
           Tra cứu đơn hàng
         </a>
       )}
