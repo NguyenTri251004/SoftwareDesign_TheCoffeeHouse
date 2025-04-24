@@ -90,9 +90,15 @@ const FlashSalePage = () => {
 
           return (
             <div key={product._id} className={styles.productItem}
-              onClick={() =>
-                  window.location.href = `/drink/detail/${product._id}?flashSaleId=${flashSale._id}&salePrice=${salePrice}`
+            onClick={() => {
+              if (flashSale.status === "Active") {
+                window.location.href = `/drink/detail/${product._id}?flashSaleId=${flashSale._id}&salePrice=${salePrice}`;
+              } else {
+                window.location.href = `/drink/detail/${product._id}`;
               }
+            }}
+            
+            
               style={{ cursor: "pointer" }}
             >
 
