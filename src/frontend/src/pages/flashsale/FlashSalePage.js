@@ -61,7 +61,9 @@ const FlashSalePage = () => {
       <div className={styles.flashSaleHeader}>
         <div className={styles.flashSaleTitle}>
           <span className={styles.flashText}>Flash Sale</span>
-          <span className={styles.countdown}>kết thúc trong {timeLeft}</span>
+            {flashSale?.status === "Active" && (
+              <span className={styles.countdown}>kết thúc trong {timeLeft}</span>
+            )}
         </div>
 
         <div className={styles.timeNav}>
