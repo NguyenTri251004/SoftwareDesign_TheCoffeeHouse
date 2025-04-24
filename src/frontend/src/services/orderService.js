@@ -252,22 +252,19 @@ const OrderAPI = {
     postOrder: async (orderData) => {
         try {
             const token = localStorage.getItem('token');
-            
-            if (!token) {
-                console.error("Không tìm thấy token đăng nhập");
-                return { 
-                    success: false, 
-                    message: "Vui lòng đăng nhập để đặt hàng"
-                };
+            const headers = {
+                "Content-Type": "application/json",
+            };
+
+            // Chỉ thêm header Authorization nếu có token và userId không phải null
+            if (token && orderData.userId) {
+                headers["Authorization"] = `Bearer ${token}`;
             }
 
             const response = await fetch(`${BASE_URL}/order`, {
                 method: "POST",
                 credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
+                headers,
                 body: JSON.stringify(orderData),
             });
 

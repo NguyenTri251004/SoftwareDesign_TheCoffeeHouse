@@ -26,7 +26,7 @@ const PaymentMethods = [
 const Checkout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state) => state.user.user); // Lấy thông tin user từ Redux
+  const user = useSelector((state) => state.user.user);
   const [products, setProducts] = useState([]);
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [recipientName, setRecipientName] = useState('');
@@ -39,58 +39,53 @@ const Checkout = () => {
   const [routeInfo, setRouteInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [editMode, setEditMode] = useState(false); // Chế độ chỉnh sửa thông tin
-  const [storeCoordinates, setStoreCoordinates] = useState({ lat: 10.762622, lon: 106.660172 }); // Default coordinates for store
+  const [editMode, setEditMode] = useState(false);
+  const [storeCoordinates, setStoreCoordinates] = useState({ lat: 10.762622, lon: 106.660172 });
   const [deliveryDistance, setDeliveryDistance] = useState(0);
   const [shippingFee, setShippingFee] = useState(0);
   const discount = 0;
-  
-  // Hệ số tính phí giao hàng (5,000 VND/km)
+
   const SHIPPING_RATE = 5000;
 
-  // Load thông tin người dùng, giỏ hàng, địa chỉ giao hàng và tọa độ cửa hàng
   useEffect(() => {
     const fetchUserAndCart = async () => {
       try {
         setIsLoading(true);
         setError(null);
 
-        // Lấy thông tin user nếu chưa có trong Redux
-        if (!user?.id) {
-          const userData = await userAPI.getProfile();
-          if (!userData || !userData.id) {
-            throw new Error("Không tìm thấy thông tin người dùng hoặc ID.");
+        const isCustomer = localStorage.getItem('role') === 'customer';
+
+        if (isCustomer) {
+          let userData = user;
+          if (!userData?.id) {
+            userData = await userAPI.getProfile();
+            dispatch(setUser(userData));
           }
-          dispatch(setUser(userData));
           setRecipientName(userData.fullname || '');
           setPhone(userData.phone || '');
           const defaultAddress = userData.addresses?.find(addr => addr.isDefault)?.address || localStorage.getItem('userAddress') || '';
           setDeliveryAddress(defaultAddress);
           setModalAddress(defaultAddress);
+          setEditMode(false);
         } else {
-          setRecipientName(user.fullname || '');
-          setPhone(user.phone || '');
-          const defaultAddress = user.addresses?.find(addr => addr.isDefault)?.address || localStorage.getItem('userAddress') || '';
-          setDeliveryAddress(defaultAddress);
-          setModalAddress(defaultAddress);
+          const savedAddress = localStorage.getItem('userAddress') || '';
+          setDeliveryAddress(savedAddress);
+          setModalAddress(savedAddress);
+          setRecipientName(localStorage.getItem('guestName') || '');
+          setPhone(localStorage.getItem('guestPhone') || '');
+          setEditMode(true);
         }
 
-        // Lấy giỏ hàng từ localStorage
-        const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
+        const savedCart = JSON.parse(localStorage.getItem('selectedCart')) || [];
+        console.log("Saved cart:", savedCart);
         setProducts(savedCart);
 
-        // Lấy thông tin tọa độ cửa hàng từ localStorage hoặc sử dụng giá trị mặc định
         const shopId = localStorage.getItem("currentShopId");
         if (shopId) {
           const storedCoordinates = localStorage.getItem(`shop_${shopId}_coordinates`);
           if (storedCoordinates) {
             setStoreCoordinates(JSON.parse(storedCoordinates));
           }
-        }
-
-        // Tính khoảng cách và phí giao hàng nếu đã có địa chỉ
-        if (deliveryAddress) {
-          calculateDeliveryFee(deliveryAddress);
         }
       } catch (error) {
         console.error("Lỗi khi lấy thông tin:", error);
@@ -100,10 +95,10 @@ const Checkout = () => {
           error.message.includes("Invalid or expired token")
         ) {
           localStorage.removeItem("token");
+          localStorage.removeItem("role");
           dispatch(clearUser());
-          navigate("/login");
         } else if (error.message.includes("Tọa độ cửa hàng không hợp lệ")) {
-          navigate("/stores"); // Chuyển hướng đến trang chọn cửa hàng
+          navigate("/stores");
         }
       } finally {
         setIsLoading(false);
@@ -112,64 +107,72 @@ const Checkout = () => {
     fetchUserAndCart();
   }, [user, dispatch, navigate]);
 
-  // Hàm tính phí giao hàng dựa trên địa chỉ
+  useEffect(() => {
+    if (deliveryAddress) {
+      calculateDeliveryFee(deliveryAddress);
+    } else {
+      setShippingFee(15000);
+      setDeliveryDistance(0);
+    }
+  }, [deliveryAddress]);
+
   const calculateDeliveryFee = async (address) => {
     if (!address || !storeCoordinates?.lat || !storeCoordinates?.lon) {
+      setShippingFee(15000);
+      setDeliveryDistance(0);
       return;
     }
 
     try {
-      // Chuyển đổi địa chỉ thành tọa độ
       const nomRes = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`,
         { headers: { 'User-Agent': 'TheCoffeeHouse/1.0' } }
       );
       const nomData = await nomRes.json();
-      
-      if (nomData.length > 0) {
-        const { lat, lon } = nomData[0];
-        const userLat = parseFloat(lat);
-        const userLon = parseFloat(lon);
-        
-        // Tính toán lộ trình và khoảng cách
-        const osrmRes = await fetch(
-          `https://router.project-osrm.org/route/v1/driving/${storeCoordinates.lon},${storeCoordinates.lat};${userLon},${userLat}?overview=false`
-        );
-        const osrmData = await osrmRes.json();
-        
-        if (osrmData.routes && osrmData.routes.length > 0) {
-          // Lấy khoảng cách (m) và chuyển đổi sang km
-          const distanceInKm = osrmData.routes[0].distance / 1000;
-          setDeliveryDistance(distanceInKm);
-          
-          // Tính phí giao hàng: 5,000đ/km, làm tròn lên 1,000đ
-          const fee = Math.ceil(distanceInKm * SHIPPING_RATE / 1000) * 1000;
-          setShippingFee(fee);
-          
-          // Lưu thông tin lộ trình
-          setRouteInfo(osrmData.routes[0]);
-          
-          console.log(`Khoảng cách: ${distanceInKm.toFixed(2)}km, Phí giao hàng: ${fee.toLocaleString()}đ`);
-          return;
-        }
+
+      if (nomData.length === 0) {
+        setError('Không tìm thấy địa chỉ. Vui lòng nhập địa chỉ hợp lệ.');
+        setShippingFee(15000);
+        setDeliveryDistance(0);
+        return;
       }
-      
-      // Nếu không tính được, đặt phí mặc định
-      setShippingFee(15000);
-      setDeliveryDistance(0);
+
+      const { lat, lon } = nomData[0];
+      const userLat = parseFloat(lat);
+      const userLon = parseFloat(lon);
+
+      const osrmRes = await fetch(
+        `https://router.project-osrm.org/route/v1/driving/${storeCoordinates.lon},${storeCoordinates.lat};${userLon},${userLat}?overview=false`
+      );
+      const osrmData = await osrmRes.json();
+
+      if (!osrmData.routes || osrmData.routes.length === 0) {
+        setError('Không thể tính khoảng cách giao hàng. Vui lòng thử lại.');
+        setShippingFee(15000);
+        setDeliveryDistance(0);
+        return;
+      }
+
+      const distanceInKm = osrmData.routes[0].distance / 1000;
+      setDeliveryDistance(distanceInKm);
+
+      const fee = Math.ceil(distanceInKm * SHIPPING_RATE / 1000) * 1000;
+      setShippingFee(fee);
+
+      setRouteInfo(osrmData.routes[0]);
+
+      console.log(`Khoảng cách: ${distanceInKm.toFixed(2)}km, Phí giao hàng: ${fee.toLocaleString()}đ`);
     } catch (error) {
       console.error('Lỗi khi tính phí giao hàng:', error);
-      // Nếu có lỗi, đặt phí mặc định
+      setError('Lỗi khi tính phí giao hàng. Vui lòng thử lại.');
       setShippingFee(15000);
       setDeliveryDistance(0);
     }
   };
 
-  // Tính toán tổng tiền
   const totalAmount = products.reduce((sum, item) => sum + item.totalPrice, 0);
   const finalAmount = totalAmount + shippingFee - discount;
 
-  // Xử lý modal địa chỉ
   const showModalAddress = () => {
     setModalAddress(deliveryAddress);
     setShowModal(true);
@@ -181,28 +184,29 @@ const Checkout = () => {
     setRouteInfo(null);
   };
 
-  // Xác nhận địa chỉ từ modal và lưu vào localStorage
   const confirmModalAddress = () => {
+    if (!modalAddress.trim()) {
+      setError('Vui lòng nhập địa chỉ giao hàng.');
+      return;
+    }
     setDeliveryAddress(modalAddress);
     localStorage.setItem('userAddress', modalAddress);
     localStorage.setItem('deliveryAddress', modalAddress);
-    // Tính lại phí ship khi xác nhận địa chỉ mới
     calculateDeliveryFee(modalAddress);
     closeModalAddress();
   };
 
-  // Tính toán lộ trình bằng OSRM
   const handleUseMap = async () => {
     if (!modalAddress) {
       alert('Vui lòng chọn hoặc nhập địa chỉ!');
       return;
     }
-    
+
     if (!storeCoordinates || !storeCoordinates.lat || !storeCoordinates.lon) {
       alert('Không có thông tin tọa độ cửa hàng. Vui lòng chọn cửa hàng trước.');
       return;
     }
-    
+
     try {
       const nomRes = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(modalAddress)}`,
@@ -220,11 +224,10 @@ const Checkout = () => {
         if (osrmData.routes && osrmData.routes.length > 0) {
           const distanceInKm = osrmData.routes[0].distance / 1000;
           setDeliveryDistance(distanceInKm);
-          
-          // Tính phí giao hàng: 5,000đ/km, làm tròn lên 1,000đ
+
           const fee = Math.ceil(distanceInKm * SHIPPING_RATE / 1000) * 1000;
           setShippingFee(fee);
-          
+
           setRouteInfo(osrmData.routes[0]);
         }
         setShowMapInModal(true);
@@ -237,7 +240,6 @@ const Checkout = () => {
     }
   };
 
-  // Validate thông tin trước khi đặt hàng
   const validateInputs = () => {
     if (!recipientName.trim()) {
       return "Tên người nhận không được để trống!";
@@ -251,10 +253,12 @@ const Checkout = () => {
     if (products.length === 0) {
       return "Giỏ hàng trống, không thể đặt hàng!";
     }
+    if (localStorage.getItem('role') !== 'customer' && paymentMethod !== 'cash') {
+      return "Khách vãng lai chỉ có thể thanh toán bằng tiền mặt!";
+    }
     return null;
   };
 
-  // Đặt hàng
   const handlePlaceOrder = async () => {
     const validationError = validateInputs();
     if (validationError) {
@@ -262,16 +266,17 @@ const Checkout = () => {
       return;
     }
 
-    if (!user?.id) {
-      alert('Vui lòng đăng nhập để đặt hàng!');
-      navigate("/login");
-      return;
-    }
-
+    const isCustomer = localStorage.getItem('role') === 'customer';
     const shopId = localStorage.getItem("currentShopId") || "67e832a5d0be3d6ab71556a0";
 
+    if (!isCustomer) {
+      localStorage.setItem('guestName', recipientName);
+      localStorage.setItem('guestPhone', phone);
+      localStorage.setItem('userAddress', deliveryAddress);
+    }
+
     const orderPayload = {
-      userId: user.id,
+      userId: isCustomer ? user.id : null,
       userName: recipientName,
       shopId,
       deliveryAddress,
@@ -281,7 +286,7 @@ const Checkout = () => {
       products: products.map((p) => ({
         productId: p.productId,
         size: p.size,
-        amount: p.quantity, // Sửa từ amount thành quantity
+        amount: p.quantity,
         unitPrice: p.unitPrice,
         totalPrice: p.totalPrice,
         topping: p.topping?.map((t) => ({ toppingId: t.toppingId })) || [],
@@ -292,61 +297,66 @@ const Checkout = () => {
       finalAmount,
       note,
       paymentMethod,
+      isGuest: !isCustomer,
     };
 
     try {
       setIsLoading(true);
       setError(null);
       const res = await OrderAPI.postOrder(orderPayload);
-      
+
       if (res && res.success !== false) {
-        // Xóa giỏ hàng sau khi đặt hàng thành công
-        localStorage.removeItem('cart');
+        localStorage.removeItem('selectedCart');
         setProducts([]);
-        
-        // Nếu chọn thanh toán MoMo, chuyển hướng đến trang thanh toán MoMo
+
+        if (paymentMethod === 'momo' && !isCustomer) {
+          alert("Khách vãng lai chỉ có thể thanh toán bằng tiền mặt.");
+          navigate('/');
+          return;
+        }
+
         if (paymentMethod === 'momo') {
           try {
             const paymentRes = await PaymentAPI.createMomoPayment({
               orderId: res.data._id,
               amount: finalAmount,
-              orderInfo: `Thanh toán đơn hàng The Coffee House #${res.data._id}`
+              orderInfo: `Thanh toán đơn hàng The Coffee House #${res.data._id}`,
             });
-            
+
             if (paymentRes.success) {
-              // Chuyển hướng đến trang thanh toán MoMo
               window.location.href = paymentRes.paymentUrl;
             } else {
-              // Xử lý khi tạo thanh toán thất bại
               alert(paymentRes.message || "Không thể tạo thanh toán MoMo. Đơn hàng đã được đặt nhưng cần thanh toán sau.");
-              navigate('/order');
+              navigate(isCustomer ? '/order' : '/');
             }
           } catch (paymentError) {
             console.error("Lỗi khi tạo thanh toán MoMo:", paymentError);
             alert("Đơn hàng đã được đặt thành công nhưng không thể tạo thanh toán MoMo. Vui lòng thanh toán sau.");
-            navigate('/order');
+            navigate(isCustomer ? '/order' : '/');
           }
         } else {
-          // Nếu không phải thanh toán MoMo, chuyển hướng đến trang đơn hàng
           alert('Đặt hàng thành công!');
-          navigate('/order');
+          navigate(isCustomer ? '/order' : '/');
         }
       } else {
         throw new Error(res.message || 'Đặt hàng thất bại.');
       }
     } catch (error) {
       console.error('Error placing order:', error);
-      setError('Đặt hàng thất bại. Vui lòng thử lại!');
+      if (error.message.includes("Dữ liệu đơn hàng không hợp lệ")) {
+        setError("Dữ liệu đơn hàng không hợp lệ. Vui lòng kiểm tra lại thông tin và thử lại.");
+      } else {
+        setError('Đặt hàng thất bại: ' + error.message);
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Xóa giỏ hàng với xác nhận
   const handleDeleteOrder = () => {
     const confirmDelete = window.confirm('Bạn có chắc muốn xóa đơn hàng này không?');
     if (confirmDelete) {
-      localStorage.removeItem('cart');
+      localStorage.removeItem('selectedCart');
       localStorage.removeItem('userAddress');
       localStorage.removeItem('deliveryAddress');
       setProducts([]);
@@ -358,6 +368,10 @@ const Checkout = () => {
   const handleEditToggle = () => {
     setEditMode(!editMode);
   };
+
+  const availablePaymentMethods = localStorage.getItem('role') === 'customer'
+    ? PaymentMethods
+    : PaymentMethods.filter((method) => method.id === 'cash');
 
   if (isLoading) {
     return (
@@ -383,9 +397,11 @@ const Checkout = () => {
           <div className={styles.shippingSection}>
             <div className={styles.sectionHeader}>
               <h3>Thông tin giao hàng</h3>
-              <button className={styles.editButton} onClick={handleEditToggle}>
-                {editMode ? 'Hủy chỉnh sửa' : 'Chỉnh sửa thông tin'}
-              </button>
+              {localStorage.getItem('role') === 'customer' && (
+                <button className={styles.editButton} onClick={handleEditToggle}>
+                  {editMode ? 'Hủy chỉnh sửa' : 'Chỉnh sửa thông tin'}
+                </button>
+              )}
             </div>
             <div className={styles.addressBox}>
               <div className={styles.addressContent}>
@@ -406,39 +422,41 @@ const Checkout = () => {
               </div>
             </div>
             <div className={styles.field}>
-              <label>Tên người nhận:  </label>
-              {editMode ? (
+              <label>Tên người nhận: </label>
+              {editMode || localStorage.getItem('role') !== 'customer' ? (
                 <input
                   type="text"
                   className={styles.inputField}
                   value={recipientName}
                   onChange={(e) => setRecipientName(e.target.value)}
                   disabled={isLoading}
+                  placeholder="Nhập tên người nhận"
                 />
               ) : (
-                <span>{ ' ' + recipientName || ' Chưa có thông tin'}</span>
+                <span>{' ' + recipientName || 'Chưa có thông tin'}</span>
               )}
             </div>
             <div className={styles.field}>
-              <label>Số điện thoại:  </label>
-              {editMode ? (
+              <label>Số điện thoại: </label>
+              {editMode || localStorage.getItem('role') !== 'customer' ? (
                 <input
                   type="text"
                   className={styles.inputField}
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   disabled={isLoading}
+                  placeholder="Nhập số điện thoại"
                 />
               ) : (
-                <span>{' ' + phone || ' Chưa có thông tin'}</span>
+                <span>{' ' + phone || 'Chưa có thông tin'}</span>
               )}
             </div>
             <div className={styles.field}>
-              <label>Ghi chú thêm (nếu có):  </label>
+              <label>Ghi chú thêm (nếu có): </label>
               <input
                 type="text"
                 className={styles.inputField}
-                placeholder=" Thêm ghi chú (nếu có)"
+                placeholder="Thêm ghi chú (nếu có)"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 disabled={isLoading}
@@ -447,7 +465,7 @@ const Checkout = () => {
 
             <h3 className={styles.sectionHeader}>Phương thức thanh toán</h3>
             <div className={styles.paymentMethods}>
-              {PaymentMethods.map((method) => (
+              {availablePaymentMethods.map((method) => (
                 <div key={method.id}>
                   <label className={styles.paymentOption}>
                     <input
@@ -509,7 +527,7 @@ const Checkout = () => {
                       <div className={styles.orderItemContentDetail}>
                         <p className={styles.drinkName}>
                           <strong>
-                            {item.quantity} x {item.name || 'Sản phẩm'} ({item.size}) {/* Sửa từ item.amount thành item.quantity */}
+                            {item.quantity} x {item.name || 'Sản phẩm'} ({item.size})
                           </strong>
                         </p>
                         <ul>
@@ -571,7 +589,7 @@ const Checkout = () => {
               <span>Giao hàng</span>
             </div>
             <div className={styles.modalContent}>
-              {user.addresses && user.addresses.length > 0 ? (
+              {localStorage.getItem('role') === 'customer' && user?.addresses && user.addresses.length > 0 ? (
                 <select
                   value={modalAddress}
                   onChange={(e) => setModalAddress(e.target.value)}
@@ -587,13 +605,15 @@ const Checkout = () => {
                 </select>
               ) : (
                 <div>
-                  <p>Chưa có địa chỉ giao hàng. Vui lòng thêm địa chỉ!</p>
-                  <button
-                    onClick={() => navigate('/profile')}
-                    className={styles.addAddressButton}
-                  >
-                    Thêm địa chỉ
-                  </button>
+                  <p>Nhập địa chỉ giao hàng:</p>
+                  <input
+                    type="text"
+                    className={styles.inputField}
+                    value={modalAddress}
+                    onChange={(e) => setModalAddress(e.target.value)}
+                    placeholder="Nhập địa chỉ giao hàng"
+                    disabled={isLoading}
+                  />
                 </div>
               )}
               <button className={styles.locationButton} onClick={handleUseMap} disabled={isLoading}>

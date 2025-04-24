@@ -115,87 +115,88 @@ const OrderController = {
 
     createOrder: async (req, res) => {
         try {
-            // Kiểm tra thông tin đầu vào
-            const { userId, userName, shopId, deliveryAddress, phone, products } = req.body;
-            
-            if (!userId || !userName || !shopId || !deliveryAddress || !phone) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Thiếu thông tin bắt buộc cho đơn hàng",
-                    error: "Vui lòng cung cấp đầy đủ: userId, userName, shopId, deliveryAddress, phone"
-                });
+          const { userId, userName, shopId, deliveryAddress, phone, products, isGuest } = req.body;
+      
+          // Kiểm tra thông tin bắt buộc (bỏ yêu cầu userId nếu isGuest là true)
+          if (!userName || !shopId || !deliveryAddress || !phone) {
+            return res.status(400).json({
+              success: false,
+              message: "Thiếu thông tin bắt buộc cho đơn hàng",
+              error: "Vui lòng cung cấp đầy đủ: userName, shopId, deliveryAddress, phone",
+            });
+          }
+      
+          if (!products || !Array.isArray(products) || products.length === 0) {
+            return res.status(400).json({
+              success: false,
+              message: "Giỏ hàng trống hoặc không hợp lệ",
+              error: "Vui lòng thêm sản phẩm vào giỏ hàng",
+            });
+          }
+      
+          // Kiểm tra định dạng ObjectId (chỉ nếu userId tồn tại)
+          try {
+            if (userId) {
+              new mongoose.Types.ObjectId(userId);
             }
-
-            if (!products || !Array.isArray(products) || products.length === 0) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Giỏ hàng trống hoặc không hợp lệ",
-                    error: "Vui lòng thêm sản phẩm vào giỏ hàng"
-                });
-            }
-
-            // Kiểm tra định dạng ObjectId
-            try {
-                new mongoose.Types.ObjectId(userId);
-                new mongoose.Types.ObjectId(shopId);
-                
-                for (const product of products) {
-                    if (product.productId) {
-                        new mongoose.Types.ObjectId(product.productId);
-                    }
-                    
-                    if (product.topping && Array.isArray(product.topping)) {
-                        for (const topping of product.topping) {
-                            if (topping.toppingId) {
-                                new mongoose.Types.ObjectId(topping.toppingId);
-                            }
-                        }
-                    }
+            new mongoose.Types.ObjectId(shopId);
+      
+            for (const product of products) {
+              if (product.productId) {
+                new mongoose.Types.ObjectId(product.productId);
+              }
+              if (product.topping && Array.isArray(product.topping)) {
+                for (const topping of product.topping) {
+                  if (topping.toppingId) {
+                    new mongoose.Types.ObjectId(topping.toppingId);
+                  }
                 }
-            } catch (idError) {
-                return res.status(400).json({
-                    success: false,
-                    message: "ID không hợp lệ trong yêu cầu",
-                    error: idError.message
-                });
+              }
             }
-
-            // Tạo đơn hàng mới
-            const newOrder = new OrderModel(req.body);
-            
-            // Lưu đơn hàng vào database
-            await newOrder.save();
-            
-            return res.status(201).json({
-                success: true,
-                message: "Đặt hàng thành công!",
-                data: newOrder
+          } catch (idError) {
+            return res.status(400).json({
+              success: false,
+              message: "ID không hợp lệ trong yêu cầu",
+              error: idError.message,
             });
+          }
+      
+          // Tạo đơn hàng mới
+          const newOrder = new OrderModel({
+            ...req.body,
+            isGuest: isGuest || false, // Thêm trường isGuest
+          });
+      
+          // Lưu đơn hàng vào database
+          await newOrder.save();
+      
+          return res.status(201).json({
+            success: true,
+            message: "Đặt hàng thành công!",
+            data: newOrder,
+          });
         } catch (error) {
-            console.error("Lỗi createOrder:", error);
-            
-            // Xử lý lỗi validation từ MongoDB/Mongoose
-            if (error.name === 'ValidationError') {
-                const validationErrors = Object.keys(error.errors).map(field => ({
-                    field,
-                    message: error.errors[field].message
-                }));
-                
-                return res.status(400).json({
-                    success: false,
-                    message: "Dữ liệu đơn hàng không hợp lệ",
-                    error: validationErrors
-                });
-            }
-            
-            // Xử lý các lỗi khác
-            return res.status(500).json({
-                success: false,
-                message: "Lỗi khi tạo đơn hàng",
-                error: error.message || "Đã xảy ra lỗi không xác định"
+          console.error("Lỗi createOrder:", error);
+      
+          if (error.name === "ValidationError") {
+            const validationErrors = Object.keys(error.errors).map((field) => ({
+              field,
+              message: error.errors[field].message,
+            }));
+            return res.status(400).json({
+              success: false,
+              message: "Dữ liệu đơn hàng không hợp lệ",
+              error: validationErrors,
             });
+          }
+      
+          return res.status(500).json({
+            success: false,
+            message: "Lỗi khi tạo đơn hàng",
+            error: error.message || "Đã xảy ra lỗi không xác định",
+          });
         }
-    },
+      },
 
     updateOrder: async (req, res) => {
         try {
