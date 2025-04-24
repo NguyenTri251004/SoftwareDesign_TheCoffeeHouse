@@ -77,7 +77,6 @@ const Checkout = () => {
         }
 
         const savedCart = JSON.parse(localStorage.getItem('selectedCart')) || [];
-        console.log("Saved cart:", savedCart);
         setProducts(savedCart);
 
         const shopId = localStorage.getItem("currentShopId");
@@ -289,7 +288,7 @@ const Checkout = () => {
         amount: p.quantity,
         unitPrice: p.unitPrice,
         totalPrice: p.totalPrice,
-        topping: p.topping?.map((t) => ({ toppingId: t.toppingId })) || [],
+        topping: p.topping?.map((t) => ({ toppingId: t.toppingId, quantity: t.quantity })) || [],
       })),
       totalAmount,
       shippingFee,
@@ -532,7 +531,9 @@ const Checkout = () => {
                         </p>
                         <ul>
                           {item.topping && item.topping.length > 0 ? (
-                            item.topping.map((t, i) => <li key={i}>{t.name}</li>)
+                            item.topping.map((t, i) => (
+                              <li key={i}>{t.name} (x{t.quantity})</li>
+                            ))
                           ) : (
                             <li>Không có topping</li>
                           )}
