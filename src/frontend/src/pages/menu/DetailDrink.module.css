@@ -39,7 +39,23 @@
     margin-bottom: 20px;
     text-align: left;
 }
-  
+
+.originalPrice {
+    text-decoration: line-through;
+    color: gray;
+    font-size: 0.9rem;
+    margin-right: 10px;
+  }
+
+  .flashSaleTag {
+    margin-left: 10px;
+    background-color: #ff9800;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
 .section {
     margin-bottom: 20px;
 }

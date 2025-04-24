@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import Header from "components/header/Header";
 import Footer from "components/footer/Footer";
 import DrinkAPI from "services/drinkService";
@@ -20,6 +20,13 @@ function DrinkDetailPage() {
     const [loadingRecommendations, setLoadingRecommendations] = useState(false);
     const [error, setError] = useState(null);
     const [isGuest, setIsGuest] = useState(true);
+
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const flashSaleId = queryParams.get("flashSaleId");
+    const salePriceFromQuery = parseFloat(queryParams.get("salePrice"));
+
+    const [flashSalePrice, setFlashSalePrice] = useState(salePriceFromQuery || null);
 
     useEffect(() => {
         const fetchUserAndDrink = async () => {
@@ -107,7 +114,7 @@ function DrinkDetailPage() {
     };
 
     const calculateTotal = () => {
-        let base = drink?.price || 0;
+        let base = flashSalePrice ?? drink?.price ?? 0;
         let sizePrice = selectedSize?.extraPrice || 0;
         let toppingsPrice = selectedToppings.reduce((sum, top) => sum + (top.price || 0), 0);
         return base + sizePrice + toppingsPrice;
@@ -127,7 +134,7 @@ function DrinkDetailPage() {
                 quantity: 1,
             })),
             quantity: 1,
-            unitPrice: drink.price,
+            unitPrice: flashSalePrice ?? drink.price,
             totalPrice: calculateTotal(),
         };
     
@@ -198,7 +205,18 @@ function DrinkDetailPage() {
                     </div>
                     <div className={styles.right}>
                         <h2 className={styles.title}>{drink.name}</h2>
-                        <p className={styles.price}>{drink.price.toLocaleString()} đ</p>
+                        <p className={styles.price}>
+                        {flashSalePrice ? (
+                            <>
+                                <span className={styles.originalPrice}>{drink.price.toLocaleString()} đ</span>
+                                <span className={styles.salePrice}>{flashSalePrice.toLocaleString()} đ</span>
+                                <span className={styles.flashSaleTag}>Flash Sale</span>
+                            </>
+                        ) : (
+                            `${drink.price.toLocaleString()} đ`
+                        )}
+                        </p>
+
                         <div className={styles.section}>
                             <div className={styles.label}>Chọn size (bắt buộc)</div>
                             <div className={styles.options}>

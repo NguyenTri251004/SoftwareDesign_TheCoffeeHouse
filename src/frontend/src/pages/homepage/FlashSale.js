@@ -1,10 +1,12 @@
 import React from "react";
 import styles from "./FlashSale.module.css";
+import { useNavigate } from "react-router-dom";
 import product1 from "assets/images/flashsale-1.png";
 import product2 from "assets/images/flashsale-2.png";
 import product3 from "assets/images/flashsale-3.png";
 
 const FlashSale = () => {
+  const navigate = useNavigate();
   const products = [
     {
       id: 1,
@@ -35,7 +37,7 @@ const FlashSale = () => {
   return (
     <div className={styles.flashSaleContainer}>
       <div className={styles.header}>
-        <h2>🔥 Flash Sale</h2>
+        <h2 onClick={() => navigate("/flashsale")}>🔥 Flash Sale</h2>
         <span className={styles.timer}>00:12:34</span>
       </div>
       <div className={styles.productList}>

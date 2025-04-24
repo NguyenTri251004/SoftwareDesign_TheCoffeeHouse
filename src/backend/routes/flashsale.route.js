@@ -2,7 +2,7 @@ import express from "express";
 import FlashSaleController from "../controllers/flashsale.controller.js";
 
 const router = express.Router();
-
+router.get("/shop-detail/:shopId", FlashSaleController.getFlashSalesByShop);
 router.get("/", FlashSaleController.getListFlashSales);
 router.post("/shop/:shopId/many", FlashSaleController.getManyFlashSales);
 router.post("/", FlashSaleController.createFlashSale);
