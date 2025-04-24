@@ -1,6 +1,7 @@
 import OrderModel from "../models/order.model.js";
 import ProductModel from "../models/product.model.js";
 import ToppingModel from "../models/topping.model.js";
+import CustomerModel from "../models/customer.model.js"; // Import mô hình Customer
 import mongoose from "mongoose";
 
 const OrderController = {
@@ -217,11 +218,37 @@ const OrderController = {
                     
                     // Cập nhật statusTimes
                     if (!updateData.statusTimes) {
-                        updateData.statusTimes = {};
+                        updateData.statusTimes = currentOrder.statusTimes || {};
                     }
                     
                     // Thêm mốc thời gian cho trạng thái mới
                     updateData.statusTimes[statusKey] = new Date();
+                    
+                    // Nếu đơn hàng chuyển sang trạng thái "Delivered" và không phải là guest, cộng điểm tích lũy
+                    if (updateData.status === 'Delivered' && currentOrder.userId && !currentOrder.isGuest) {
+                        try {
+                            // Tính toán điểm tích lũy: 1 điểm cho mỗi 10.000đ
+                            const orderTotal = currentOrder.finalAmount || 0;
+                            const pointsToAdd = Math.floor(orderTotal / 1000); // 10.000đ = 10 điểm
+                            
+                            if (pointsToAdd > 0) {
+                                // Cập nhật điểm tích lũy cho khách hàng
+                                const updatedCustomer = await CustomerModel.findByIdAndUpdate(
+                                    currentOrder.userId,
+                                    { $inc: { loyaltyPoints: pointsToAdd } },
+                                    { new: true }
+                                );
+                                
+                                console.log(`Đã cộng ${pointsToAdd} điểm tích lũy cho khách hàng ${currentOrder.userId} từ đơn hàng ${id}`);
+                                
+                                // Thêm thông tin điểm tích lũy vào đơn hàng
+                                updateData.pointsEarned = pointsToAdd;
+                            }
+                        } catch (pointsError) {
+                            console.error("Lỗi khi cộng điểm tích lũy cho khách hàng:", pointsError);
+                            // Vẫn tiếp tục cập nhật đơn hàng ngay cả khi có lỗi khi cộng điểm
+                        }
+                    }
                 }
             }
 
