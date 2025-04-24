@@ -72,12 +72,7 @@ const Header = () => {
   const { openPopup } = usePopup();
 
   const handleCartClick = () => {
-    const role = localStorage.getItem("role");
-    if (role === "customer") {
       navigate("/cart");
-    } else {
-      navigate("/checkout");
-    }
   };
 
   return (

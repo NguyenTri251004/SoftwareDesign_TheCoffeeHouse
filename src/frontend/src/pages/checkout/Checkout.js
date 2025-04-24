@@ -13,6 +13,7 @@ import AddressMap from '../../components/map/AddressMap';
 import OrderAPI from 'services/orderService';
 import userAPI from "services/userService";
 import PaymentAPI from "services/paymentService";
+import CartAPI from 'services/cartService';
 
 const PaymentMethods = [
   { id: 'cash', label: 'Tiền mặt' },
@@ -77,7 +78,6 @@ const Checkout = () => {
         }
 
         const savedCart = JSON.parse(localStorage.getItem('selectedCart')) || [];
-        console.log("Saved cart:", savedCart);
         setProducts(savedCart);
 
         const shopId = localStorage.getItem("currentShopId");
@@ -289,7 +289,7 @@ const Checkout = () => {
         amount: p.quantity,
         unitPrice: p.unitPrice,
         totalPrice: p.totalPrice,
-        topping: p.topping?.map((t) => ({ toppingId: t.toppingId })) || [],
+        topping: p.topping?.map((t) => ({ toppingId: t.toppingId, quantity: t.quantity })) || [],
       })),
       totalAmount,
       shippingFee,
@@ -306,6 +306,19 @@ const Checkout = () => {
       const res = await OrderAPI.postOrder(orderPayload);
 
       if (res && res.success !== false) {
+        // Xóa giỏ hàng
+        if (isCustomer && user?.id) {
+          try {
+            await CartAPI.removeFromCart(user.id, -1);
+          } catch (cartError) {
+            console.error("Lỗi khi xóa giỏ hàng trên backend:", cartError);
+            setError("Đặt hàng thành công nhưng không thể xóa giỏ hàng. Vui lòng kiểm tra lại.");
+          }
+        } else {
+          localStorage.removeItem('cart');
+        }
+
+        // Xóa selectedCart
         localStorage.removeItem('selectedCart');
         setProducts([]);
 
@@ -357,6 +370,7 @@ const Checkout = () => {
     const confirmDelete = window.confirm('Bạn có chắc muốn xóa đơn hàng này không?');
     if (confirmDelete) {
       localStorage.removeItem('selectedCart');
+      localStorage.removeItem('cart');
       localStorage.removeItem('userAddress');
       localStorage.removeItem('deliveryAddress');
       setProducts([]);
@@ -532,7 +546,9 @@ const Checkout = () => {
                         </p>
                         <ul>
                           {item.topping && item.topping.length > 0 ? (
-                            item.topping.map((t, i) => <li key={i}>{t.name}</li>)
+                            item.topping.map((t, i) => (
+                              <li key={i}>{t.name} (x{t.quantity})</li>
+                            ))
                           ) : (
                             <li>Không có topping</li>
                           )}
