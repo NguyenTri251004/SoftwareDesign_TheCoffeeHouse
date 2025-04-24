@@ -76,7 +76,8 @@ const Checkout = () => {
           setEditMode(true);
         }
 
-        const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
+        const savedCart = JSON.parse(localStorage.getItem('selectedCart')) || [];
+        console.log("Saved cart:", savedCart);
         setProducts(savedCart);
 
         const shopId = localStorage.getItem("currentShopId");
@@ -305,7 +306,7 @@ const Checkout = () => {
       const res = await OrderAPI.postOrder(orderPayload);
 
       if (res && res.success !== false) {
-        localStorage.removeItem('cart');
+        localStorage.removeItem('selectedCart');
         setProducts([]);
 
         if (paymentMethod === 'momo' && !isCustomer) {
@@ -355,7 +356,7 @@ const Checkout = () => {
   const handleDeleteOrder = () => {
     const confirmDelete = window.confirm('Bạn có chắc muốn xóa đơn hàng này không?');
     if (confirmDelete) {
-      localStorage.removeItem('cart');
+      localStorage.removeItem('selectedCart');
       localStorage.removeItem('userAddress');
       localStorage.removeItem('deliveryAddress');
       setProducts([]);
