@@ -24,6 +24,17 @@ const PaymentMethods = [
   { id: 'card', label: 'Thẻ ngân hàng' },
 ];
 
+// Hàm tạo uniqueId dựa trên productId, size và topping
+const generateUniqueId = (item) => {
+  const toppingStr = item.topping || item.toppings
+    ? (item.topping || item.toppings)
+        .map((t) => `${t.toppingId}:${t.quantity}`)
+        .sort()
+        .join('|')
+    : '';
+  return `${item.productId}-${item.size}-${toppingStr}`;
+};
+
 const Checkout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -306,16 +317,34 @@ const Checkout = () => {
       const res = await OrderAPI.postOrder(orderPayload);
 
       if (res && res.success !== false) {
-        // Xóa giỏ hàng
+        // Xóa các sản phẩm được chọn khỏi giỏ hàng
         if (isCustomer && user?.id) {
           try {
-            await CartAPI.removeFromCart(user.id, -1);
+            const cartData = await CartAPI.getCartByUserId(user.id);
+            const selectedUniqueIds = products.map((p) => p.uniqueId);
+            const indicesToRemove = cartData.items
+              .map((item, index) => {
+                const itemUniqueId = generateUniqueId(item);
+                return selectedUniqueIds.includes(itemUniqueId) ? index : -1;
+              })
+              .filter((index) => index !== -1)
+              .sort((a, b) => b - a); // Sắp xếp giảm dần để xóa từ cuối lên đầu
+
+            for (const index of indicesToRemove) {
+              await CartAPI.removeFromCart(user.id, index);
+            }
           } catch (cartError) {
-            console.error("Lỗi khi xóa giỏ hàng trên backend:", cartError);
-            setError("Đặt hàng thành công nhưng không thể xóa giỏ hàng. Vui lòng kiểm tra lại.");
+            console.error("Lỗi khi xóa sản phẩm khỏi giỏ hàng trên backend:", cartError);
+            setError("Đặt hàng thành công nhưng không thể cập nhật giỏ hàng. Vui lòng kiểm tra lại.");
           }
         } else {
-          localStorage.removeItem('cart');
+          const currentCart = JSON.parse(localStorage.getItem('cart')) || [];
+          const selectedUniqueIds = products.map((p) => p.uniqueId);
+          const updatedCart = currentCart.filter((item) => {
+            const itemUniqueId = generateUniqueId(item);
+            return !selectedUniqueIds.includes(itemUniqueId);
+          });
+          localStorage.setItem('cart', JSON.stringify(updatedCart));
         }
 
         // Xóa selectedCart
@@ -535,7 +564,7 @@ const Checkout = () => {
                 <p>Chưa có sản phẩm nào trong đơn hàng.</p>
               ) : (
                 products.map((item, index) => (
-                  <div key={index} className={styles.orderItem}>
+                  <div key={item.uniqueId || index} className={styles.orderItem}>
                     <div className={styles.orderItemContent}>
                       <MdEdit className={styles.editIcon} />
                       <div className={styles.orderItemContentDetail}>
