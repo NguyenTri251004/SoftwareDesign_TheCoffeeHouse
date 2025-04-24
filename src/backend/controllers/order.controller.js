@@ -412,6 +412,59 @@ const OrderController = {
             return res.status(500).json({ success: false, message: "Lỗi khi hủy đơn hàng", error: error.message });
         }
     },
+
+    findOrdersByPhone: async (req, res) => {
+        try {
+            const { phone } = req.query;
+            
+            if (!phone) {
+                return res.status(400).json({ 
+                    success: false, 
+                    message: "Vui lòng cung cấp số điện thoại để tra cứu đơn hàng" 
+                });
+            }
+            
+            // Tìm kiếm đơn hàng theo số điện thoại
+            const orders = await OrderModel.find({ phone })
+                .populate({
+                    path: 'shopId',
+                    model: 'Shop',
+                    select: 'name address phone image'
+                })
+                .populate({
+                    path: 'products.productId',
+                    model: 'Drink',
+                    select: 'name description category image price'
+                })
+                .populate({
+                    path: 'products.topping.toppingId',
+                    model: 'Topping',
+                    select: 'name price'
+                })
+                .sort({ createdAt: -1 }); // Sắp xếp theo thời gian mới nhất
+            
+            // Nếu không tìm thấy đơn hàng nào
+            if (orders.length === 0) {
+                return res.status(404).json({ 
+                    success: false, 
+                    message: "Không tìm thấy đơn hàng nào với số điện thoại này" 
+                });
+            }
+            
+            return res.status(200).json({ 
+                success: true, 
+                count: orders.length,
+                data: orders 
+            });
+        } catch (error) {
+            console.error("Lỗi findOrdersByPhone:", error);
+            return res.status(500).json({ 
+                success: false, 
+                message: "Lỗi khi tìm đơn hàng theo số điện thoại", 
+                error: error.message 
+            });
+        }
+    },
 };
 
 export default OrderController;

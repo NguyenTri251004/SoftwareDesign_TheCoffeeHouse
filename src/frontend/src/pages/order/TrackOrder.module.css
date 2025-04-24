@@ -1,0 +1,200 @@
+.container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #E57905;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #555;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.searchForm {
+  max-width: 600px;
+  margin: 0 auto 40px;
+}
+
+.inputWrapper {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.phoneInput {
+  flex: 1;
+  min-width: 300px;
+  padding: 14px 16px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.phoneInput:focus {
+  border-color: #E57905;
+  box-shadow: 0 0 0 2px rgba(229, 121, 5, 0.2);
+}
+
+.searchButton {
+  padding: 14px 30px;
+  background-color: #E57905;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.searchButton:hover {
+  background-color: #d06700;
+}
+
+.searchButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.resultsContainer {
+  margin-top: 40px;
+}
+
+.resultsTitle {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #333;
+}
+
+.ordersList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.orderCard {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.orderCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.orderHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.orderId {
+  font-weight: 600;
+  color: #333;
+}
+
+.orderStatus {
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.status_pending {
+  background-color: #ffe8cc;
+  color: #ff8800;
+}
+
+.status_confirmed {
+  background-color: #e0f2ff;
+  color: #0080ff;
+}
+
+.status_preparing {
+  background-color: #fff4e0;
+  color: #f5a623;
+}
+
+.status_delivering {
+  background-color: #e0f7fa;
+  color: #00acc1;
+}
+
+.status_delivered {
+  background-color: #e0f2e9;
+  color: #27ae60;
+}
+
+.status_cancelled {
+  background-color: #ffebee;
+  color: #e53935;
+}
+
+.orderDetails {
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.orderDate, .orderShop, .orderTotal {
+  margin-bottom: 8px;
+  color: #666;
+}
+
+.viewDetailButton {
+  text-align: center;
+  color: #E57905;
+  font-weight: 600;
+  padding: 8px 0;
+  margin-top: 12px;
+  border-top: 1px solid #eee;
+}
+
+.noResults {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-radius: 10px;
+}
+
+.noResults p:first-child {
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.noResults p:last-child {
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .ordersList {
+    grid-template-columns: 1fr;
+  }
+  
+  .phoneInput, .searchButton {
+    width: 100%;
+  }
+  
+  .inputWrapper {
+    flex-direction: column;
+  }
+}

@@ -11,6 +11,7 @@ import ShopDetailPage from "pages/shop/DetailShop";
 import Redeem from "pages/redeem/RedeemPage";
 import "leaflet/dist/leaflet.css";
 import OrderStatus from "pages/order/orderStatus";
+import TrackOrder from "pages/order/TrackOrder"; // Import trang tra cứu đơn hàng
 import Menu from "pages/menu/Menu";
 import DrinkDetailPage from "pages/menu/DetailDrink";
 import {PopupProvider} from "context/PopupContext";
@@ -50,8 +51,9 @@ function App() {
 
           <Route path="/user/profile" element={<UserProfile />} />
           <Route path="/drink/detail/:id" element={<DrinkDetailPage />} />
-          <Route path="/order-status/:orderId" element={<OrderStatus />} />
+          <Route path="/order/:orderId" element={<OrderStatus />} />
           <Route path="/order" element={<ListOrderPage />} />
+          <Route path="/track-order" element={<TrackOrder />} />
           <Route path="/redeem" element={<Redeem />} />
           <Route path="/menu/*" element={<Menu />} />
 
