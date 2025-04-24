@@ -13,6 +13,7 @@ import AddressMap from '../../components/map/AddressMap';
 import OrderAPI from 'services/orderService';
 import userAPI from "services/userService";
 import PaymentAPI from "services/paymentService";
+import CartAPI from 'services/cartService';
 
 const PaymentMethods = [
   { id: 'cash', label: 'Tiền mặt' },
@@ -305,6 +306,19 @@ const Checkout = () => {
       const res = await OrderAPI.postOrder(orderPayload);
 
       if (res && res.success !== false) {
+        // Xóa giỏ hàng
+        if (isCustomer && user?.id) {
+          try {
+            await CartAPI.removeFromCart(user.id, -1);
+          } catch (cartError) {
+            console.error("Lỗi khi xóa giỏ hàng trên backend:", cartError);
+            setError("Đặt hàng thành công nhưng không thể xóa giỏ hàng. Vui lòng kiểm tra lại.");
+          }
+        } else {
+          localStorage.removeItem('cart');
+        }
+
+        // Xóa selectedCart
         localStorage.removeItem('selectedCart');
         setProducts([]);
 
@@ -356,6 +370,7 @@ const Checkout = () => {
     const confirmDelete = window.confirm('Bạn có chắc muốn xóa đơn hàng này không?');
     if (confirmDelete) {
       localStorage.removeItem('selectedCart');
+      localStorage.removeItem('cart');
       localStorage.removeItem('userAddress');
       localStorage.removeItem('deliveryAddress');
       setProducts([]);
