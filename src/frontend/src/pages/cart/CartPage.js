@@ -8,6 +8,16 @@ import CartAPI from 'services/cartService';
 import { useNavigate } from 'react-router-dom';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 
+const generateUniqueId = (item) => {
+  const toppingStr = item.topping
+    ? item.topping
+        .map((t) => `${t.toppingId}:${t.quantity}`)
+        .sort()
+        .join('|')
+    : '';
+  return `${item.productId}-${item.size}-${toppingStr}`;
+};
+
 const CartPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,13 +44,22 @@ const CartPage = () => {
             unitPrice: item.unitPrice,
             totalPrice: item.totalPrice,
             topping: item.toppings,
+            uniqueId: generateUniqueId({
+              productId: item.productId,
+              size: item.size,
+              topping: item.toppings,
+            }),
           }));
           setProducts(formattedCart);
-          setSelectedItems(formattedCart.map((item) => item.productId));
+          setSelectedItems(formattedCart.map((item) => item.uniqueId));
         } else {
           const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
-          setProducts(savedCart);
-          setSelectedItems(savedCart.map((item) => item.productId));
+          const formattedCart = savedCart.map((item) => ({
+            ...item,
+            uniqueId: generateUniqueId(item),
+          }));
+          setProducts(formattedCart);
+          setSelectedItems(formattedCart.map((item) => item.uniqueId));
         }
       } catch (error) {
         console.error('Lỗi khi lấy giỏ hàng:', error);
@@ -53,8 +72,12 @@ const CartPage = () => {
           localStorage.removeItem('role');
           dispatch(clearUser());
           const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
-          setProducts(savedCart);
-          setSelectedItems(savedCart.map((item) => item.productId));
+          const formattedCart = savedCart.map((item) => ({
+            ...item,
+            uniqueId: generateUniqueId(item),
+          }));
+          setProducts(formattedCart);
+          setSelectedItems(formattedCart.map((item) => item.uniqueId));
         }
       } finally {
         setIsLoading(false);
@@ -63,11 +86,11 @@ const CartPage = () => {
     fetchCart();
   }, [user, dispatch]);
 
-  const toggleSelect = (productId) => {
+  const toggleSelect = (uniqueId) => {
     setSelectedItems((prev) =>
-      prev.includes(productId)
-        ? prev.filter((id) => id !== productId)
-        : [...prev, productId]
+      prev.includes(uniqueId)
+        ? prev.filter((id) => id !== uniqueId)
+        : [...prev, uniqueId]
     );
   };
 
@@ -85,7 +108,7 @@ const CartPage = () => {
     }
 
     setProducts(newProducts);
-    setSelectedItems(newProducts.map((p) => p.productId));
+    setSelectedItems(newProducts.map((p) => p.uniqueId));
 
     if (isCustomer && user?.id) {
       try {
@@ -115,7 +138,7 @@ const CartPage = () => {
   };
 
   const handleProceedToCheckout = () => {
-    const selected = products.filter((p) => selectedItems.includes(p.productId));
+    const selected = products.filter((p) => selectedItems.includes(p.uniqueId));
     if (selected.length === 0) {
       alert('Vui lòng chọn ít nhất một món để đặt hàng!');
       return;
@@ -150,7 +173,9 @@ const CartPage = () => {
     navigate('/menu');
   };
 
-  const totalAmount = products.reduce((sum, item) => sum + item.totalPrice, 0);
+  const totalAmount = products
+    .filter((item) => selectedItems.includes(item.uniqueId))
+    .reduce((sum, item) => sum + item.totalPrice, 0);
 
   return (
     <div className={styles.container}>
@@ -170,12 +195,12 @@ const CartPage = () => {
         ) : (
           <div className={styles.productList}>
             {products.map((item, index) => (
-              <div key={index} className={styles.productItem}>
+              <div key={item.uniqueId} className={styles.productItem}>
                 <div className={styles.checkbox}>
                   <input
                     type="checkbox"
-                    checked={selectedItems.includes(item.productId)}
-                    onChange={() => toggleSelect(item.productId)}
+                    checked={selectedItems.includes(item.uniqueId)}
+                    onChange={() => toggleSelect(item.uniqueId)}
                   />
                 </div>
 
