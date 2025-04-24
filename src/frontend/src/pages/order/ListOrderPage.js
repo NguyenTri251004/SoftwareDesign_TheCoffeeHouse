@@ -100,7 +100,7 @@ function ListOrderPage() {
 
   // Xử lý khi nhấn nút "Chi tiết đơn hàng"
   const handleOrderDetails = useCallback((orderId) => {
-    navigate(`/order-status/${orderId}`); // Sửa lại đường dẫn để khớp với định nghĩa trong App.js
+    navigate(`/order/${orderId}`); // Sửa lại đường dẫn để khớp với định nghĩa trong App.js
   }, [navigate]);
 
   if (isLoading) {
