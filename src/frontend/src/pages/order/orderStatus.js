@@ -5,19 +5,39 @@ import { FaMapMarkerAlt, FaBox, FaTruck } from 'react-icons/fa';
 import Header from 'components/header/Header';
 import CancelOrder from './CancelOrder';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const OrderStatus = () => {
   const { orderId } = useParams(); // Extract orderId from URL
   const navigate = useNavigate();
 
-  // Debug: Log the orderId to verify it's being extracted
-  console.log('orderId from useParams:', orderId);
-
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showCancelModal, setShowCancelModal] = useState(false);
-  const [cancelReason, setCancelReason] = useState('');
+  const [cancelLoading, setCancelLoading] = useState(false);
+
+  // Fetch the order data
+  const fetchOrder = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5001/api/order/${orderId}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
+
+      // Check if the API response indicates success
+      if (!response.data.success) {
+        throw new Error(response.data.message || 'Không thể tải thông tin đơn hàng');
+      }
+
+      // Set the order data from the response
+      const orderData = response.data.data;
+      setOrder(orderData);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message || 'Không thể tải thông tin đơn hàng.');
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     // Check if orderId is undefined or empty
@@ -28,77 +48,160 @@ const OrderStatus = () => {
       return;
     }
 
-    const fetchOrder = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5001/api/order/${orderId}`, {
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        });
-
-        // Check if the API response indicates success
-        if (!response.data.success) {
-          throw new Error(response.data.message || 'Không thể tải thông tin đơn hàng');
-        }
-
-        // Set the order data from the response
-        const orderData = response.data.data;
-
-        // Validate that products array exists and has populated data
-        // if (!orderData.products || !orderData.products.every(item => item.productId && item.productId.name)) {
-        //   throw new Error('Dữ liệu đơn hàng không đầy đủ. Vui lòng liên hệ hỗ trợ.');
-        // }
-
-        setOrder(orderData);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message || 'Không thể tải thông tin đơn hàng.');
-        setLoading(false);
-      }
-    };
-
     fetchOrder();
   }, [orderId, navigate]);
 
+  // Handle order cancellation
+  const handleCancelOrder = async (reason) => {
+    setCancelLoading(true);
+    try {
+      const response = await axios.put(`http://localhost:5001/api/order/${orderId}/cancel`, 
+        { reason },
+        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
+      );
+
+      if (!response.data.success) {
+        throw new Error(response.data.message || 'Không thể hủy đơn hàng');
+      }
+
+      toast.success('Đơn hàng đã được hủy thành công');
+      // Refresh order data to reflect the new status
+      fetchOrder();
+    } catch (err) {
+      toast.error(err.response?.data?.message || err.message || 'Không thể hủy đơn hàng. Vui lòng thử lại.');
+    } finally {
+      setCancelLoading(false);
+    }
+  };
+
   // Map status to timeline steps
   const getStatusTimeline = (status, createdAt) => {
-    const baseTime = new Date(createdAt);
-    const timeline = [];
+    let timeline = []; // Thay đổi từ const sang let để có thể gán lại biến này
+    const statusTimes = order.statusTimes || {};
+    
+    // Định nghĩa các trạng thái theo thứ tự xử lý
+    const allStatuses = ['Pending', 'Confirmed', 'Preparing', 'Delivering', 'Delivered'];
+    
+    // Xác định vị trí của trạng thái hiện tại trong quy trình
+    const currentStatusIndex = allStatuses.indexOf(status);
+    
+    // Step 1: Order received - shown for all orders
+    timeline.push({
+      time: formatDate(new Date(createdAt)),
+      title: 'Đã nhận đơn hàng',
+      description: 'Đơn hàng của bạn đã được tiếp nhận thành công.',
+      icon: <FaBox />,
+      active: true,
+      completed: true
+    });
 
-    if (status === 'Pending' || status === 'Confirmed' || status === 'Preparing' || status === 'Delivered' || status === 'Cancelled') {
+    // Step 2: Confirmed order
+    if (statusTimes.confirmed) {
       timeline.push({
-        time: formatDate(baseTime),
+        time: formatDate(new Date(statusTimes.confirmed)),
+        title: 'Đã xác nhận đơn hàng',
+        description: 'Đơn hàng của bạn đã được xác nhận. Chúng tôi sẽ chuẩn bị ngay!',
+        icon: <FaBox />,
+        active: true,
+        completed: true
+      });
+    } else {
+      timeline.push({
+        time: 'Đang chờ',
+        title: 'Xác nhận đơn hàng',
+        description: 'Đơn hàng của bạn đang chờ xác nhận.',
+        icon: <FaBox />,
+        active: currentStatusIndex >= 1, // Chỉ active nếu đã đạt trạng thái này
+        completed: false,
+        pending: true
+      });
+    }
+
+    // Step 3: Preparing order
+    if (statusTimes.preparing) {
+      timeline.push({
+        time: formatDate(new Date(statusTimes.preparing)),
         title: 'Đang chuẩn bị hàng',
         description: 'Đơn hàng của bạn đang được chuẩn bị. Chúng tôi đang pha chế đồ uống thật tươi ngon cho bạn!',
         icon: <FaBox />,
+        active: true,
+        completed: true
+      });
+    } else {
+      timeline.push({
+        time: 'Đang chờ',
+        title: 'Chuẩn bị đơn hàng',
+        description: 'Đơn hàng của bạn sẽ được chuẩn bị sau khi xác nhận.',
+        icon: <FaBox />,
+        active: currentStatusIndex >= 2, // Chỉ active nếu đã đạt trạng thái này
+        completed: false,
+        pending: true
       });
     }
 
-    if (status === 'Preparing' || status === 'Delivered') {
-      baseTime.setMinutes(baseTime.getMinutes() + 16);
+    // Step 4: Delivering order
+    if (statusTimes.delivering) {
       timeline.push({
-        time: formatDate(baseTime),
-        title: 'Đã giao cho đơn vị vận chuyển',
-        description: 'Đơn hàng đã sẵn sàng và được giao cho đơn vị vận chuyển. Chờ chút nhé, đồ uống của bạn sắp đến rồi!',
-        icon: <FaMapMarkerAlt />,
-      });
-    }
-
-    if (status === 'Delivered') {
-      baseTime.setMinutes(baseTime.getMinutes() + 14);
-      timeline.push({
-        time: formatDate(baseTime),
-        title: 'Đang vận chuyển',
+        time: formatDate(new Date(statusTimes.delivering)),
+        title: 'Đang giao hàng',
         description: 'Tài xế đang trên đường giao hàng. Hãy chuẩn bị nhận đồ uống ngon lành của bạn nhé!',
         icon: <FaTruck />,
+        active: true,
+        completed: true
+      });
+    } else {
+      timeline.push({
+        time: 'Đang chờ',
+        title: 'Giao hàng',
+        description: 'Đơn hàng sẽ được giao sau khi hoàn tất chuẩn bị.',
+        icon: <FaTruck />,
+        active: currentStatusIndex >= 3, // Chỉ active nếu đã đạt trạng thái này
+        completed: false,
+        pending: true
       });
     }
 
-    if (status === 'Cancelled') {
+    // Step 5: Delivered
+    if (statusTimes.delivered) {
       timeline.push({
-        time: formatDate(baseTime),
+        time: formatDate(new Date(statusTimes.delivered)),
+        title: 'Đã giao hàng',
+        description: 'Đơn hàng đã được giao thành công. Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!',
+        icon: <FaMapMarkerAlt />,
+        active: true,
+        completed: true
+      });
+    } else {
+      timeline.push({
+        time: 'Đang chờ',
+        title: 'Giao hàng thành công',
+        description: 'Thông báo khi đơn hàng được giao thành công.',
+        icon: <FaMapMarkerAlt />,
+        active: currentStatusIndex >= 4, // Chỉ active nếu đã đạt trạng thái này
+        completed: false,
+        pending: true
+      });
+    }
+
+    // If order was cancelled, replace with cancellation timeline
+    if (status === 'Cancelled') {
+      const cancelTime = statusTimes.cancelled || new Date();
+      timeline = [{
+        time: formatDate(new Date(createdAt)),
+        title: 'Đã nhận đơn hàng',
+        description: 'Đơn hàng của bạn đã được tiếp nhận thành công.',
+        icon: <FaBox />,
+        active: true,
+        completed: true
+      }, {
+        time: formatDate(new Date(cancelTime)),
         title: 'Đơn hàng đã bị hủy',
         description: 'Đơn hàng của bạn đã bị hủy. Vui lòng liên hệ hỗ trợ nếu cần thêm thông tin.',
         icon: <FaBox />,
-      });
+        active: true,
+        completed: true,
+        cancelled: true
+      }];
     }
 
     return timeline;
@@ -118,6 +221,9 @@ const OrderStatus = () => {
   if (loading) return <div>Đang tải...</div>;
   if (error) return <div>{error}</div>;
   if (!order) return <div>Không tìm thấy đơn hàng.</div>;
+
+  // Check if order can be cancelled
+  const canCancel = ['Pending', 'Confirmed', 'Preparing'].includes(order.status);
 
   // Calculate prices
   const totalPrice = order.products.reduce((total, item) => total + item.totalPrice, 0);
@@ -175,14 +281,26 @@ const OrderStatus = () => {
             <h3>
               Mã đơn hàng: <strong>{order._id}</strong>
             </h3>
+            {order.status === 'Cancelled' && (
+              <div className={styles.cancelledBadge}>
+                Đã hủy
+              </div>
+            )}
           </div>
           <div className={styles.timeline}>
             {getStatusTimeline(order.status, order.createdAt).map((step, index) => (
-              <div className={styles.step} key={index}>
-                <div className={styles.icon}>{step.icon}</div>
+              <div 
+                className={`${styles.step} ${step.pending ? styles.pending : ''} ${step.cancelled ? styles.cancelled : ''}`} 
+                key={index}
+              >
+                <div className={`${styles.icon} ${step.completed ? styles.completedIcon : ''} ${step.pending ? styles.pendingIcon : ''} ${step.cancelled ? styles.cancelledIcon : ''}`}>
+                  {step.icon}
+                </div>
                 <div className={styles.details}>
                   <div className={styles.time}>{step.time}</div>
-                  <div className={styles.title}>{step.title}</div>
+                  <div className={`${styles.title} ${step.pending ? styles.pendingText : ''} ${step.cancelled ? styles.cancelledText : ''}`}>
+                    {step.title}
+                  </div>
                   <div className={styles.desc}>{step.description}</div>
                 </div>
               </div>
@@ -192,13 +310,19 @@ const OrderStatus = () => {
             {order.status === 'Delivered' && (
               <button className={styles.primaryButton}>Đã nhận hàng</button>
             )}
-            {['Pending', 'Confirmed', 'Preparing'].includes(order.status) && (
+            {canCancel && (
               <button
-                className={styles.primaryButton}
+                className={styles.cancelButton}
                 onClick={() => setShowCancelModal(true)}
+                disabled={cancelLoading}
               >
-                Huỷ đơn hàng
+                {cancelLoading ? 'Đang xử lý...' : 'Huỷ đơn hàng'}
               </button>
+            )}
+            {order.status === 'Cancelled' && order.cancelReason && (
+              <div className={styles.cancelReason}>
+                <strong>Lý do hủy:</strong> {order.cancelReason}
+              </div>
             )}
           </div>
         </div>
@@ -206,25 +330,7 @@ const OrderStatus = () => {
       {showCancelModal && (
         <CancelOrder
           onClose={() => setShowCancelModal(false)}
-          onConfirm={async (reason) => {
-            setCancelReason(reason);
-            setShowCancelModal(false);
-            try {
-              // Note: Backend doesn't have this endpoint yet; this will fail
-              const response = await axios.post(`/api/orders/${orderId}/cancel`, { reason });
-              if (!response.data.success) {
-                throw new Error(response.data.message || 'Không thể hủy đơn hàng');
-              }
-              alert(`Huỷ đơn hàng với lý do: ${reason}`);
-              // Refetch the order to update the UI
-              const updatedOrderResponse = await axios.get(`/api/orders/${orderId}`);
-              if (updatedOrderResponse.data.success) {
-                setOrder(updatedOrderResponse.data.data);
-              }
-            } catch (err) {
-              alert(err.message || 'Không thể hủy đơn hàng. Vui lòng thử lại.');
-            }
-          }}
+          onConfirm={handleCancelOrder}
         />
       )}
     </div>

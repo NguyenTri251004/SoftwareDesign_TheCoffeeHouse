@@ -112,7 +112,7 @@ body {
   flex-direction: column;
   gap: 1.5rem;
   margin-left: 20px;
-  border-left: 2px  #f0c36d;
+  border-left: 2px solid #f0c36d;
   padding-left: 1.5rem;
   position: relative;
   margin-bottom: 40px;
@@ -134,6 +134,45 @@ body {
   position: absolute;
   left: -45px;
   width: 40px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Style cho các trạng thái hoàn thành */
+.completedIcon {
+  background: #fceecf;
+  color: #f0a500;
+}
+
+/* Style cho các trạng thái pending (chưa hoàn thành) */
+.pendingIcon {
+  background: #e9ecef;
+  color: #adb5bd;
+}
+
+/* Style cho trạng thái đã hủy */
+.cancelledIcon {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+.pending .details {
+  opacity: 0.7;
+}
+
+.pendingText {
+  color: #6c757d;
+}
+
+.cancelled .details {
+  color: #ef4444;
+}
+
+.cancelledText {
+  color: #ef4444;
+  font-weight: bold;
 }
 
 .drinkDetails {
@@ -167,6 +206,9 @@ body {
   padding: 0px 10px;
   display: flex;
   justify-content: space-between;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
 .disabledButton {
@@ -190,5 +232,51 @@ body {
   cursor: pointer;
   font-weight: bold;
   font-size: 16px;
+  transition: background-color 0.2s;
+}
+
+.primaryButton:hover {
+  background: #d67800;
+}
+
+.cancelButton {
+  padding: 10px 20px;
+  background: #fff;
+  color: #E98800FF;
+  border: 1px solid #E98800FF;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+.cancelButton:hover {
+  background: #fff3e6;
+}
+
+.cancelButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cancelReason {
+  margin-top: 15px;
+  padding: 10px 15px;
+  background-color: #fff3e6;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.cancelledBadge {
+  display: inline-block;
+  background-color: #ff5252;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  margin-left: 10px;
 }
 

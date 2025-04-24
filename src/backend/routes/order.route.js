@@ -12,6 +12,7 @@ router.get("/:id", OrderController.getOneOrder);
 
 router.post("/", OrderController.createOrder);
 router.put("/:id", OrderController.updateOrder);
+router.put("/:id/cancel", verifyToken, OrderController.cancelOrder); // Endpoint mới để hủy đơn hàng
 router.delete("/:id", OrderController.deleteOrder);
 
 export default router;

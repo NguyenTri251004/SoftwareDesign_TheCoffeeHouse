@@ -200,7 +200,31 @@ const OrderController = {
     updateOrder: async (req, res) => {
         try {
             const { id } = req.params;
-            const updatedOrder = await OrderModel.findByIdAndUpdate(id, req.body, {
+            const updateData = { ...req.body };
+            
+            // Nếu trạng thái đơn hàng thay đổi, cập nhật thời gian cho trạng thái mới
+            if (updateData.status) {
+                const currentOrder = await OrderModel.findById(id);
+                if (!currentOrder) {
+                    return res.status(404).json({ success: false, message: "Đơn hàng không tồn tại" });
+                }
+                
+                // Chỉ cập nhật thời gian nếu trạng thái thực sự thay đổi
+                if (currentOrder.status !== updateData.status) {
+                    // Sử dụng status.toLowerCase() để đảm bảo key trong Map là chữ thường
+                    const statusKey = updateData.status.toLowerCase();
+                    
+                    // Cập nhật statusTimes
+                    if (!updateData.statusTimes) {
+                        updateData.statusTimes = {};
+                    }
+                    
+                    // Thêm mốc thời gian cho trạng thái mới
+                    updateData.statusTimes[statusKey] = new Date();
+                }
+            }
+
+            const updatedOrder = await OrderModel.findByIdAndUpdate(id, updateData, {
                 new: true,
                 runValidators: true
             });
@@ -333,6 +357,58 @@ const OrderController = {
                 message: "Lỗi khi lọc danh sách đơn hàng theo trạng thái", 
                 error: error.message 
             });
+        }
+    },
+
+    cancelOrder: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { reason } = req.body;
+            
+            // Kiểm tra xem đơn hàng có tồn tại không
+            const order = await OrderModel.findById(id);
+            if (!order) {
+                return res.status(404).json({ success: false, message: "Đơn hàng không tồn tại" });
+            }
+            
+            // Kiểm tra xem người dùng có quyền hủy đơn không
+            // Nếu là người dùng thường, chỉ được hủy đơn của mình
+            if (req.userRole === 'user' && order.userId.toString() !== req.userId) {
+                return res.status(403).json({ success: false, message: "Bạn không có quyền hủy đơn hàng này" });
+            }
+            
+            // Kiểm tra xem đơn hàng có thể hủy không (không thể hủy khi đang giao hoặc đã giao)
+            if (['Delivering', 'Delivered'].includes(order.status)) {
+                return res.status(400).json({ 
+                    success: false, 
+                    message: "Không thể hủy đơn hàng khi đã trong trạng thái giao hàng hoặc đã giao hàng" 
+                });
+            }
+            
+            // Cập nhật trạng thái và lý do hủy
+            const updateData = {
+                status: 'Cancelled',
+                cancelReason: reason || 'Không có lý do',
+            };
+            
+            // Cập nhật thời gian hủy đơn
+            updateData.statusTimes = order.statusTimes || {};
+            updateData.statusTimes.cancelled = new Date();
+            
+            // Cập nhật đơn hàng
+            const updatedOrder = await OrderModel.findByIdAndUpdate(id, updateData, {
+                new: true,
+                runValidators: true
+            });
+            
+            return res.status(200).json({
+                success: true,
+                message: "Hủy đơn hàng thành công",
+                data: updatedOrder
+            });
+        } catch (error) {
+            console.error("Lỗi cancelOrder:", error);
+            return res.status(500).json({ success: false, message: "Lỗi khi hủy đơn hàng", error: error.message });
         }
     },
 };

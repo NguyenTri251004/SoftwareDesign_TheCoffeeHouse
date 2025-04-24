@@ -30,6 +30,15 @@ const OrderSchema = new Schema({
         enum: ['Pending', 'Confirmed', 'Preparing', 'Delivering', 'Delivered', 'Cancelled'],
         default: 'Pending'
     },
+    statusTimes: {
+        type: Map,
+        of: Date,
+        default: () => new Map([['pending', new Date()]])
+    },
+    cancelReason: {
+        type: String,
+        default: ''
+    },
     refundStatus: {
         type: String,
         enum: ['None', 'Partial', 'Full'],

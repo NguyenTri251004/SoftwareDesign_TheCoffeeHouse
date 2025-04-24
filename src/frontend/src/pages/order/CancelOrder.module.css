@@ -1,91 +1,115 @@
 .overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .modal {
-    background: white;
-    padding: 2rem;
-    border-radius: 16px;
-    width: 400px;
-    max-width: 90%;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    position: relative;
-  }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    font-family: 'Open Sans', sans-serif;
-    color: #9095A1FF;
-    font-weight: bold;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
-  .title {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #5c5c69;
-  }
-  
-  .icon {
-    font-size: 20px;
-    color: #d4a019; /* vàng đồng */
-  }
-  
-  .closeBtn {
-    background: none;
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
-    color: #999;
-    margin-bottom: 30px;
-  }
-  
-  .message {
-    font-size: 15px;
-    margin-bottom: 1rem;
-  }
-  
-  .dropdown {
-    width: 100%;
-    padding: 0.6rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 15px;
-    margin-bottom: 1.5rem;
-  }
-  
-  .confirmBtn {
-    background-color: #f6a700;
-    color: white;
-    padding: 0.6rem 1.2rem;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    width: 100%;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  
-  .confirmBtn:disabled {
-    background-color: #ddd;
-    cursor: not-allowed;
-  }
+.modal {
+  background-color: #fff;
+  border-radius: 8px;
+  width: 500px;
+  max-width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
 
-  .input {
-    width: 100%;
-    padding: 0.6rem;
-    border: none;
-    border-radius: 6px;
-    font-size: 15px;
-    margin-bottom: 1.5rem;
-    
-  }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #e57905;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #777;
+}
+
+.content {
+  padding: 20px;
+}
+
+.reasonOption {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.reasonOption input[type="radio"] {
+  margin-right: 10px;
+}
+
+.reasonOption label {
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.otherReasonInput {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  min-height: 80px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.error {
+  color: #e74c3c;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+.actions {
+  padding: 16px 20px;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid #eee;
+  gap: 10px;
+}
+
+.cancelButton, .confirmButton {
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s;
+}
+
+.cancelButton {
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+.confirmButton {
+  background-color: #e57905;
+  color: white;
+}
+
+.confirmButton:hover {
+  background-color: #d06700;
+}
+
+.cancelButton:hover {
+  background-color: #e5e5e5;
+}
