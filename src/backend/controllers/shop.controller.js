@@ -2,7 +2,7 @@ import { get } from "mongoose";
 import ShopModel from "../models/shop.model.js";
 import axios from 'axios';
 
-const GEOCODIFY_API_KEY = 'eyd9P0oasHRZa4qYLLYS4ENljzXmegDD';
+const GEOCODIFY_API_KEY = 'Eipx9T07TrDfNOSdrMvFR0BZJZvnhHNC';
 const GEOCODIFY_BASE_URL = 'https://api.geocodify.com/v2/geocode';
 
 async function geocodeAddress(address) {
