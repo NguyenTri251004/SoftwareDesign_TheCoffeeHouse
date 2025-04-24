@@ -8,7 +8,7 @@ const FlashSaleSchema = new Schema({
     endTime: { type: Date, required: true },
     products: [
         {
-            productId: { type: Schema.Types.ObjectId, required: true, ref: "Product" },
+            productId: { type: Schema.Types.ObjectId, required: true, ref: "Drink" },
             discountPercentage: { type: Number, required: true, min: 0, max: 100 },
             stock: { type: Number, required: true, min: 0 },
             maxQuantityPerCustomer: { type: Number, required: true, min: 1 },

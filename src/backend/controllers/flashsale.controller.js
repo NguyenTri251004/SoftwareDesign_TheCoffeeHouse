@@ -1,6 +1,83 @@
 import FlashSaleModel from "../models/flashsale.model.js";
+import ProductModel from "../models/product.model.js";
+import mongoose from "mongoose";
 
 const FlashSaleController = {
+    getFlashSalesByShop: async (req, res) => {
+        try {
+            const { shopId } = req.params;
+
+            if (!shopId || !mongoose.Types.ObjectId.isValid(shopId)) {
+                return res.status(400).json({ success: false, message: "Thiếu hoặc sai định dạng shopId" });
+            }
+
+            const now = new Date();
+
+            // Cập nhật trạng thái Flash Sale dựa vào thời gian
+            await FlashSaleModel.updateMany(
+                {
+                    shopId,
+                    status: "Upcoming",
+                    startTime: { $lte: now },
+                    endTime: { $gte: now }
+                },
+                { $set: { status: "Active" } }
+            );
+
+            await FlashSaleModel.updateMany(
+                {
+                    shopId,
+                    status: { $in: ["Upcoming", "Active"] },
+                    endTime: { $lt: now }
+                },
+                { $set: { status: "Ended" } }
+            );
+
+            // Lấy Flash Sale hiện tại
+            let current = await FlashSaleModel.findOne({
+                shopId,
+                status: "Active",
+                startTime: { $lte: now },
+                endTime: { $gte: now }
+            }).populate("products.productId").lean();
+
+            if (current) {
+                current.products = current.products.filter(p => p.productId); // loại bỏ product bị null
+            }
+
+            // Lấy 3 Flash Sale sắp diễn ra
+            let upcoming = await FlashSaleModel.find({
+                shopId,
+                status: "Upcoming",
+                startTime: { $gt: now }
+            })
+                .sort({ startTime: 1 })
+                .limit(3)
+                .populate("products.productId")
+                .lean();
+
+            upcoming = upcoming.map(flashSale => ({
+                ...flashSale,
+                products: flashSale.products.filter(p => p.productId) // loại product null
+            }));
+
+            return res.status(200).json({
+                success: true,
+                data: {
+                    current: current || null,
+                    upcoming
+                }
+            });
+        } catch (error) {
+            console.error("Lỗi getFlashSalesByShop:", error);
+            return res.status(500).json({
+                success: false,
+                message: "Lỗi khi lấy Flash Sale hiện tại và sắp diễn ra",
+                error
+            });
+        }
+    },   
+
     getListFlashSales: async (req, res) => {
         try {
             const { start = 0, end = 10, shopId } = req.query;

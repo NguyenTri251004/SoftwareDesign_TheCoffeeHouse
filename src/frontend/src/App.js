@@ -30,6 +30,7 @@ import VoucherPage from "pages/voucher/VoucherPage";
 import ListOrderPage from "pages/order/ListOrderPage";
 import UserProfile from "pages/user/UserProfile";
 import CartPage from "pages/cart/CartPage";
+import FlashSalePage from "pages/flashsale/FlashSalePage";
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
           <Route path="/checkout" element={<Checkout/>} />
           <Route path="/demo-payment" element={<DemoPayment/>} />
           <Route path="/payment-result" element={<PaymentResult/>} />
+          <Route path="/flashsale" element={<FlashSalePage/>} />
         </Routes>
       </Router>
       <VoucherPage/>
