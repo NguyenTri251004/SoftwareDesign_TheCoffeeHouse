@@ -3,183 +3,126 @@ import styles from './CartPage.module.css';
 import Header from 'components/header/Header';
 import Footer from 'components/footer/Footer';
 import OrderAPI from 'services/orderService';
-
-const PaymentMethods = [
-  { id: 'cash', label: 'Tiền mặt' },
-  { id: 'vnpay', label: 'VNPAY' },
-  { id: 'momo', label: 'MoMo' },
-  { id: 'zalopay', label: 'ZaloPay' },
-  { id: 'shopeepay', label: 'ShopeePay' },
-  { id: 'card', label: 'Thẻ ngân hàng' },
-];
+import { useNavigate } from 'react-router-dom';
+import { FiMinus, FiPlus } from 'react-icons/fi';
 
 const CartPage = () => {
   const [products, setProducts] = useState([]);
-  const [deliveryAddress, setDeliveryAddress] = useState('');
-  const [recipientName, setRecipientName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [note, setNote] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('cash');
-
-  const shippingFee = products.length > 0 ? 15000 : 0;
-  const discount = 0;
+  const [selectedItems, setSelectedItems] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
     setProducts(savedCart);
+    setSelectedItems(savedCart.map((item) => item.productId));
   }, []);
 
-  const totalAmount = products.reduce((sum, item) => sum + item.totalPrice, 0);
-  const finalAmount = totalAmount + shippingFee - discount;
+  const toggleSelect = (productId) => {
+    setSelectedItems((prev) =>
+      prev.includes(productId)
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId]
+    );
+  };
 
-  const handlePlaceOrder = async () => {
-    if (!recipientName || !deliveryAddress || !phone) {
-      alert('Vui lòng điền đầy đủ thông tin người nhận!');
+  const updateQuantity = (index, delta) => {
+    const newProducts = [...products];
+    const basePrice = newProducts[index].totalPrice / newProducts[index].quantity;
+    newProducts[index].quantity += delta;
+
+    if (newProducts[index].quantity <= 0) {
+      newProducts.splice(index, 1);
+    } else {
+      newProducts[index].totalPrice =
+        basePrice * newProducts[index].quantity;
+    }
+
+    setProducts(newProducts);
+    localStorage.setItem('cart', JSON.stringify(newProducts));
+    setSelectedItems(newProducts.map((p) => p.productId));
+  };
+
+  const handleProceedToCheckout = () => {
+    const selected = products.filter((p) => selectedItems.includes(p.productId));
+    if (selected.length === 0) {
+      alert('Vui lòng chọn ít nhất một món để đặt hàng!');
       return;
     }
-    
-    const shopId = localStorage.getItem("currentShopId") || "67e832a5d0be3d6ab71556a0";
 
-    const orderPayload = {
-      useName: recipientName, // Lưu ý: Có thể đây là lỗi đánh máy, nên là `userName`?
-      shopId: shopId,
-      deliveryAddress,
-      phone,
-      status: 'Pending',
-      refundStatus: 'None',
-      products: products.map((p) => ({
-        productId: p.productId,
-        size: p.size,
-        amount: p.quantity, // Sửa từ amount thành quantity
-        unitPrice: p.unitPrice,
-        totalPrice: p.totalPrice,
-        topping: p.topping?.map((t) => ({ toppingId: t.toppingId })) || [],
-      })),
-      totalAmount,
-      shippingFee,
-      discount,
-      finalAmount,
-    };
-  
-    const res = await OrderAPI.postOrder(orderPayload);
-    if (res && res.success !== false) {
-      alert('Đặt hàng thành công!');
-      localStorage.removeItem('cart');
-      setProducts([]);
-    } else {
-      alert('Đặt hàng thất bại. Vui lòng thử lại!');
-    }
+    localStorage.setItem('selectedCart', JSON.stringify(selected));
+    navigate('/checkout');
   };
-  
 
   const handleDeleteOrder = () => {
     localStorage.removeItem('cart');
     setProducts([]);
+    setSelectedItems([]);
   };
+
+  const totalAmount = products.reduce((sum, item) => sum + item.totalPrice, 0);
 
   return (
     <div className={styles.container}>
       <Header />
-      <div className={styles.cartContainer}>
-        <h2 className={styles.heading}>📁 Xác nhận đơn hàng</h2>
+      <div className={styles.cartWrapper}>
+        <h2 className={styles.heading}>🛒 Giỏ hàng của bạn</h2>
 
-        <div className={styles.wrapper}>
-          <div className={styles.left}>
-            <div className={styles.section}>
-              <h3>Giao hàng</h3>
-              <input
-                type="text"
-                placeholder="Tên người nhận"
-                value={recipientName}
-                onChange={(e) => setRecipientName(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Số điện thoại"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Địa chỉ giao hàng"
-                value={deliveryAddress}
-                onChange={(e) => setDeliveryAddress(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Ghi chú thêm (nếu có)"
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-              />
-              <p>Nhận hàng trong ngày 15-30 phút</p>
-            </div>
-
-            <div className={styles.section}>
-              <h3>Phương thức thanh toán</h3>
-              {PaymentMethods.map((method) => (
-                <label key={method.id} className={styles.paymentOption}>
+        {products.length === 0 ? (
+          <p className={styles.empty}>Giỏ hàng hiện đang trống.</p>
+        ) : (
+          <div className={styles.productList}>
+            {products.map((item, index) => (
+              <div key={index} className={styles.productItem}>
+                <div className={styles.checkbox}>
                   <input
-                    type="radio"
-                    name="payment"
-                    value={method.id}
-                    checked={paymentMethod === method.id}
-                    onChange={() => setPaymentMethod(method.id)}
+                    type="checkbox"
+                    checked={selectedItems.includes(item.productId)}
+                    onChange={() => toggleSelect(item.productId)}
                   />
-                  {method.label}
-                </label>
-              ))}
-            </div>
-
-            <div className={styles.terms}>
-              <input type="checkbox" defaultChecked />
-              <span>
-                Đồng ý với các{' '}
-                <a href="#" target="_blank" rel="noreferrer">
-                  điều khoản và điều kiện
-                </a>{' '}
-                mua hàng của The Coffee House
-              </span>
-            </div>
-          </div>
-
-          <div className={styles.right}>
-            <h3>Các món đã chọn</h3>
-            {products.length === 0 ? (
-              <p className={styles.emptyMessage}>Chưa có sản phẩm nào trong đơn hàng.</p>
-            ) : (
-              products.map((item, index) => (
-                <div key={index} className={styles.item}>
-                  <p>
-                    {item.quantity} x {item.name || 'Sản phẩm'} ({item.size}) {/* Sửa từ item.amount thành item.quantity */}
-                  </p>
-                  <ul>
-                    {item.topping && item.topping.length > 0 ? (
-                      item.topping.map((t, i) => <li key={i}>{t.name}</li>)
-                    ) : (
-                      <li>Không có topping</li>
-                    )}
-                  </ul>
-                  <p className={styles.price}>{item.totalPrice.toLocaleString()}đ</p>
                 </div>
-              ))
-            )}
 
-            <div className={styles.summary}>
-              <p>Thành tiền: <strong>{totalAmount.toLocaleString()}đ</strong></p>
-              <p>Phí giao hàng: <strong>{shippingFee.toLocaleString()}đ</strong></p>
-              <p>Khuyến mãi: <strong>-{discount.toLocaleString()}đ</strong></p>
-              <p className={styles.total}>Tổng cộng: <strong>{finalAmount.toLocaleString()}đ</strong></p>
+                <div className={styles.info}>
+                  <p className={styles.name}>
+                    {item.name} ({item.size})
+                  </p>
+                  <ul className={styles.toppings}>
+                    {item.topping?.length > 0
+                      ? item.topping.map((t, i) => <li key={i}>{t.name}</li>)
+                      : <li>Không có topping</li>}
+                  </ul>
+                  <div className={styles.quantityControls}>
+                    <button onClick={() => updateQuantity(index, -1)}>
+                      <FiMinus />
+                    </button>
+                    <span>{item.quantity}</span>
+                    <button onClick={() => updateQuantity(index, 1)}>
+                      <FiPlus />
+                    </button>
+                  </div>
+                </div>
+
+                <div className={styles.price}>
+                  {item.totalPrice.toLocaleString()}đ
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {products.length > 0 && (
+          <div className={styles.summarySection}>
+            <div className={styles.totalRow}>
+              <span>Tạm tính:</span>
+              <strong>{totalAmount.toLocaleString()}đ</strong>
             </div>
-
-            <button className={styles.orderButton} onClick={handlePlaceOrder}>
-              Đặt hàng
+            <button className={styles.orderBtn} onClick={handleProceedToCheckout}>
+              ✅ Tiến hành đặt hàng
             </button>
-
-            <button className={styles.cancelButton} onClick={handleDeleteOrder}>
-              🗑 Xóa giỏ hàng
+            <button className={styles.clearBtn} onClick={handleDeleteOrder}>
+              🗑 Xóa toàn bộ giỏ hàng
             </button>
           </div>
-        </div>
+        )}
       </div>
       <Footer />
     </div>
