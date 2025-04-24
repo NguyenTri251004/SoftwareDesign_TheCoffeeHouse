@@ -195,7 +195,7 @@ export default function UserProfile() {
                     ? { ...addr, isDefault: true }
                     : { ...addr, isDefault: false }
             );
-            if (!user._id) {
+            if (!user.id) {
                 throw new Error("Không tìm thấy user ID. Vui lòng đăng nhập lại.");
             }
             const updatedUser = await userAPI.updateCustomerProfile(user.id, {
@@ -257,7 +257,7 @@ export default function UserProfile() {
             if (!user.id) {
                 throw new Error("Không tìm thấy user ID. Vui lòng đăng nhập lại.");
             }
-            const updatedUser = await userAPI.updateCustomerProfile(user._id, {
+            const updatedUser = await userAPI.updateCustomerProfile(user.id, {
                 fullname: fullName,
                 email,
                 phone,
