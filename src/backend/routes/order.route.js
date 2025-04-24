@@ -4,6 +4,9 @@ import { verifyToken } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
+// Thêm endpoint tìm đơn hàng theo số điện thoại - không yêu cầu đăng nhập
+router.get("/track-by-phone", OrderController.findOrdersByPhone);
+
 router.get("/", OrderController.getListOrders);
 router.get("/user", verifyToken, OrderController.getUserOrders); // Endpoint để lấy đơn hàng của user đã đăng nhập
 router.get("/user/status", verifyToken, OrderController.getOrdersByStatus); // Endpoint mới để lọc đơn hàng theo trạng thái

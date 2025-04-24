@@ -5,6 +5,7 @@ import styles from "./AccountDropdown.module.css";
 import memberIcon from "assets/icon/member.png";
 import beanIcon from "assets/icon/bean.png";
 import orderIcon from "assets/icon/order-history.png";
+import trackOrderIcon from "assets/icon/order-track.png"; // Sử dụng ảnh icon sẵn có hoặc thêm file mới
 import shipIcon from "assets/icon/ship.png";
 import signupIcon from "assets/icon/signup.png";
 import signinIcon from "assets/icon/signin.png";
@@ -43,7 +44,20 @@ const AccountDropdown = ({ isLoggedIn }) => {
             <img src={signupIcon} alt="" className={styles.icon} />
             Đăng ký
           </a>
+          {/* Thêm liên kết tra cứu đơn hàng cho người dùng chưa đăng nhập */}
+          <a href="/track-order" className={styles.dropdownItem}>
+            <img src={orderIcon} alt="Tra cứu đơn hàng" className={styles.icon} />
+            Tra cứu đơn hàng
+          </a>
         </>
+      )}
+      
+      {/* Luôn hiển thị liên kết tra cứu đơn hàng ở cuối menu dù đã đăng nhập hay chưa */}
+      {isLoggedIn && (
+        <a href="/track-order" className={styles.dropdownItem}>
+          <img src={orderIcon} alt="Tra cứu đơn hàng" className={styles.icon} />
+          Tra cứu đơn hàng
+        </a>
       )}
     </div>
   );
