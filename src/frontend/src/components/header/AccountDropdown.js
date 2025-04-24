@@ -9,8 +9,25 @@ import trackOrderIcon from "assets/icon/order-track.png"; // Sử dụng ảnh i
 import shipIcon from "assets/icon/ship.png";
 import signupIcon from "assets/icon/signup.png";
 import signinIcon from "assets/icon/signin.png";
+import logoutIcon from "assets/icon/logout.png";
+
+import authAPI from "services/authService";
+import { useNavigate } from "react-router-dom";
 
 const AccountDropdown = ({ isLoggedIn }) => {
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    try {
+      await authAPI.logout(); // Gọi API log out
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      navigate("/login"); // Chuyển hướng về trang đăng nhập
+    } catch (error) {
+      console.error("Logout failed:", error.message);
+      alert("Đăng xuất thất bại. Vui lòng thử lại.");
+    }
+  };
+
   return (
     <div className={styles.dropdownContainer}>
       {isLoggedIn ? (
@@ -31,6 +48,10 @@ const AccountDropdown = ({ isLoggedIn }) => {
           <a href="/menu" className={styles.dropdownItem}>
             <img src={shipIcon} alt="Giao hàng" className={styles.icon} />
             Giao hàng
+          </a>
+          <a href="/#" className={styles.dropdownItem} onClick={handleLogout}>
+            <img src={logoutIcon} alt="Đăng xuất" className={styles.icon} />
+            Đăng xuất
           </a>
         </>
       ) : (
